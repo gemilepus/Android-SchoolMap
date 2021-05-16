@@ -1,0 +1,55 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="vertical"
+    tools:context=".VineJsonParsing.JSONMainActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarJSON"
+            android:theme="@style/ToolbarColoredBackArrow"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/colorPrimary" />
+
+        <!--Toolbar 圖示的顏色 受theme得影響-->
+
+        <TextView
+            android:id="@+id/textViewJSON"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="0dp"
+            android:layout_marginLeft="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginTop="0dp"
+            android:gravity="center_horizontal"
+            android:text="TextView"
+            android:textColor="@color/Color003"
+            />
+
+        <ImageView
+            android:id="@+id/imageViewBar"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            app:srcCompat="@mipmap/ic_launcher"
+            android:scaleType="centerCrop"/>
+
+        <!--CENTER_CROP：當圖片比ImageView大/小時，會依圖片之等比例縮放，並將其放在框的中間顯示，-->
+        <!--即大的圖縮小，小的圖放大。但是，如果該圖非正方形者，會依其短邊來與ImageView的邊相等，因此其會將ImageView完全的填滿。-->
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/card_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+    </LinearLayout>
+
+</LinearLayout>
