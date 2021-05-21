@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
         return new HomeFragment();
     }
 
-    // Fragment Communicating........................
+    // Fragment Communicating
     SendMessage SM;
 
     Button buttonTest;
@@ -48,12 +48,11 @@ public class HomeFragment extends Fragment {
     int ListOpenFlag = 0;
 
     private EditText searchTextStart , searchTextEnd;
-    int StartTextFlag = 0 , EndTextFlag = 0; // 起點 終點 的以選擇標記
-    String searchString="";
     TextWatcher textWatcher;
-    String value_1,value_2;
     Button btnStart;
-    short check = 0;
+    int StartTextFlag = 0 , EndTextFlag = 0; // 起點 終點 的以選擇標記
+    String searchString = "", StartPoints, EndPoints;
+    short SelectStatus = 0;
 
     @Nullable
     @Override
@@ -98,8 +97,8 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent();
                 //intent.setClass(HomeFragment.this,ShowValue.class);
                 intent.setClass(HomeFragment.this.getActivity(),MapMainActivity.class);
-                intent.putExtra("startstring",value_1);//此方式可以放所有基本型別
-                intent.putExtra("endstring",value_2);//此方式可以放所有基本型別
+                intent.putExtra("startstring",StartPoints);
+                intent.putExtra("endstring",EndPoints);
                 startActivity(intent);
             }});
 
@@ -167,7 +166,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before , int count) {
                 // textView.setText(searchTextStart.getText());
-                //check=1;
+                //SelectStatus=1;
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -191,12 +190,12 @@ public class HomeFragment extends Fragment {
         searchTextStart.setOnFocusChangeListener(new View.OnFocusChangeListener() { //FocusChange
 
             public void onFocusChange(View v, boolean hasFocus) {
-                check=1;
+                SelectStatus=1;
             }
         });
         searchTextEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {//FocusChange
             public void onFocusChange(View v, boolean hasFocus) {
-                check=2;
+                SelectStatus=2;
             }
         });
 
@@ -205,7 +204,7 @@ public class HomeFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before , int count) {
                 // textView1.setText(searchTextEnd.getText());
-                //  check=2;
+                //  SelectStatus=2;
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -336,26 +335,26 @@ public class HomeFragment extends Fragment {
                     public void onClick(View v) {
                         String startstring = htxt.getText().toString(); // 讀取清單的文字
                         String point = vtxt.getText().toString();
-                        if (check==1) {
-                            value_1 = point;
+                        if (SelectStatus==1) {
+                            StartPoints = point;
                             SM.sendData("START".trim());  // PassingDataBetweenFragments  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                             GlobalVariable globalVariable = (GlobalVariable)getActivity().getApplicationContext();
-                            globalVariable.Start =  value_1;
+                            globalVariable.Start =  StartPoints;
                             searchTextStart.setText("(" + startstring + ")");
                             searchTextStart.setTextColor(Color.parseColor("#136388"));
-                            //  textView.setText(value_1);
+                            //  textView.setText(StartPoints);
                             final List<DataObject> filteredModelList = filter(list, "");//清單重置
                             searchTextEnd.requestFocus();//  Focus 下一個 edittext
                             StartTextFlag = 1; // 起點已選擇
                         }
                         else {
-                            value_2 = point;
+                            EndPoints = point;
                             SM.sendData("END".trim());  // PassingDataBetweenFragments  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                             GlobalVariable globalVariable = (GlobalVariable)getActivity().getApplicationContext();
-                            globalVariable.End =  value_2;
+                            globalVariable.End =  EndPoints;
                             searchTextEnd.setText("(" + startstring + ")");
                             searchTextEnd.setTextColor(Color.parseColor("#136388"));
-                            //  textView1.setText(value_2);
+                            //  textView1.setText(EndPoints);
                             final List<DataObject> filteredModelList = filter(list, "");//清單重置
                             btnStart.setEnabled(true);//  解除鎖定 Button
                             btnStart.setBackgroundColor(0xFF47C5FF);
