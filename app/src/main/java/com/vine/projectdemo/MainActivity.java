@@ -33,11 +33,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , HomeFragment.SendMessage{
+
     //  ~~~~~~~~~~~~~~~~~~~~~ Fragment ~~~~~~~~~~~~~~~~~~~~~~~~~~
     private ViewPager mViewPager;
     public HomeFragment homeFragment;
     public MapFragment mapFragment;
     //  ~~~~~~~~~~~~~~~~~~~~~ Fragment ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
     private BottomNavigationView mBottomNavigationView;
     private FloatingActionButton fab_Go,fab_help;
     private Boolean isFabOpen = false;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         setupNavigationView();
         setupBottomNavigation();
