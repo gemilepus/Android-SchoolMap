@@ -1,65 +1,39 @@
 package com.vine.projectdemo.VineMapView;
 
 import android.Manifest;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.CornerPathEffect;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 
-import android.graphics.Path;
 import android.graphics.Rect;
-import android.graphics.Region;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
-import android.view.ViewDebug;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.hotspots.HotSpot;
 import com.qozix.tileview.markers.MarkerLayout;
-import com.vine.projectdemo.HomeFragment;
-import com.vine.projectdemo.MainActivity;
 import com.vine.projectdemo.R;
-import com.vine.projectdemo.VineJsonParsing.JSONMainActivity;
-import com.vine.projectdemo.VinePHPMySQL.PHPMainActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.lang.*;
-import java.io.IOException;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import android.content.res.AssetManager;
-
-import static com.vine.projectdemo.R.id.imageView;
 
 /**
  * 含室內地圖
@@ -471,7 +445,7 @@ public class MapMainActivity extends AppCompatActivity implements LocationListen
 
         //    跨校區 測試
         if (Integer.parseInt(AfterSplitStartString[0]) < 125 && Integer.parseInt(AfterSplitEndString[0]) < 125) { //只有八甲
-            String contentStr = ("maptestb.txt");//讀ASSETS~~~~~~~
+            String contentStr = ("map_b.txt");//讀ASSETS~~~~~~~
             loadfiletoArray(contentStr);
             Plusflag = 0;
             dijkstraMin();   //  取得最短的組合
@@ -479,7 +453,7 @@ public class MapMainActivity extends AppCompatActivity implements LocationListen
             dijkstraT();
         } else if (Integer.parseInt(AfterSplitStartString[0]) > 125 && Integer.parseInt(AfterSplitEndString[0]) > 125) {  //只有二坪
 
-            String contentStr = ("maptesta.txt");//讀ASSETS~~~~~~~!! 用二坪的檔案
+            String contentStr = ("map_a.txt");//讀ASSETS~~~~~~~!! 用二坪的檔案
             loadfiletoArray(contentStr);
             Plusflag = 1;
             dijkstraMin();   //  取得最短的組合
@@ -489,7 +463,7 @@ public class MapMainActivity extends AppCompatActivity implements LocationListen
             if (Integer.parseInt(AfterSplitStartString[0]) < 125) { // 八甲開始
                 Doflag = 1; //  跨區旗標 = 1 終點圖示改變    (目前未使用
                 Plusflag = 0;
-                String contentStr = ("maptestb.txt");
+                String contentStr = ("map_b.txt");
                 loadfiletoArray(contentStr);
                 AfterSplitEndString = new String[0]; // 清空陣列
                 AfterSplitEndString = new String[1];
@@ -511,7 +485,7 @@ public class MapMainActivity extends AppCompatActivity implements LocationListen
 
                 ListStFlag = DrawPointsList.size(); //   八甲校區已經畫了幾點
 
-                contentStr = ("maptesta.txt");
+                contentStr = ("map_a.txt");
                 loadfiletoArray(contentStr);
                 AfterSplitStartString = new String[0]; // 清空陣列
                 AfterSplitStartString = new String[1];
@@ -527,7 +501,7 @@ public class MapMainActivity extends AppCompatActivity implements LocationListen
                 Doflag = 2; //  跨區旗標 = 2 起點圖示改變
                 Plusflag = 1;
 
-                String contentStr = ("maptesta.txt");
+                String contentStr = ("map_a.txt");
                 loadfiletoArray(contentStr);
 
                 AfterSplitEndString = new String[0]; // 清空陣列
@@ -542,7 +516,7 @@ public class MapMainActivity extends AppCompatActivity implements LocationListen
                 Doflag = 1; //  跨區旗標 = 1 終點圖示改變
                 Plusflag = 0;
 
-                contentStr = ("maptestb.txt");
+                contentStr = ("map_b.txt");
                 loadfiletoArray(contentStr);
                 AfterSplitStartString = new String[0]; // 清空陣列
                 AfterSplitStartString = new String[1];

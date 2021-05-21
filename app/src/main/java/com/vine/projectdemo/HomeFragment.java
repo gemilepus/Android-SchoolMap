@@ -33,13 +33,13 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class HomeFragment extends Fragment {
 
-    // Fragment Communicating........................
-    SendMessage SM;
-
-    public static final String TITLE = "搜尋";
+    public static final String TITLE = "查詢路線";
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
+
+    // Fragment Communicating........................
+    SendMessage SM;
 
     Button buttonTest;
     RecyclerView recyclerView;
@@ -47,13 +47,13 @@ public class HomeFragment extends Fragment {
     List<DataObject> list;
     int ListOpenFlag = 0;
 
+    private EditText searchTextStart , searchTextEnd;
+    int StartTextFlag = 0 , EndTextFlag = 0; // 起點 終點 的以選擇標記
     String searchString="";
     TextWatcher textWatcher;
     String value_1,value_2;
     Button btnStart;
     short check = 0;
-    private EditText searchTextStart , searchTextEnd;
-    int StartTextFlag = 0 , EndTextFlag = 0; // 起點 終點 的以選擇標記
 
     @Nullable
     @Override
@@ -109,7 +109,6 @@ public class HomeFragment extends Fragment {
         list.add(2,new DataObject("H1行政大樓","二坪校區","144-157-170"));
         list.add(3,new DataObject("F1第一研究大樓","二坪校區","147-172"));
         list.add(4,new DataObject("F2建築系館&設計學院","二坪校區","150-160"));
-
         list.add(5,new DataObject("K2教學大樓","二坪校區","153-178"));
         list.add(6,new DataObject("K3教學大樓","二坪校區","154-182"));
         list.add(7,new DataObject("景觀餐廳","二坪校區","163"));

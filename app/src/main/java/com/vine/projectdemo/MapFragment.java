@@ -1,8 +1,6 @@
 package com.vine.projectdemo;
 
 import android.Manifest;
-import android.animation.ValueAnimator;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,9 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.Rect;
-import android.graphics.Region;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -24,12 +19,10 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -47,20 +40,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qozix.tileview.TileView;
-import com.qozix.tileview.hotspots.HotSpot;
 import com.qozix.tileview.markers.MarkerLayout;
-import com.qozix.tileview.widgets.ZoomPanLayout;
-import com.vine.projectdemo.VineJsonParsing.*;
-import com.vine.projectdemo.VineJsonParsing.JSONResponse;
 import com.vine.projectdemo.VineMapView.SampleCallout;
 
-import com.vine.projectdemo.VinePHPMySQL.Constants;
 import com.vine.projectdemo.VineReValues.GPS_Dot;
 import com.vine.projectdemo.VineReValues.GlobalVariable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -1204,7 +1191,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //    跨校區 測試 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (Integer.parseInt(AfterSplitStartString[0]) < 125 && Integer.parseInt(AfterSplitEndString[0]) < 125) { //只有八甲
 
-            String contentStr = ("maptestb.txt");//讀ASSETS~~~~~~~
+            String contentStr = ("map_b.txt");//讀ASSETS~~~~~~~
             loadfiletoArray(contentStr);
 
             Plusflag = 0;
@@ -1213,7 +1200,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             dijkstraT();
         } else if (Integer.parseInt(AfterSplitStartString[0]) > 125 && Integer.parseInt(AfterSplitEndString[0]) > 125) {  //只有二坪
 
-            String contentStr = ("maptesta.txt");//讀ASSETS~~~~~~~!! 用二坪的檔案
+            String contentStr = ("map_a.txt");//讀ASSETS~~~~~~~!! 用二坪的檔案
             loadfiletoArray(contentStr);
 
             Plusflag = 1;
@@ -1226,7 +1213,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 Doflag = 1; //  跨區旗標 = 1 終點圖示改變    (目前未使用
                 Plusflag = 0;
 
-                String contentStr = ("maptestb.txt");
+                String contentStr = ("map_b.txt");
                 loadfiletoArray(contentStr);
 
                 AfterSplitEndString = new String[0]; // 清空陣列
@@ -1249,7 +1236,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 ListStFlag = DrawPointsList.size(); //   八甲校區已經畫了幾點
 
 
-                contentStr = ("maptesta.txt");
+                contentStr = ("map_a.txt");
                 loadfiletoArray(contentStr);
                 AfterSplitStartString = new String[0]; // 清空陣列
                 AfterSplitStartString = new String[1];
@@ -1265,7 +1252,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 Doflag = 2; //  跨區旗標 = 2 起點圖示改變
                 Plusflag = 1;
 
-                String contentStr = ("maptesta.txt");
+                String contentStr = ("map_a.txt");
                 loadfiletoArray(contentStr);
 
                 AfterSplitEndString = new String[0]; // 清空陣列
@@ -1280,7 +1267,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 Doflag = 1; //  跨區旗標 = 1 終點圖示改變
                 Plusflag = 0;
 
-                contentStr = ("maptestb.txt");
+                contentStr = ("map_b.txt");
                 loadfiletoArray(contentStr);
                 AfterSplitStartString = new String[0]; // 清空陣列
                 AfterSplitStartString = new String[1];
