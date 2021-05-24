@@ -67,43 +67,11 @@ import static com.vine.projectdemo.VinePHPMySQL.Constants.BASE_URL;
 
 public class MapFragment extends Fragment implements SensorEventListener, LocationListener {
 
-    // ~~~~~~~~~~~~~~~   Tab   ~~~~~~~~~~~~~~~~~~
-    public static final String TITLE = "全校地圖";
+    public static final String TITLE = "校園地圖";
     public static MapFragment newInstance() {
         return new MapFragment();
     }
-    // ~~~~~~~~~~~~~~~   Tab   ~~~~~~~~~~~~~~~~~~
 
-    private String StartString;
-    private String EndString;
-
-    String[] AfterSplitStartString;
-    String[] AfterSplitEndString;
-
-    int Doflag = 0, Plusflag = 0; //  跨區旗標
-    int StartPointMin = 0, EndPointMin = 0;  // 最近短距離的 起點 終點
-    int ListStFlag = 0;
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Draw Text  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // 畫 TEXT
-    TextView[] marker_Text_array = new TextView[60]; // Test Array
-    String ValueString, TextString;
-    String[] ValueStringArray;
-    List<DataObject> list;
-    int List_Length;
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Draw Text  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Draw Movedot  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ImageView[] marker_Movedot_array = new ImageView[25]; // Test Array
-    // ImageView[] marker_Movedot_array ; // Test Array
-    // ImageView[] marker_Movedot_array[] ;
-
-    int marker_Move_dot_num = 0;
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Draw Movedot  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Draw GPS  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ImageView marker_MoveHere;//作為全域使用  removeMarker
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Draw GPS  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Draw Point & Line  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ArrayList<double[]> DrawPointsList = new ArrayList<>();
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Draw Point & Line  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  TileView  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     LinearLayout mLinearLayout_P;
     TileView tileView;
@@ -112,8 +80,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     public static final double SOUTH_EAST_LATITUDE = 24.533648; //南 東
     public static final double NORTH_WEST_LONGITUDE = 120.7832;//經度     //0.012904468412943
     public static final double NORTH_WEST_LATITUDE = 24.547866; //北  西 緯度   //0.0117471872931833
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  TileView  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dijkstra 未定大小 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GPS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    private LocationManager locationManager;
+    private static final int MinTime = 1000;//更新時間
+    private static final float MinDistance = 1;//移動多少 M 才會監聽
+    int GPS_Run = 0;
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dijkstra ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     private static final int INF = Integer.MAX_VALUE;   // 最大值
     int[] mVexs;// 純標記
     int mMatrix[][];
@@ -121,27 +93,36 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     int[] prev;
     int[] dist;
     int[] parent;
-    //END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dijkstra 未定大小 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GPS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    private LocationManager locationManager;
 
-    private static final int MinTime = 1000;//更新時間
-    private static final float MinDistance = 1;//移動多少 M 才會監聽
-    int GPS_Run = 0;
-    //END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GPS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // ~~~~~~~~~~~~~~~  電子羅盤  ~~~~~~~~~~~~~~~
+    String[] AfterSplitStartString;
+    String[] AfterSplitEndString;
+
+    int Doflag = 0, Plusflag = 0; //  跨區旗標
+    int StartPointMin = 0, EndPointMin = 0;  // 最近短距離的 起點 終點
+    int ListStFlag = 0;
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Label  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    TextView[] marker_Text_array = new TextView[60]; // Test Array
+    String ValueString, TextString;
+    String[] ValueStringArray;
+    List<DataObject> list;
+    int List_Length;
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  dot  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    ImageView[] marker_Movedot_array = new ImageView[25];
+    // ImageView[] marker_Movedot_array[] ;
+    int marker_Move_dot_num = 0;
+    ImageView marker_MoveHere;//作為全域使用  removeMarker
+    ArrayList<double[]> DrawPointsList = new ArrayList<>();
+    
+    // ~~~~~~~~~~~~~~~  ElectronicCompass  ~~~~~~~~~~~~~~~
     private float currentDegree = 0f;
-    // 感應器管理
     private SensorManager mSensorManager;
-
     String vector;
     float[] mGravity;
     float[] mGeomagnetic;
     float Rotation[] = new float[9];
     float[] degree = new float[3];
-    //END~~~~~~~~~~~~~~~  電子羅盤 ~~~~~~~~~~~~~~~
-
-    Button btn;
+    Button ElectronicCompassBtn;
     Timer timer = new Timer(true);
     Timer timerAnima = new Timer(true);
 
@@ -163,8 +144,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //String  NN;
         //NN = String.valueOf(v.getTag());
 
-        btn = (Button) v.findViewById(R.id.BTNN);
-        btn.setOnClickListener(new View.OnClickListener() {
+        ElectronicCompassBtn = (Button) v.findViewById(R.id.BTNN);
+        ElectronicCompassBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -312,7 +293,26 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         return v;
     }
 
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    public TileView getTileView(){
+        return tileView;
+    }
+
+    public void frameTo( final double x, final double y ) {
+        getTileView().post( new Runnable() {
+            @Override
+            public void run() {
+               // getTileView().moveToMarker();
+            }
+        });
+    }
+
     public void DrawTextMarker() {
+
         //region 標記所有點
 //        ArrayList<double[]> map_point = new ArrayList<>();{}
 //        for (int r = 0; r < 227; r++) {
@@ -375,22 +375,18 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE);
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void MoveToA(){ // 二坪校區
+        tileView.moveToMarker(tileView.getMarkerLayout().getChildAt(0),false);
     }
 
-    public TileView getTileView(){
-        return tileView;
-    }
-
-    public void frameTo( final double x, final double y ) {
-        getTileView().post( new Runnable() {
-            @Override
-            public void run() {
-               // getTileView().moveToMarker();
+    public void MoveToB(){ // 八甲校區
+        int num=0;
+        for(int i=0;i<tileView.getMarkerLayout().getChildCount() ;i++){
+            if( tileView.getMarkerLayout().getChildAt(i) instanceof TextView ){
+                num++;
             }
-        });
+        }
+        tileView.moveToMarker(tileView.getMarkerLayout().getChildAt(num-1),false);
     }
 
     //region ###################################################  Timer  ####################################################
@@ -646,11 +642,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
     }
 
-
     /* 改變經確度 */
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // not in use
-
     }
     //endregion ################################################  Sensor  ####################################################
 
@@ -1051,7 +1045,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     }
 
     //END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   Dijkstra  & F ile I/O~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    private void   dijkstraMin(){ // 多點最短路徑
+    private void dijkstraMin(){
         int[][] PointNumTemp = new int[ AfterSplitStartString.length ][ AfterSplitEndString.length ]; // 個路徑的距離紀錄
         int vsTemp; //  起點
 //        for (int i = 0; i < mVexs.length; i++) { // 9999 換成 INF = 無限大
@@ -1107,7 +1101,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 }
             }
 
-
             //  存入各點之間的距離大小
             for (int N = 0; N <  AfterSplitEndString.length ; N++) {
                 //dist[N] 距離
@@ -1151,7 +1144,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
     }
 
-    public void  Draw_Dijkstra(){
+    public void Draw_Dijkstra(){
+        String StartString,EndString;
+
         // remove marker
         while(true) {
             int num = 0;
@@ -1341,53 +1336,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     }
     //endregion #########################################################  Dijkstra   ####################################################
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        tileView.resume();
-        tileView_Run = 1;
-
-        // 註冊感應監聽器
-        Sensor accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        Sensor magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
-    }
-
-    @Override
-    public void onDestroy() { //銷毀
-        super.onDestroy();
-
-        tileView_Run = 0;
-        tileView.destroy();
-        tileView = null;
-    }
-
-    public void onPause() { //暫停
-        super.onPause();
-        tileView.pause();
-        tileView_Run = 0;
-        //stopLocationUpdates(); // 停止GPS更新
-
-        // 停止感應監聽器
-        mSensorManager.unregisterListener(this);
-    }
-
-    public void MoveToA(){ // 二坪校區
-        tileView.moveToMarker(tileView.getMarkerLayout().getChildAt(0),false);
-    }
-
-    public void MoveToB(){ // 八甲校區
-        int num=0;
-        for(int i=0;i<tileView.getMarkerLayout().getChildCount() ;i++){
-            if( tileView.getMarkerLayout().getChildAt(i) instanceof TextView ){
-                num++;
-            }
-        }
-        tileView.moveToMarker(tileView.getMarkerLayout().getChildAt(num-1),false);
-    }
-
     //region #########################################################  test   ####################################################
     // Fragment Communicating........................
     String StartStr , EndStr;
@@ -1411,13 +1359,16 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         public void onMarkerTap(View view, int x, int y) {
             // get reference to the TileView
             // tileView = this.getActivity().getTileView();
-            Toast.makeText( MapFragment.this.getActivity(),  "按 X = " + String.valueOf(x) + " Y = " + String.valueOf(y) , Toast.LENGTH_LONG).show();
+            Toast.makeText( MapFragment.this.getActivity(),
+                    "X = " + String.valueOf(x)
+                            + " Y = " + String.valueOf(y),
+                    Toast.LENGTH_LONG).show();
 
             if( !(view instanceof TextView) ){ // View != TextView
                 // we saved the coordinate in the marker's tag
                 double[] position = (double[]) view.getTag();
                 // lets center the screen to that coordinate
-                tileView.slideToAndCenter(position[0], position[1]);//移動
+                //tileView.slideToAndCenter(position[0], position[1]);//移動
                 // create a simple callout
                 SampleCallout callout = new SampleCallout(view.getContext());
                 // add it to the view tree at the same position and offset as the marker that invoked it
@@ -1427,26 +1378,20 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 // stub out some text
                 callout.setTitle("Info");
                 callout.setSubtitle("位置 : " + position[1] + ", " + position[0]);
-                callout_dialog(); // Callout dialog View ! Test
             }
         }
     };
 
-    // Dialog View
     private void callout_dialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getActivity());
-        // AlertDialogのタイトル設定します
         alertDialogBuilder.setTitle("Info");
-        // AlertDialogのメッセージ設定
-        alertDialogBuilder.setMessage("確定刪除這筆？");
-        // AlertDialogのYesボタンのコールバックリスナーを登録
+        alertDialogBuilder.setMessage("");
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
             }
         });
-        // AlertDialogのNoボタンのコールバックリスナーを登録
         alertDialogBuilder.setNeutralButton("No", new DialogInterface.OnClickListener() {
 
             @Override
@@ -1454,10 +1399,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 // nothing to do
             }
         });
-        // AlertDialogのキャンセルができるように設定
         alertDialogBuilder.setCancelable(true);
         AlertDialog alertDialog = alertDialogBuilder.create();
-        // AlertDialogの表示
         alertDialog.show();
     }
 
@@ -1483,4 +1426,39 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         });
     }
     //endregion #########################################################  test   ##################################################
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        tileView.resume();
+        tileView_Run = 1;
+
+        // 註冊感應監聽器
+        Sensor accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        tileView_Run = 0;
+        tileView.destroy();
+        tileView = null;
+    }
+
+    public void onPause() {
+        super.onPause();
+        tileView.pause();
+        tileView_Run = 0;
+
+        // 停止GPS更新
+        //stopLocationUpdates();
+
+        // 停止感應監聽器
+        mSensorManager.unregisterListener(this);
+    }
 }
