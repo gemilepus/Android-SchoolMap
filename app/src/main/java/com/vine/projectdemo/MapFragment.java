@@ -77,16 +77,16 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     TileView tileView;
     int tileView_Run = 1;
     public static final double SOUTH_EAST_LONGITUDE = 120.8167;
-    public static final double SOUTH_EAST_LATITUDE = 24.533648; //南 東
-    public static final double NORTH_WEST_LONGITUDE = 120.7832;//經度     //0.012904468412943
-    public static final double NORTH_WEST_LATITUDE = 24.547866; //北  西 緯度   //0.0117471872931833
+    public static final double SOUTH_EAST_LATITUDE = 24.533648;
+    public static final double NORTH_WEST_LONGITUDE = 120.7832; // 經度 0.012904468412943
+    public static final double NORTH_WEST_LATITUDE = 24.547866; // 緯度 0.0117471872931833
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GPS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     private LocationManager locationManager;
-    private static final int MinTime = 1000;//更新時間
-    private static final float MinDistance = 1;//移動多少 M 才會監聽
+    private static final int MinTime = 1000;// 更新時間
+    private static final float MinDistance = 1;// 移動多少 M 才會監聽
     int GPS_Run = 0;
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dijkstra ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    private static final int INF = Integer.MAX_VALUE;   // 最大值
+    private static final int INF = Integer.MAX_VALUE;
     int[] mVexs;// 純標記
     int mMatrix[][];
     int vs;//起始點
@@ -131,7 +131,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.map_content_main, container, false);
 
-        // 電子羅盤
+        // ElectronicCompass
         WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
 //        Point size = new Point();
@@ -139,14 +139,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 //        int width = size.x;
 //        int height = size.y;
         mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
-        // 電子羅盤
-
-        //String  NN;
-        //NN = String.valueOf(v.getTag());
-
         ElectronicCompassBtn = (Button) v.findViewById(R.id.BTNN);
         ElectronicCompassBtn.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 mSensorManager.unregisterListener(MapFragment.this);
@@ -156,10 +150,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         tileView = new TileView(this.getActivity());
 
         // let the image explode
-        tileView.setScaleLimits(0, 2);//放大大小
-
-        // size of original image at 100% mScale
-
+        tileView.setScaleLimits(0, 2);
         // size and geolocation
         tileView.setSize(25960, 12088);
 
@@ -200,7 +191,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         paint.setPathEffect(new DashPathEffect(new float[]{20, 10}, 0)); // 畫虛線
         //paint.setColor();
 
-        //tileView.drawPath(points.subList(2, 5), null);//畫線
+        //tileView.drawPath(points.subList(2, 5), null); // 畫線
 
         // set mScale to 0, but keep scaleToFit true, so it'll be as small as possible but still match the container
         tileView.setScale(0);
@@ -222,20 +213,18 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //lp.addView(tileView,lp);
         //((LinearLayout)getActivity().findViewById(R.id.LI).addView(tileView,lp);
 
-        // 用 LinearLayout 當框框 放入 tileView ， tileView 超出的部分會裁掉
+        // LinearLayout裁掉超出的部分
         mLinearLayout_P = (LinearLayout) v.findViewById(R.id.LI);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1); // 框框 View
         ((LinearLayout) v.findViewById(R.id.LI)).addView(tileView, lp); // addView
-        tileView.setScaleY((float) 16.5 / 10.f); // 放大
-        tileView.setScaleX((float) 16.5 / 10.f); // 放大
+        tileView.setScaleY((float) 16.5 / 10.f);
+        tileView.setScaleX((float) 16.5 / 10.f);
 
         list = new ArrayList<DataObject>();
         list.add(0, new DataObject("二坪校區正門", "二坪校區", "126"));
         list.add(1, new DataObject("J1活動中心", "二坪校區", "139-142"));
         list.add(2, new DataObject("H1行政大樓", "二坪校區", "144-157-170"));
         list.add(3, new DataObject("F1第一研究大樓", "二坪校區", "147-172"));
-
-
         list.add(4, new DataObject("F2建築系館&設計學院", "二坪校區", "150-160"));
         list.add(5, new DataObject("K2教學大樓", "二坪校區", "153-178"));
         list.add(6, new DataObject("K3教學大樓", "二坪校區", "154-182"));
@@ -279,16 +268,13 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //GPS 服務檢查
         if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
-
             //請求權限的對話框
         } else {
             locationStart();
             GPS_Run = 1;
         }
 
-        DrawTextMarker();
-
-        //loadJSON(); // not use
+        DrawLable();
 
         return v;
     }
@@ -311,7 +297,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         });
     }
 
-    public void DrawTextMarker() {
+    public void DrawLable() {
 
         //region 標記所有點
 //        ArrayList<double[]> map_point = new ArrayList<>();{}
@@ -688,9 +674,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, this);//重複的動作
     }
 
-    //locationStart_Old
-//  locationStart_Old
-//    private void locationStart_Old(){
+    private void locationStart_Old(){
 //        Log.d("debug","locationStart()");
 //        // LocationManager インスタンス生成
 //        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);  // TabFragment 改
@@ -714,9 +698,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 //            Log.d("debug", "checkSelfPermission false");
 //            return;
 //        }
-//
-//        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, this);//重複的動作
-//    }
+
+        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, this);//重複的動作
+    }
 
     // 結果の受け取り
     @Override
@@ -736,7 +720,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
         }
     }
-
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -765,7 +748,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     }
 
-    double  lasttLatitude,lastLongitude;  // 紀錄
     @Override
     public void onLocationChanged(Location location) {  //GPS更新監聽
         if(tileView_Run == 1){ // 檢查 tileview 啟動
@@ -806,8 +788,18 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
     }
 
-    public double GetAngle(double ax, double ay,double bx,double by) // OK
-    {
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    double  lasttLatitude,lastLongitude; // 紀錄
+    public double GetAngle(double ax, double ay,double bx,double by){
         // 這邊需要過濾掉位置相同的問題
         if ( ax == bx && ay >= by ) return 0;
         bx -= ax;
@@ -821,241 +813,14 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         return (WRotation);
     }
 
-    @Override
-    public void onProviderEnabled(String provider) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
     //endregion #######################################################  GPS   ####################################################
 
     //region #################################################  Dijkstra   ####################################################
 
+    private void GetMIN(){
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   Dijkstra  & F ile I/O~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    /*
-     * Dijkstra最短路徑。
-     * 即，統計圖中"頂點vs"到其它各個頂點的最短路徑。
-     *
-     * 參數說明：
-     *       vs -- 起始頂點(start vertex)。即計算"頂點vs"到其它頂點的最短路徑。
-     *     prev -- 前驅頂點陣列。即，prev[i]的值是"頂點vs"到"頂點i"的最短路徑所經歷的全部頂點中，位於"頂點i"之前的那個頂點。
-     *     dist -- 長度陣列。即，dist[i]是"頂點vs"到"頂點i"的最短路徑的長度。
-     */
-    // dijkstraT(終點)
-    private void  dijkstraT(){
-
-//        for (int i = 0; i < mVexs.length; i++) { // 9999 換成 INF = 無限大
-//            mVexs[i]= i ;
-//        }
-
-
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~已做過~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-//        for (int i = 0; i < mVexs.length; i++) { // 9999 換成 INF = 無限大
-//            for (int j = 0; j < mVexs.length; j++) {
-//                mMatrix[i][j]= Loaddata[i][j];
-//                if(Loaddata[i][j]==9999){
-//                    mMatrix[i][j]=INF;
-//                }
-//            }
-//        }
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~已做過~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        //vs=3;
-        // vs = Integer.valueOf(txtScreen.getText().toString());
-        // flag[i]=true表示"頂點vs"到"頂點i"的最短路徑已成功獲取
-        boolean[] flag = new boolean[mVexs.length];
-        // 初始化
-        for (int i = 0; i < mVexs.length; i++) {
-            parent[i] = -1;//~~~
-            flag[i] = false;          // 頂點i的最短路徑還沒獲取到。
-            //prev[i] = 0;              // 頂點i的前驅頂點為0。
-            dist[i] = mMatrix[vs][i];  // 頂點i的最短路徑為"頂點vs"到"頂點i"的權。
-        }
-        // 對"頂點vs"自身進行初始化
-        flag[vs] = true;
-        dist[vs] = 0;
-        // 遍歷mVexs.length-1次；每次找出一個頂點的最短路徑。
-        int k=0;
-        for (int i = 1; i < mVexs.length; i++) {
-            // 尋找當前最小的路徑；
-            // 即，在未獲取最短路徑的頂點中，找到離vs最近的頂點(k)。
-            int min = INF;
-            for (int j = 0; j < mVexs.length; j++) {
-                if (flag[j]==false && dist[j]<min) {
-                    min = dist[j];
-                    k = j;
-                }
-            }
-            // 標記"頂點k"為已經獲取到最短路徑
-            flag[k] = true;
-            // 修正當前最短路徑和前驅頂點
-            // 即，當已經"頂點k的最短路徑"之後，更新"未獲取最短路徑的頂點的最短路徑和前驅頂點"。
-            for (int j = 0; j < mVexs.length; j++) {
-                int tmp = (mMatrix[k][j]==INF ? INF : (min + mMatrix[k][j]));
-                if (flag[j]==false && (tmp<dist[j]) ) {
-                    dist[j] = tmp;
-                    //prev[j] = k;
-                    parent[j] = k;//~~~
-                }
-            }
-        }
-//        for (int i = 0; i < mVexs.length; i++) {
-//            displaytext +=  mVexs[vs] + " to " + mVexs[i] + "=" + dist[i];
-//            displaytext += " ( " + vs;
-//            printPath(parent, i);
-//             displaytext +=  " ) ";
-//             displaytext += "\n";
-//
-//        }
-        // txtScreen.setText(displaytext);//顯示結果
-//        int EndPointTemp = Integer.parseInt(EndString)-1;//CCCCCCCCCCC
-//        int StartPointTemp Integer.parseInt(StartString)-1;
-
-        int StartPointTemp = StartPointMin;
-        int EndPointTemp = EndPointMin;
-//        DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
-//        printPath(parent, EndPointTemp);//加入路徑座標
-//        DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
-        if(Plusflag == 1){ // 二坪用
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp+125][0] ,GPS_Dot.Xys_List[StartPointTemp+125][1]});//加入起點座標
-            printPath(parent, EndPointTemp);//加入路徑座標
-//            DrawPointsList.add(new double[]{24.538329, 120.792896});
-//            DrawPointsList.add(new double[]{24.539129, 120.795621});
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp+125+1][0] ,GPS_Dot.Xys_List[EndPointTemp+125][1]});//加入終點座標
-        }
-        else{
-
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
-            printPath(parent, EndPointTemp);//加入路徑座標
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
-
-        }
-        Toast.makeText(this.getActivity(),  String.valueOf(dist[EndPointTemp]) , Toast.LENGTH_SHORT).show(); // 距離
-
-//        for (int r = 0;r< 227; r++) {   //  畫地圖上的所有點
-//            map_point.add(new double[]{GPS_Dot.Xys_List[r][0] ,GPS_Dot.Xys_List[r][1]});
-//        }
-//        for (double[] point : map_point) {  //建立標記圖示
-//            // any view will do...
-//            //marker = new ImageView(this);
-//
-//            ImageView marker = new ImageView(this.getActivity());
-//            // save the coordinate for centering and callout positioning
-//            marker.setTag(point);
-//            // give it a standard marker icon - this indicator points down and is centered, so we'll use appropriate anchors
-//
-//            //marker.setImageResource(Math.random() < 0.75 ? R.drawable.map_marker_normal : R.drawable.map_marker_featured);//random 隨機
-//            //random 隨機
-//
-//            marker.setImageResource(R.drawable.map_marker_123);
-//
-//
-//            marker.setScaleY((float) 0.5); // 放大
-//            marker.setScaleX((float) 0.5); // 放大
-//
-//            // on tap show further information about the area indicated
-//            // this could be done using a OnClickListener, which is a little more "snappy", since
-//            // MarkerTapListener uses GestureDetector.onSingleTapConfirmed, which has a delay of 300ms to
-//            // confirm it's not the start of a double-tap. But this would consume the touch event and
-//            // interrupt dragging
-//            tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
-//            // add it to the view tree
-//
-//            tileView.addMarker(marker, point[0], point[1], null, null);
-//        }
-    }
-
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    void printPath(int parent[], int j) { // 路徑
-        // Base Case : If j is source
-        if (parent[j]==-1) {
-            //  displaytext +=" > "+ j  ;
-            // Toast.makeText(this,  String.valueOf(j) , Toast.LENGTH_SHORT).show();
-            // DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j][0] ,GPS_Dot.Xys_List[j][1]});
-            if(Plusflag == 1){ // 二坪用
-                DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
-            }
-            else{
-                DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j][0] ,GPS_Dot.Xys_List[j][1]});
-            }
-            return;
-        }
-        printPath(parent, parent[j]);
-
-        //  displaytext +=" > "+ j  ;
-        if(Plusflag == 1){ // 二坪用
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
-        }
-        else{
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j][0] ,GPS_Dot.Xys_List[j][1]});
-        }
-    }
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~loadFile~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public String loadfiletoArray(String fStartString){
-        String result=null;
-        try
-        {
-            InputStream in=this.getResources().getAssets().open(fStartString);
-            int ch=0;
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            while((ch=in.read())!=-1)
-            {
-                baos.write(ch);
-            }
-            byte[] buff=baos.toByteArray();
-            baos.close();
-            in.close();
-            result = new String(buff,"UTF-8");//AN
-            String[] AfterSplit =  result.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");// C
-            int  ArraySum =  (int)Math.sqrt(AfterSplit.length);  //  開根號 及 型別轉換
-            // ~~~~~~~~~~~~~~~~~~設定各種大小~~~~~~~~~~~~~~~~~~~~
-            mVexs = new int[ArraySum];// 純標記
-
-            mMatrix = new int[mVexs.length][mVexs.length];
-            prev = new int[mVexs.length];
-            dist = new int[mVexs.length];
-            parent = new int[mVexs.length];
-            //~~~~~~~~~~~~~~~~~~ 一維轉二維陣列 ~~~~~~~~~~~~~~~~~~~~
-            int NumSplit = 0;
-            for (int i = 0; i< ArraySum ; i++){
-                for (int j = 0 ; j < ArraySum ; j++){
-                    int temp= Integer.parseInt(AfterSplit[NumSplit]);
-                    if(temp == 9999){
-                        mMatrix[i][j] = INF;
-                    }
-                    else{
-                        mMatrix[i][j] = temp;
-                    }
-                    NumSplit++;
-                }
-            }
-            result=result.replaceAll("\\r\\n","\n");
-        }
-        catch(Exception e)
-        {
-            Toast.makeText(this.getActivity(), "你已經GG了！", Toast.LENGTH_SHORT).show();
-        }
-        return result;
-    }
-
-    //END~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   Dijkstra  & F ile I/O~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    private void dijkstraMin(){
         int[][] PointNumTemp = new int[ AfterSplitStartString.length ][ AfterSplitEndString.length ]; // 個路徑的距離紀錄
         int vsTemp; //  起點
-//        for (int i = 0; i < mVexs.length; i++) { // 9999 換成 INF = 無限大
-//            for (int j = 0; j < mVexs.length; j++) {
-//                mMatrix[i][j]= Loaddata[i][j];
-//                if(Loaddata[i][j]==9999){
-//                    mMatrix[i][j]=INF;
-//                }
-//            }
-//        }
 
         for (int PointNum = 0; PointNum <  AfterSplitStartString.length ; PointNum++) {
             vsTemp =  Integer.parseInt(AfterSplitStartString[PointNum]) -1;  //  設定起點  點的起始為1
@@ -1128,8 +893,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
 
         // 取出對應的點
-//        StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1; // 最近短距離的 起點
-//        EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1;   // 最近短距離的 終點
+        //StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1; // 最近短距離的 起點
+        //EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1;   // 最近短距離的 終點
 
         if(Plusflag == 1){ // 二坪用
             // 設定最短的起點+終點   從別的Activity取得原始的值
@@ -1142,6 +907,135 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1;   // 最近短距離的 終點
 
         }
+    }
+
+    private void GetDijkstra(){
+
+        /*
+         * Dijkstra最短路徑。
+         * 即，統計圖中"頂點vs"到其它各個頂點的最短路徑。
+         *
+         * 參數說明：
+         *       vs -- 起始頂點(start vertex)。即計算"頂點vs"到其它頂點的最短路徑。
+         *     prev -- 前驅頂點陣列。即，prev[i]的值是"頂點vs"到"頂點i"的最短路徑所經歷的全部頂點中，位於"頂點i"之前的那個頂點。
+         *     dist -- 長度陣列。即，dist[i]是"頂點vs"到"頂點i"的最短路徑的長度。
+         */
+
+         /*
+        for (int i = 0; i < mVexs.length; i++) { // 9999 換成 INF = 無限大
+            for (int j = 0; j < mVexs.length; j++) {
+                mMatrix[i][j]= Loaddata[i][j];
+                if(Loaddata[i][j]==9999){
+                    mMatrix[i][j]=INF;
+                }
+            }
+        }
+       */
+
+        //vs=3;
+        //vs = Integer.valueOf(txtScreen.getText().toString());
+        // flag[i]=true表示"頂點vs"到"頂點i"的最短路徑已成功獲取
+        boolean[] flag = new boolean[mVexs.length];
+        // 初始化
+        for (int i = 0; i < mVexs.length; i++) {
+            parent[i] = -1;//~~~
+            flag[i] = false;          // 頂點i的最短路徑還沒獲取到。
+            //prev[i] = 0;              // 頂點i的前驅頂點為0。
+            dist[i] = mMatrix[vs][i];  // 頂點i的最短路徑為"頂點vs"到"頂點i"的權。
+        }
+        // 對"頂點vs"自身進行初始化
+        flag[vs] = true;
+        dist[vs] = 0;
+        // 遍歷mVexs.length-1次；每次找出一個頂點的最短路徑。
+        int k=0;
+        for (int i = 1; i < mVexs.length; i++) {
+            // 尋找當前最小的路徑；
+            // 即，在未獲取最短路徑的頂點中，找到離vs最近的頂點(k)。
+            int min = INF;
+            for (int j = 0; j < mVexs.length; j++) {
+                if (flag[j]==false && dist[j]<min) {
+                    min = dist[j];
+                    k = j;
+                }
+            }
+            // 標記"頂點k"為已經獲取到最短路徑
+            flag[k] = true;
+            // 修正當前最短路徑和前驅頂點
+            // 即，當已經"頂點k的最短路徑"之後，更新"未獲取最短路徑的頂點的最短路徑和前驅頂點"。
+            for (int j = 0; j < mVexs.length; j++) {
+                int tmp = (mMatrix[k][j]==INF ? INF : (min + mMatrix[k][j]));
+                if (flag[j]==false && (tmp<dist[j]) ) {
+                    dist[j] = tmp;
+                    //prev[j] = k;
+                    parent[j] = k;//~~~
+                }
+            }
+        }
+
+//        for (int i = 0; i < mVexs.length; i++) {
+//            displaytext +=  mVexs[vs] + " to " + mVexs[i] + "=" + dist[i];
+//            displaytext += " ( " + vs;
+//            PrintPath(parent, i);
+//             displaytext +=  " ) ";
+//             displaytext += "\n";
+//
+//        }
+        // txtScreen.setText(displaytext);//顯示結果
+//        int EndPointTemp = Integer.parseInt(EndString)-1;//CCCCCCCCCCC
+//        int StartPointTemp Integer.parseInt(StartString)-1;
+
+        int StartPointTemp = StartPointMin;
+        int EndPointTemp = EndPointMin;
+//        DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
+//        PrintPath(parent, EndPointTemp);//加入路徑座標
+//        DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
+        if(Plusflag == 1){ // 二坪用
+            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp+125][0] ,GPS_Dot.Xys_List[StartPointTemp+125][1]});//加入起點座標
+            PrintPath(parent, EndPointTemp);//加入路徑座標
+//            DrawPointsList.add(new double[]{24.538329, 120.792896});
+//            DrawPointsList.add(new double[]{24.539129, 120.795621});
+            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp+125+1][0] ,GPS_Dot.Xys_List[EndPointTemp+125][1]});//加入終點座標
+        }
+        else{
+
+            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
+            PrintPath(parent, EndPointTemp);//加入路徑座標
+            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
+
+        }
+        Toast.makeText(this.getActivity(),  String.valueOf(dist[EndPointTemp]) , Toast.LENGTH_SHORT).show(); // 距離
+
+//        for (int r = 0;r< 227; r++) {   //  畫地圖上的所有點
+//            map_point.add(new double[]{GPS_Dot.Xys_List[r][0] ,GPS_Dot.Xys_List[r][1]});
+//        }
+//        for (double[] point : map_point) {  //建立標記圖示
+//            // any view will do...
+//            //marker = new ImageView(this);
+//
+//            ImageView marker = new ImageView(this.getActivity());
+//            // save the coordinate for centering and callout positioning
+//            marker.setTag(point);
+//            // give it a standard marker icon - this indicator points down and is centered, so we'll use appropriate anchors
+//
+//            //marker.setImageResource(Math.random() < 0.75 ? R.drawable.map_marker_normal : R.drawable.map_marker_featured);//random 隨機
+//            //random 隨機
+//
+//            marker.setImageResource(R.drawable.map_marker_123);
+//
+//
+//            marker.setScaleY((float) 0.5); // 放大
+//            marker.setScaleX((float) 0.5); // 放大
+//
+//            // on tap show further information about the area indicated
+//            // this could be done using a OnClickListener, which is a little more "snappy", since
+//            // MarkerTapListener uses GestureDetector.onSingleTapConfirmed, which has a delay of 300ms to
+//            // confirm it's not the start of a double-tap. But this would consume the touch event and
+//            // interrupt dragging
+//            tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
+//            // add it to the view tree
+//
+//            tileView.addMarker(marker, point[0], point[1], null, null);
+//        }
     }
 
     public void Draw_Dijkstra(){
@@ -1190,18 +1084,18 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             loadfiletoArray(contentStr);
 
             Plusflag = 0;
-            dijkstraMin();   //  取得最短的組合
+            GetMIN();   //  取得最短的組合
             vs = StartPointMin;
-            dijkstraT();
+            GetDijkstra();
         } else if (Integer.parseInt(AfterSplitStartString[0]) > 125 && Integer.parseInt(AfterSplitEndString[0]) > 125) {  //只有二坪
 
             String contentStr = ("map_a.txt");//讀ASSETS~~~~~~~!! 用二坪的檔案
             loadfiletoArray(contentStr);
 
             Plusflag = 1;
-            dijkstraMin();   //  取得最短的組合
+            GetMIN();   //  取得最短的組合
             vs = StartPointMin;
-            dijkstraT();
+            GetDijkstra();
         } else { // 跨校區
             if (Integer.parseInt(AfterSplitStartString[0]) < 125) { // 八甲開始
 
@@ -1214,9 +1108,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 AfterSplitEndString = new String[0]; // 清空陣列
                 AfterSplitEndString = new String[1];
                 AfterSplitEndString[0] = String.valueOf(123); //校門口
-                dijkstraMin();   //  取得最短的組合
+                GetMIN();   //  取得最短的組合
                 vs = StartPointMin;
-                dijkstraT();
+                GetDijkstra();
                 AfterSplitEndString = EndString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");//恢復
 
                 Doflag = 2; //  跨區旗標 = 2 起點圖示改變
@@ -1236,9 +1130,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 AfterSplitStartString = new String[0]; // 清空陣列
                 AfterSplitStartString = new String[1];
                 AfterSplitStartString[0] = String.valueOf(200); //校門口
-                dijkstraMin();   //  取得最短的組合
+                GetMIN();   //  取得最短的組合
                 vs = StartPointMin;
-                dijkstraT();
+                GetDijkstra();
                 AfterSplitStartString = StartString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");//恢復
 
 
@@ -1253,9 +1147,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 AfterSplitEndString = new String[0]; // 清空陣列
                 AfterSplitEndString = new String[1];
                 AfterSplitEndString[0] = String.valueOf(200); //校門口
-                dijkstraMin();   //  取得最短的組合
+                GetMIN();   //  取得最短的組合
                 vs = StartPointMin;
-                dijkstraT();
+                GetDijkstra();
                 AfterSplitEndString = EndString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");//恢復
 
 
@@ -1267,9 +1161,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 AfterSplitStartString = new String[0]; // 清空陣列
                 AfterSplitStartString = new String[1];
                 AfterSplitStartString[0] = String.valueOf(123); //校門口
-                dijkstraMin();   //  取得最短的組合
+                GetMIN();   //  取得最短的組合
                 vs = StartPointMin;
-                dijkstraT();
+                GetDijkstra();
                 AfterSplitStartString = StartString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");//恢復
             }
         }
@@ -1334,13 +1228,87 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         mMatrix = new int[0][0];
         tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE); // to GPS座標
     }
+
+    private void PrintPath(int parent[], int j) {
+        // Base Case : If j is source
+        if (parent[j]==-1) {
+            //  displaytext +=" > "+ j  ;
+            // Toast.makeText(this,  String.valueOf(j) , Toast.LENGTH_SHORT).show();
+            // DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j][0] ,GPS_Dot.Xys_List[j][1]});
+            if(Plusflag == 1){ // 二坪用
+                DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
+            }
+            else{
+                DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j][0] ,GPS_Dot.Xys_List[j][1]});
+            }
+            return;
+        }
+        PrintPath(parent, parent[j]);
+
+        //  displaytext +=" > "+ j  ;
+        if(Plusflag == 1){ // 二坪用
+            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
+        }
+        else{
+            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j][0] ,GPS_Dot.Xys_List[j][1]});
+        }
+    }
+
+    public String loadfiletoArray(String fStartString){
+        String result = null;
+
+        try {
+            InputStream in=this.getResources().getAssets().open(fStartString);
+            int ch=0;
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            while((ch=in.read())!=-1)
+            {
+                baos.write(ch);
+            }
+            byte[] buff=baos.toByteArray();
+            baos.close();
+            in.close();
+            result = new String(buff,"UTF-8");//AN
+            String[] AfterSplit =  result.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");// C
+            int  ArraySum =  (int)Math.sqrt(AfterSplit.length);  //  開根號 及 型別轉換
+            // ~~~~~~~~~~~~~~~~~~設定各種大小~~~~~~~~~~~~~~~~~~~~
+            mVexs = new int[ArraySum];// 純標記
+
+            mMatrix = new int[mVexs.length][mVexs.length];
+            prev = new int[mVexs.length];
+            dist = new int[mVexs.length];
+            parent = new int[mVexs.length];
+            //~~~~~~~~~~~~~~~~~~ 一維轉二維陣列 ~~~~~~~~~~~~~~~~~~~~
+            int NumSplit = 0;
+            for (int i = 0; i< ArraySum ; i++){
+                for (int j = 0 ; j < ArraySum ; j++){
+                    int temp= Integer.parseInt(AfterSplit[NumSplit]);
+                    if(temp == 9999){
+                        mMatrix[i][j] = INF;
+                    }
+                    else{
+                        mMatrix[i][j] = temp;
+                    }
+                    NumSplit++;
+                }
+            }
+            result=result.replaceAll("\\r\\n","\n");
+        }
+        catch(Exception e)
+        {
+            Toast.makeText(this.getActivity(), "你已經GG了！", Toast.LENGTH_SHORT).show();
+        }
+        return result;
+    }
+
     //endregion #########################################################  Dijkstra   ####################################################
 
-    //region #########################################################  test   ####################################################
-    // Fragment Communicating........................
+    //region #############################################  test   ####################################################
+
+    // Fragment Communicating
     String StartStr , EndStr;
-    protected void displayReceivedData(String message)
-    {
+
+    protected void displayReceivedData(String message) {
 //        GlobalVariable globalVariable = (GlobalVariable)getActivity().getApplicationContext();
 //        StartStr = globalVariable.Start;
 //
