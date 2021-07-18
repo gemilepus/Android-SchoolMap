@@ -21,7 +21,7 @@ public class PHPMainActivity extends AppCompatActivity {
 
         Toolbar toolbar =(Toolbar) findViewById(R.id.toolbarJSON);
         //toolbar.setLogo(R.drawable.ic_menu_back);
-        toolbar.setTitle("管理系統");
+        toolbar.setTitle("校園公告管理系統");
         toolbar.setTitleTextColor(0xFFFFFFFF);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
