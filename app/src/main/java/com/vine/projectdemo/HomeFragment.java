@@ -21,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vine.projectdemo.VineMapView.MapMainActivity;
 import com.vine.projectdemo.VineReValues.GlobalVariable;
 
 import java.lang.ref.WeakReference;
@@ -96,7 +95,7 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 //intent.setClass(HomeFragment.this,ShowValue.class);
-                intent.setClass(HomeFragment.this.getActivity(),MapMainActivity.class);
+                //intent.setClass(HomeFragment.this.getActivity(),MapMainActivity.class);
                 intent.putExtra("startstring",StartPoints);
                 intent.putExtra("endstring",EndPoints);
                 startActivity(intent);
