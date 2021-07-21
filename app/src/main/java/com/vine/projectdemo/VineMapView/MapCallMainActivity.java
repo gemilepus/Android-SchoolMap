@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.vine.projectdemo.R;
-import com.vine.projectdemo.VineJsonParsing.JSONMainActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
