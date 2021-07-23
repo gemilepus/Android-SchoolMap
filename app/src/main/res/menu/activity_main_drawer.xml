@@ -5,7 +5,8 @@
         <item
             android:id="@+id/nav_camera"
             android:icon="@drawable/ic_menu_camera"
-            android:title="往返火車站班車時刻表" />
+            android:title="往返火車站班車時刻表"
+            android:visible="false"/>
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
