@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -186,39 +187,36 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 //                        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, metrics)
 //                )
 //        ); // 線的彎曲幅度
-        //paint.setPathEffect(null);  // 不做任何效果
-
-        paint.setPathEffect(new DashPathEffect(new float[]{20, 10}, 0)); // 畫虛線
+        //paint.setPathEffect(null);
+        paint.setPathEffect(new DashPathEffect(new float[]{20, 10}, 0));
         //paint.setColor();
-
-        //tileView.drawPath(points.subList(2, 5), null); // 畫線
+        //tileView.drawPath(points.subList(2, 5), null);
 
         // set mScale to 0, but keep scaleToFit true, so it'll be as small as possible but still match the container
         tileView.setScale(0);
 
         // frame to center
-        // frameTo(0.5, 0.5);
+        //frameTo(0.5, 0.5);
 
         // render while panning
         tileView.setShouldRenderWhilePanning(true);
 
         // disallow going back to minimum scale while double-taping at maximum scale (for demo purpose)
         tileView.setShouldLoopScale(false);
+        //tileView.setSaveEnabled(true);
 
-        // tileView.setSaveEnabled( true );
-        // setContentView(tileView);
-
-        // View v =  tileView;
-        //LinearLayout lp =  (LinearLayout) v.findViewById(R.id.LI);
-        //lp.addView(tileView,lp);
-        //((LinearLayout)getActivity().findViewById(R.id.LI).addView(tileView,lp);
-
-        // LinearLayout裁掉超出的部分
+        // Map Layout
         mLinearLayout_P = (LinearLayout) v.findViewById(R.id.LI);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT, 1); // 框框 View
-        ((LinearLayout) v.findViewById(R.id.LI)).addView(tileView, lp); // addView
-        tileView.setScaleY((float) 16.5 / 10.f);
-        tileView.setScaleX((float) 16.5 / 10.f);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        ((LinearLayout) v.findViewById(R.id.LI)).addView(tileView, lp);
+
+        Point size = new Point();
+        MapFragment.this.getActivity().getWindowManager().getDefaultDisplay().getSize(size);
+        //mScale= Math.sqrt((Math.pow(size.x, 2)+Math.pow(size.y, 2)))/size.x;
+        float mScale= (float)size.y/size.x;
+        tileView.setScaleY(mScale);
+        tileView.setScaleX(mScale);
 
         list = new ArrayList<DataObject>();
         list.add(0, new DataObject("二坪校區正門", "二坪校區", "126"));
