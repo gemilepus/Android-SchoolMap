@@ -94,7 +94,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                //intent.setClass(HomeFragment.this,ShowValue.class);
                 //intent.setClass(HomeFragment.this.getActivity(),MapMainActivity.class);
                 intent.putExtra("startstring",StartPoints);
                 intent.putExtra("endstring",EndPoints);

@@ -32,10 +32,6 @@
         </activity>
 
         <activity
-            android:name="com.vine.projectdemo.ShowValue">
-        </activity>
-
-        <activity
             android:theme="@style/AppTheme.NoActionBar"
             android:name="com.vine.projectdemo.VinePHPMySQL.PHPMainActivity"
             android:screenOrientation="portrait">
