@@ -28,21 +28,15 @@ import com.vine.projectdemo.VineJsonParsing.JSONMainActivity;
 import com.vine.projectdemo.VinePHPMySQL.PHPMainActivity;
 import com.vine.projectdemo.VineReValues.GlobalVariable;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , HomeFragment.SendMessage{
 
-    //  ~~~~~~~~~~~~~~~~~~~~~ Fragment ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Fragment
     private ViewPager mViewPager;
     public HomeFragment homeFragment;
     public MapFragment mapFragment;
-    //  ~~~~~~~~~~~~~~~~~~~~~ Fragment ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     private BottomNavigationView mBottomNavigationView;
     private FloatingActionButton fab_Go,fab_help;
-    private Boolean isFabOpen = false;
     private Animation fab_open,fab_close, fab_right;
     private Animation rotate_forward,rotate_backward;
 
@@ -78,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String tag = "android:switcher:" + R.id.pager + ":" + 1;
         MapFragment f = (MapFragment) getSupportFragmentManager().findFragmentByTag(tag);
         f.displayReceivedData(message);
+
         //【FragmentStatePagerAdapter】
         //FragmentManager manager = getSupportFragmentManager();
         //mapFragment = (MapFragment) manager.findFragmentById(R.id.pager);
@@ -170,38 +165,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab_close       = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
         rotate_forward  = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_forward);
         rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_backward);
-        fab_right = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_right);
+        fab_right       = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_right);
 
-//        mViewPager.getCurrentItem();
-//        mViewPagerAdapter.getItem(1).getTag().toString();
+        //mViewPager.getCurrentItem();
+        //mViewPagerAdapter.getItem(1).getTag().toString();
 
         fab_Go = (FloatingActionButton)findViewById(R.id.fab1);
+        fab_Go.setY(200);
+        fab_Go.setVisibility(View.GONE);
+        fab_Go.setClickable(false);
         fab_Go.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View view) {
-//                FragmentManager manager = getSupportFragmentManager();
-//                homeFragment = (HomeFragment) manager.findFragmentById(R.id.pager);
-//                homeFragment.SetCommend();
+                //FragmentManager manager = getSupportFragmentManager();
+                //homeFragment = (HomeFragment) manager.findFragmentById(R.id.pager);
+                //homeFragment.SetCommend();
 
                 FragmentManager manager = getSupportFragmentManager();
                 mapFragment = (MapFragment) manager.findFragmentById(R.id.pager);
-                mapFragment.Draw_Dijkstra();   // Activity 可以直接命令 Fragment (Fragment 的函數要為 public)
-                mViewPager.setCurrentItem(1); // 跳到 index 1 的 Page
+                mapFragment.Draw_Dijkstra();
+                mViewPager.setCurrentItem(1);
 
-                //  SM.sendData("32".trim());  // PassingDataBetweenFragments
-
-                fab_Go.startAnimation(fab_right);
-                //animateFAB();
-                fab_Go.setVisibility(View.GONE);
-                fab_Go.setClickable(false);
-
+                animateFAB();
                 hideSoftKeyboard();
+
+                //SM.sendData("test".trim());  // PassingDataBetweenFragments
             }
         });
-        fab_Go.setY(200);
-        fab_Go.setVisibility(View.GONE); 
-        fab_Go.setClickable(false);
 
         fab_help = (FloatingActionButton) findViewById(R.id.fab_help);
         fab_help.setOnClickListener(new View.OnClickListener() {
@@ -209,34 +199,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "輸入完現在及目的位置後，按下開始導航即會進入地圖畫面", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                // fab_Go.layout(fab_help.getLeft(),fab_help.getRight(),fab_help.getTop(),fab_help.getBottom() );
-                // fab_Go.getLocationInWindow();
-                // fab_Go.setX(300);
-                // fab_Go.topMargin  = 200;
             }
 
         });
     }
 
     public void animateFAB(){
-//        if(isFabOpen){
-//         //   fab_Go.startAnimation(rotate_backward);
-//           // fab_Go.startAnimation(fab_close);
-//           // fab2.startAnimation(fab_close);
-//            //fab_Go.setClickable(false);
-//           // fab2.setClickable(false);
-//            isFabOpen = false;
-//            Log.d("Raj", "close");
-//        } else {
-//          //  fab_Go.startAnimation(rotate_forward);
-//           fab_Go.startAnimation(fab_open);
-//           // fab2.startAnimation(fab_open);
-//            fab_Go.setClickable(true);
-//           // fab2.setClickable(true);
-//            isFabOpen = true;
-//            Log.d("Raj","open");
-//        }
-        fab_Go.startAnimation(fab_open);
+        fab_Go.startAnimation(fab_right);
+        fab_Go.setVisibility(View.GONE);
+        fab_Go.setClickable(false);
     }
 
     //region #########################################################  NavigationView   ####################################################
@@ -296,49 +267,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     //endregion #########################################################  NavigationView   ####################################################
 
-    //region #########################################################  test   ####################################################
-
-    //RelativeLayout relativeLayout = findViewById(R.id.your_relative_layout);
-    //mVideo = new VideoView(this);
-    //RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT); // or wrap_content
-    //layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-    //relativeLayout.addView(mVideo , layoutParams);
-    
-    private List<WeakReference<Fragment>> mFragList = new ArrayList<WeakReference<Fragment>>();
-
-    @Override
-    public void onAttachFragment (Fragment fragment) {
-        mFragList.add(new WeakReference(fragment));
-    }
-    public List<Fragment> getActiveFragments() {
-        ArrayList<Fragment> ret = new ArrayList<Fragment>();
-        for(WeakReference<Fragment> ref : mFragList) {
-            Fragment f = ref.get();
-            if(f != null) {
-                if(f.isVisible()) {
-                    ret.add(f);
-                }
-            }
-        }
-        return ret;
-    }
-
-//    public Fragment findFragement(String tClass) {
-//
-//        List<Fragment> fragments = getActiveFragments();
-//        for (Fragment fragment : fragments) {
-//            if (tClass.equalsIgnoreCase("Home")) {
-//                if (fragment instanceof MapFragment) {
-//                    return fragment;
-//
-//                }
-//            } else if (tClass.equalsIgnoreCase("Contacts")) {
-//                if (fragment instanceof ContactFragment) {
-//                    return fragment;
-//                }
-//            }
-//        }
-//        return null;
-//    }
-    //endregion #########################################################  test   ##################################################
 }
