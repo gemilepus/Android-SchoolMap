@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.Spannable;
 import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,11 +58,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,  Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.home_content_main, container, false);
-        LinearLayout LI_Home = (LinearLayout) v.findViewById(R.id.LIhome);// 介面上放Button的位置
+        LinearLayout LI_Home = (LinearLayout) v.findViewById(R.id.LIhome);
         LI_Home.setVisibility(View.GONE);
-        //recipient = (EditText) v.findViewById(R.id.recipient);
-        //setContentView(R.layout.home_content_main);
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);//    EditText 取得焦點 但不會立刻彈出鍵盤
 
         buttonTest = (Button)v.findViewById(R.id.button2);
         buttonTest.setOnClickListener(new View.OnClickListener() { // 展開清單
@@ -72,7 +70,7 @@ public class HomeFragment extends Fragment {
 
                 if(ListOpenFlag == 1){
                     ListOpenFlag = 0;
-                    buttonTest.setText("+"); // button 要於全域宣告
+                    buttonTest.setText("+");
                 }else{
                     ListOpenFlag = 1;
                     buttonTest.setText("-");
@@ -82,8 +80,8 @@ public class HomeFragment extends Fragment {
                 // RecyclerView 主體
                 recyclerView.getLayoutManager().scrollToPosition(10);// 移動到對 X 個
 
-//                ViewGroup.LayoutParams laParams =  recyclerView.getLayoutParams();
-//                laParams.
+                //ViewGroup.LayoutParams laParams =  recyclerView.getLayoutParams();
+                //laParams.
                 //myRecAdapter.notifyItemRemoved(10);
             }});
 
@@ -155,7 +153,7 @@ public class HomeFragment extends Fragment {
         // Item Spacing
         int spacingInPixels = getResources().getDimensionPixelSize(R.dimen.margin_cardview);
         recyclerView.addItemDecoration(new SpacesItemDecoration(spacingInPixels));
-        //Edittext
+        // Edittext
         searchTextStart = (EditText) v.findViewById(R.id.editTextStart);
         searchTextEnd = (EditText) v.findViewById(R.id.editTextEnd);
 
@@ -163,24 +161,25 @@ public class HomeFragment extends Fragment {
         searchTextStart.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before , int count) {
-                // textView.setText(searchTextStart.getText());
+                //textView.setText(searchTextStart.getText());
                 //SelectStatus=1;
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //Toast.makeText(ShowAddressActivity.this,"beforeTextChanged ",Toast.LENGTH_SHORT).show();
+                Log.i("HomeFragment", "beforeTextChanged ");
             }
             @Override
             public void afterTextChanged(Editable s) {
                 searchTextStart.setTextColor(Color.BLACK);
                 String text = searchTextStart.getText().toString().toLowerCase(Locale.getDefault());
                 final List<DataObject> filteredModelList = filter(list, text);
+
                 if (filteredModelList.size() > 0) {
                     myRecAdapter.setFilter(filteredModelList);
                     //return true;
                 } else {
                     // If not matching search filter data
-                    //Toast.makeText(HomeFragment.this.getActivity(), "Not Found", Toast.LENGTH_SHORT).show();
+                    Log.i("HomeFragment", "Not Found");
                     //return false;
                 }
             }
@@ -206,15 +205,11 @@ public class HomeFragment extends Fragment {
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                //Toast.makeText(ShowAddressActivity.this,"beforeTextChanged ",Toast.LENGTH_SHORT).show();
-
+                Log.i("HomeFragment", "beforeTextChanged ");
             }
             @Override
             public void afterTextChanged(Editable s) {
-
                 searchTextEnd.setTextColor(Color.BLACK);
-
-
                 String text = searchTextEnd.getText().toString().toLowerCase(Locale.getDefault());
                 final List<DataObject> filteredModelList = filter(list, text);
 
@@ -223,7 +218,7 @@ public class HomeFragment extends Fragment {
                     //return true;
                 } else {
                     // If not matching search filter data
-                    //Toast.makeText(HomeFragment.this.getActivity(), "Not Found", Toast.LENGTH_SHORT).show();
+                    Log.i("HomeFragment", "Not Found");
                     //return false;
                 }
             }
@@ -335,24 +330,22 @@ public class HomeFragment extends Fragment {
                         String point = vtxt.getText().toString();
                         if (SelectStatus==1) {
                             StartPoints = point;
-                            SM.sendData("START".trim());  // PassingDataBetweenFragments  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            SM.sendData("START".trim());  // PassingDataBetweenFragments
                             GlobalVariable globalVariable = (GlobalVariable)getActivity().getApplicationContext();
                             globalVariable.Start =  StartPoints;
                             searchTextStart.setText("(" + startstring + ")");
                             searchTextStart.setTextColor(Color.parseColor("#136388"));
-                            //  textView.setText(StartPoints);
                             final List<DataObject> filteredModelList = filter(list, "");//清單重置
                             searchTextEnd.requestFocus();//  Focus 下一個 edittext
                             StartTextFlag = 1; // 起點已選擇
                         }
                         else {
                             EndPoints = point;
-                            SM.sendData("END".trim());  // PassingDataBetweenFragments  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                            SM.sendData("END".trim());  // PassingDataBetweenFragments
                             GlobalVariable globalVariable = (GlobalVariable)getActivity().getApplicationContext();
                             globalVariable.End =  EndPoints;
                             searchTextEnd.setText("(" + startstring + ")");
                             searchTextEnd.setTextColor(Color.parseColor("#136388"));
-                            //  textView1.setText(EndPoints);
                             final List<DataObject> filteredModelList = filter(list, "");//清單重置
                             btnStart.setEnabled(true);//  解除鎖定 Button
                             btnStart.setBackgroundColor(0xFF47C5FF);
@@ -415,9 +408,4 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    //region #########################################################  test   ####################################################
-    public void SetCommend() { // 測試
-
-    }
-    //endregion #########################################################  test   ##################################################
 }

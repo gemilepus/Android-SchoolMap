@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -110,10 +111,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }else{
                     fab_help.setVisibility(View.GONE); 
                     mBottomNavigationView.setVisibility(View.VISIBLE);
-
-                    fab_Go.setVisibility(View.GONE); 
                     fab_Go.startAnimation(fab_close);
                     fab_Go.setClickable(false);
+                    fab_Go.setVisibility(View.GONE);
                 }
             }
             @Override
@@ -161,14 +161,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setupFab(){
+        Log.i("MainActivity", "CurrentItem : " + String.valueOf(mViewPager.getCurrentItem()));
+
         fab_open        = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_open);
         fab_close       = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
         rotate_forward  = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_forward);
         rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_backward);
         fab_right       = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_right);
-
-        //mViewPager.getCurrentItem();
-        //mViewPagerAdapter.getItem(1).getTag().toString();
 
         fab_Go = (FloatingActionButton)findViewById(R.id.fab1);
         fab_Go.setY(200);
@@ -177,10 +176,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab_Go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //FragmentManager manager = getSupportFragmentManager();
-                //homeFragment = (HomeFragment) manager.findFragmentById(R.id.pager);
-                //homeFragment.SetCommend();
-
                 FragmentManager manager = getSupportFragmentManager();
                 mapFragment = (MapFragment) manager.findFragmentById(R.id.pager);
                 mapFragment.Draw_Dijkstra();
@@ -267,4 +262,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     //endregion #########################################################  NavigationView   ####################################################
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("debug", "onRestart()");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("debug", "onResume()");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("debug", "onPause()");
+        fab_Go.clearAnimation();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("debug", "onStop()");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("debug", "onDestroy()");
+    }
 }
