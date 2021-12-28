@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setupBottomNavigation();
         setViewPager(); // add Tab
         setupFab();
-        
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);// EditText 取得焦點 但不會立刻彈出鍵盤
     }
 

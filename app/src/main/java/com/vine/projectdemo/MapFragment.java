@@ -73,20 +73,21 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         return new MapFragment();
     }
 
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  TileView  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    LinearLayout mLinearLayout_P;
+    // TileView
     TileView tileView;
     int tileView_Run = 1;
-    public static final double SOUTH_EAST_LONGITUDE = 120.8167;
-    public static final double SOUTH_EAST_LATITUDE = 24.533648;
-    public static final double NORTH_WEST_LONGITUDE = 120.7832; // 經度 0.012904468412943
     public static final double NORTH_WEST_LATITUDE = 24.547866; // 緯度 0.0117471872931833
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ GPS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public static final double NORTH_WEST_LONGITUDE = 120.7832; // 經度 0.012904468412943
+    public static final double SOUTH_EAST_LATITUDE = 24.533648;
+    public static final double SOUTH_EAST_LONGITUDE = 120.8167;
+
+    // GPS
     private LocationManager locationManager;
     private static final int MinTime = 1000;// 更新時間
     private static final float MinDistance = 1;// 移動多少 M 才會監聽
     int GPS_Run = 0;
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Dijkstra ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // Dijkstra
     private static final int INF = Integer.MAX_VALUE;
     int[] mVexs;// 純標記
     int mMatrix[][];
@@ -103,10 +104,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     int ListStFlag = 0;
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Label  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    TextView[] marker_Text_array = new TextView[60]; // Test Array
-    String ValueString, TextString;
-    String[] ValueStringArray;
     List<DataObject> list;
+    TextView[] marker_Text_array = new TextView[60]; // Test Array
     int List_Length;
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  dot  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     ImageView[] marker_Movedot_array = new ImageView[25];
@@ -134,11 +133,13 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
         // ElectronicCompass
         WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+        /*
         Display display = wm.getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        int width = size.x;
-//        int height = size.y;
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+         */
         mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         ElectronicCompassBtn = (Button) v.findViewById(R.id.BTNN);
         ElectronicCompassBtn.setOnClickListener(new View.OnClickListener() {
@@ -173,13 +174,15 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         Paint paint = tileView.getDefaultPathPaint();
 
         // dress up the path effects and draw it between some points
-        // 陰影效果  (耗能)
-//        paint.setShadowLayer(
-//                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, metrics),
-//                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, metrics),
-//                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, metrics),
-//                0x66000000
-//        );
+
+        /*
+        paint.setShadowLayer(
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, metrics),
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, metrics),
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, metrics),
+                0x66000000
+        );
+         */
 
         paint.setStrokeWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, metrics));  //  線寬
 //        paint.setPathEffect(
@@ -206,7 +209,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //tileView.setSaveEnabled(true);
 
         // Map Layout
-        mLinearLayout_P = (LinearLayout) v.findViewById(R.id.LI);
+        LinearLayout MainLinearLayout = (LinearLayout) v.findViewById(R.id.LI);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT, 1);
         ((LinearLayout) v.findViewById(R.id.LI)).addView(tileView, lp);
@@ -286,15 +289,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         return tileView;
     }
 
-    public void frameTo( final double x, final double y ) {
-        getTileView().post( new Runnable() {
-            @Override
-            public void run() {
-               // getTileView().moveToMarker();
-            }
-        });
-    }
-
     public void DrawLable() {
 
         //region 標記所有點
@@ -326,36 +320,28 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
         List_Length = (int) list.size();
         double x, y;
-        for (int N = 0; N < List_Length; N++) {
-
+        for (int i = 0; i < List_Length; i++) {
             x = 0;
             y = 0;
-            TextString = list.get(N).getHeading();
-            ValueString = list.get(N).getValue();
-            ValueStringArray = ValueString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");
-            for (int i = 0; i < ValueStringArray.length; i++) {
-                //Integer.valueOf( ValueStringArray[N])
-                // ValueStringArray[]
-                x = x + GPS_Dot.Xys_List[Integer.valueOf(ValueStringArray[i]) - 1][0];
-                y = y + GPS_Dot.Xys_List[Integer.valueOf(ValueStringArray[i]) - 1][1];
+            String TextString = list.get(i).getHeading();
+            String ValueString = list.get(i).getValue();
+            String[] ValueStringArray = ValueString.split("-");
+            
+            for (String s : ValueStringArray) {
+                x = x + GPS_Dot.Xys_List[Integer.parseInt(s) - 1][0];
+                y = y + GPS_Dot.Xys_List[Integer.parseInt(s) - 1][1];
             }
             x = x / ValueStringArray.length;
             y = y / ValueStringArray.length;
 
-            ArrayList<double[]> pointsText = new ArrayList<>();
-            // pointsText.add(new double[]{GPS_Dot.Xys_List[Integer.valueOf( ValueStringArray[N])-1][0] ,GPS_Dot.Xys_List[Integer.valueOf( ValueStringArray[N])-1][1]});
-            marker_Text_array[N] = new TextView(this.getActivity());
-            //TextView marker = new TextView(this.getActivity());
-            marker_Text_array[N].setText(TextString);
-            marker_Text_array[N].setTag(pointsText);
-            marker_Text_array[N].setTextColor(Color.parseColor("#ff007acc"));
-            marker_Text_array[N].setBackgroundColor(Color.parseColor("#4032abfc"));
-
-            // tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
-            // tileView.addMarker(marker,GPS_Dot.Xys_List[Integer.valueOf( ValueStringArray[N])-1][0] ,GPS_Dot.Xys_List[Integer.valueOf( ValueStringArray[N])-1][1], null, null);
-            tileView.addMarker(marker_Text_array[N], x, y, null, null);
+            // create marker
+            marker_Text_array[i] = new TextView(this.getActivity());
+            marker_Text_array[i].setText(TextString);
+            marker_Text_array[i].setTextColor(Color.parseColor("#ff007acc"));
+            marker_Text_array[i].setBackgroundColor(Color.parseColor("#4032abfc"));
+            //tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
+            tileView.addMarker(marker_Text_array[i], x, y, null, null);
         }
-        // 轉變為GPS座標
         tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE);
     }
 
@@ -490,29 +476,29 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             degree[0] = (float) Math.toDegrees(degree[0]);
 
             //取方位
-//            if ((int)degree[0]<30 && (int)degree[0]>-30) {
-//                vector="北";}
-//            else if ((int)degree[0]>=30 && (int)degree[0]<=60){
-//                vector="東北";
-//            }
-//            else if ((int)degree[0]>60 && (int)degree[0]<120){
-//                vector="東";
-//            }
-//            else if ((int)degree[0]>=120 && (int)degree[0]<=150){
-//                vector="東南";
-//            }
-//            else if ((int)degree[0]>=-60 && (int)degree[0]<=-30){
-//                vector="西北";
-//            }
-//            else if ((int)degree[0]>=-150 && (int)degree[0]<=-120){
-//                vector="西南";
-//            }
-//            else if ((int)degree[0]>-120 && (int)degree[0]<-60){
-//                vector="西";
-//            }
-//            else {
-//                vector="南";
-//            }
+            if ((int)degree[0]<30 && (int)degree[0]>-30) {
+                vector="北";}
+            else if ((int)degree[0]>=30 && (int)degree[0]<=60){
+                vector="東北";
+            }
+            else if ((int)degree[0]>60 && (int)degree[0]<120){
+                vector="東";
+            }
+            else if ((int)degree[0]>=120 && (int)degree[0]<=150){
+                vector="東南";
+            }
+            else if ((int)degree[0]>=-60 && (int)degree[0]<=-30){
+                vector="西北";
+            }
+            else if ((int)degree[0]>=-150 && (int)degree[0]<=-120){
+                vector="西南";
+            }
+            else if ((int)degree[0]>-120 && (int)degree[0]<-60){
+                vector="西";
+            }
+            else {
+                vector="南";
+            }
             //if( Animation_Run == 0) {
                 if (currentDegree - (-degree[0]) > 5 || currentDegree - (-degree[0]) < -5 && MyTimerTaskATime == 0) {
 
@@ -672,34 +658,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, this);//重複的動作
     }
 
-    private void locationStart_Old(){
-//        Log.d("debug","locationStart()");
-//        // LocationManager インスタンス生成
-//        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);  // TabFragment 改
-//
-//        final boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-//        if (!gpsEnabled) {
-//            // GPSを設定するように促す
-//            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-//            startActivity(settingsIntent);
-//
-//            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MinTime, MinDistance, this);// 對GPS做一些設定
-//
-//            Log.d("debug", "gpsEnable, startActivity");
-//        } else {
-//            Log.d("debug", "gpsEnabled");
-//        }
-//
-//        if (ActivityCompat.checkSelfPermission(MapFragment.this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(MapFragment.this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
-//
-//            Log.d("debug", "checkSelfPermission false");
-//            return;
-//        }
-
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, this);//重複的動作
-    }
-
     // 結果の受け取り
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -707,10 +665,10 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             // 使用が許可された
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Log.d("debug","checkSelfPermission true");
-                //Toast toast1 = Toast.makeText(this, "GPS 啟動", Toast.LENGTH_SHORT);
-                locationStart();
-                return;
 
+                locationStart();
+                Toast.makeText(MapFragment.this.getActivity(), "GPS 啟動", Toast.LENGTH_SHORT).show();
+                return;
             } else {
                 // それでも拒否された時の対応
                 Toast toast = Toast.makeText(MapFragment.this.getActivity(), "これ以上なにもできません", Toast.LENGTH_SHORT);
@@ -743,20 +701,17 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 toast2.show();
                 break;
         }
-
     }
 
     @Override
-    public void onLocationChanged(Location location) {  //GPS更新監聽
+    public void onLocationChanged(Location location) {  // GPS更新監聽
         if(tileView_Run == 1){ // 檢查 tileview 啟動
-            //~~~~~~~~~~~~~~~~~~ path marker
+            // path marker
             double[]  point3 = {location.getLongitude() ,location.getLatitude()};
             marker_Movedot_array[marker_Move_dot_num] = new ImageView(this.getActivity());
             marker_Movedot_array[marker_Move_dot_num].setTag(point3);
             marker_Movedot_array[marker_Move_dot_num].setImageResource(R.drawable.dot);
-            //tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
             tileView.addMarker(marker_Movedot_array[marker_Move_dot_num], point3[0], point3[1], null, null);  // 使GPS座標設定Marker的位置
-            //marker_Movedot_array[marker_Move_dot_num].setScrollY(-95);
             marker_Movedot_array[marker_Move_dot_num].setScaleY((float) 0.6); // 縮小
             marker_Movedot_array[marker_Move_dot_num].setScaleX((float) 0.6); // 縮小
             marker_Move_dot_num = marker_Move_dot_num ++;
@@ -764,22 +719,26 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             if( marker_Move_dot_num == 26){
                 marker_Move_dot_num = 0;
             }
-            //~~~~~~~~~~~~~~~~~~~~~~ here marker
+
+            // here marker
             double[] point2 = {location.getLongitude() ,location.getLatitude()};
             tileView.removeMarker(marker_MoveHere);
             marker_MoveHere = new ImageView(this.getActivity());
+
             // save the coordinate for centering and callout positioning
             marker_MoveHere.setTag(point2);
-            //~~~~~~~~~~~~~~~~~~~~ rotation
-            //marker_MoveHere.setImageResource(R.drawable.map_marker_green_f);
+
+            // rotation
             marker_MoveHere.setImageResource(R.drawable.map_min_m);
+
             // add it to the view tree
-            //tileView.addMarker(marker2, 120.816 ,24.536, null, null);
             tileView.addMarker(marker_MoveHere, point2[0], point2[1], null, null);// 使GPS座標設定Marker的位置
             marker_MoveHere.setRotation( (int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ) ); //旋轉 TEST
+            tileView.setRotation((int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ));
+
             // moveToMarker
             getTileView().moveToMarker( marker_MoveHere,false);
-            //Toast.makeText(this, "GPS : " +  String.valueOf( location.getLongitude()) +" , "+  String.valueOf(location.getLatitude())  , Toast.LENGTH_SHORT).show();
+            Toast.makeText(MapFragment.this.getActivity(), "GPS : " +  String.valueOf( location.getLongitude()) +" , "+  String.valueOf(location.getLatitude())  , Toast.LENGTH_SHORT).show();
 
             lasttLatitude = location.getLatitude();
             lastLongitude = location.getLongitude();
@@ -807,7 +766,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         double WRotation = DRoation/Math.PI*180;
 
         //return (bx < ax ? -angle : angle);
-        //Toast.makeText( MapFragment.this.getActivity(),  "方向" + String.valueOf(WRotation) , Toast.LENGTH_LONG).show();
+        //Toast.makeText( MapFragment.this.getActivity(),  "角度" + String.valueOf(WRotation) , Toast.LENGTH_LONG).show();
         return (WRotation);
     }
 
@@ -970,70 +929,39 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
         }
 
-//        for (int i = 0; i < mVexs.length; i++) {
-//            displaytext +=  mVexs[vs] + " to " + mVexs[i] + "=" + dist[i];
-//            displaytext += " ( " + vs;
-//            PrintPath(parent, i);
-//             displaytext +=  " ) ";
-//             displaytext += "\n";
-//
-//        }
-        // txtScreen.setText(displaytext);//顯示結果
-//        int EndPointTemp = Integer.parseInt(EndString)-1;//CCCCCCCCCCC
-//        int StartPointTemp Integer.parseInt(StartString)-1;
+        /*
+        for (int i = 0; i < mVexs.length; i++) {
+            displaytext +=  mVexs[vs] + " to " + mVexs[i] + "=" + dist[i];
+            displaytext += " ( " + vs;
+            PrintPath(parent, i);
+             displaytext +=  " ) ";
+             displaytext += "\n";
+
+        }
+         */
+
+        //txtScreen.setText(displaytext);//顯示結果
+        //int EndPointTemp = Integer.parseInt(EndString)-1;
+        //int StartPointTemp Integer.parseInt(StartString)-1;
 
         int StartPointTemp = StartPointMin;
         int EndPointTemp = EndPointMin;
-//        DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
-//        PrintPath(parent, EndPointTemp);//加入路徑座標
-//        DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
+        //DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
+        //PrintPath(parent, EndPointTemp);//加入路徑座標
+        //DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
         if(Plusflag == 1){ // 二坪用
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp+125][0] ,GPS_Dot.Xys_List[StartPointTemp+125][1]});//加入起點座標
             PrintPath(parent, EndPointTemp);//加入路徑座標
-//            DrawPointsList.add(new double[]{24.538329, 120.792896});
-//            DrawPointsList.add(new double[]{24.539129, 120.795621});
+            //DrawPointsList.add(new double[]{24.538329, 120.792896});
+            //DrawPointsList.add(new double[]{24.539129, 120.795621});
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp+125+1][0] ,GPS_Dot.Xys_List[EndPointTemp+125][1]});//加入終點座標
         }
         else{
-
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
             PrintPath(parent, EndPointTemp);//加入路徑座標
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
-
         }
         Toast.makeText(this.getActivity(),  String.valueOf(dist[EndPointTemp]) , Toast.LENGTH_SHORT).show(); // 距離
-
-//        for (int r = 0;r< 227; r++) {   //  畫地圖上的所有點
-//            map_point.add(new double[]{GPS_Dot.Xys_List[r][0] ,GPS_Dot.Xys_List[r][1]});
-//        }
-//        for (double[] point : map_point) {  //建立標記圖示
-//            // any view will do...
-//            //marker = new ImageView(this);
-//
-//            ImageView marker = new ImageView(this.getActivity());
-//            // save the coordinate for centering and callout positioning
-//            marker.setTag(point);
-//            // give it a standard marker icon - this indicator points down and is centered, so we'll use appropriate anchors
-//
-//            //marker.setImageResource(Math.random() < 0.75 ? R.drawable.map_marker_normal : R.drawable.map_marker_featured);//random 隨機
-//            //random 隨機
-//
-//            marker.setImageResource(R.drawable.map_marker_123);
-//
-//
-//            marker.setScaleY((float) 0.5); // 放大
-//            marker.setScaleX((float) 0.5); // 放大
-//
-//            // on tap show further information about the area indicated
-//            // this could be done using a OnClickListener, which is a little more "snappy", since
-//            // MarkerTapListener uses GestureDetector.onSingleTapConfirmed, which has a delay of 300ms to
-//            // confirm it's not the start of a double-tap. But this would consume the touch event and
-//            // interrupt dragging
-//            tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
-//            // add it to the view tree
-//
-//            tileView.addMarker(marker, point[0], point[1], null, null);
-//        }
     }
 
     public void Draw_Dijkstra(){
@@ -1079,7 +1007,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         if (Integer.parseInt(AfterSplitStartString[0]) < 125 && Integer.parseInt(AfterSplitEndString[0]) < 125) { //只有八甲
 
             String contentStr = ("map_b.txt");//讀ASSETS~~~~~~~
-            loadfiletoArray(contentStr);
+            LoadFileToMatrix(contentStr);
 
             Plusflag = 0;
             GetMIN();   //  取得最短的組合
@@ -1088,7 +1016,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         } else if (Integer.parseInt(AfterSplitStartString[0]) > 125 && Integer.parseInt(AfterSplitEndString[0]) > 125) {  //只有二坪
 
             String contentStr = ("map_a.txt");//讀ASSETS~~~~~~~!! 用二坪的檔案
-            loadfiletoArray(contentStr);
+            LoadFileToMatrix(contentStr);
 
             Plusflag = 1;
             GetMIN();   //  取得最短的組合
@@ -1101,7 +1029,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 Plusflag = 0;
 
                 String contentStr = ("map_b.txt");
-                loadfiletoArray(contentStr);
+                LoadFileToMatrix(contentStr);
 
                 AfterSplitEndString = new String[0]; // 清空陣列
                 AfterSplitEndString = new String[1];
@@ -1124,7 +1052,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
 
                 contentStr = ("map_a.txt");
-                loadfiletoArray(contentStr);
+                LoadFileToMatrix(contentStr);
                 AfterSplitStartString = new String[0]; // 清空陣列
                 AfterSplitStartString = new String[1];
                 AfterSplitStartString[0] = String.valueOf(200); //校門口
@@ -1140,7 +1068,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 Plusflag = 1;
 
                 String contentStr = ("map_a.txt");
-                loadfiletoArray(contentStr);
+                LoadFileToMatrix(contentStr);
 
                 AfterSplitEndString = new String[0]; // 清空陣列
                 AfterSplitEndString = new String[1];
@@ -1155,7 +1083,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 Plusflag = 0;
 
                 contentStr = ("map_b.txt");
-                loadfiletoArray(contentStr);
+                LoadFileToMatrix(contentStr);
                 AfterSplitStartString = new String[0]; // 清空陣列
                 AfterSplitStartString = new String[1];
                 AfterSplitStartString[0] = String.valueOf(123); //校門口
@@ -1195,7 +1123,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 //            int h = d.getIntrinsicHeight();
 //            int w = d.getIntrinsicWidth();
 
-            // marker.getHeight(); //TTTTTTTTTTTTT
+            // marker.getHeight();
             // Toast.makeText(this,  " 高 " + String.valueOf(h) , Toast.LENGTH_SHORT).show(); // 距離
 
 
@@ -1230,9 +1158,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     private void PrintPath(int parent[], int j) {
         // Base Case : If j is source
         if (parent[j]==-1) {
-            //  displaytext +=" > "+ j  ;
-            // Toast.makeText(this,  String.valueOf(j) , Toast.LENGTH_SHORT).show();
-            // DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j][0] ,GPS_Dot.Xys_List[j][1]});
             if(Plusflag == 1){ // 二坪用
                 DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
             }
@@ -1243,7 +1168,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
         PrintPath(parent, parent[j]);
 
-        //  displaytext +=" > "+ j  ;
         if(Plusflag == 1){ // 二坪用
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
         }
@@ -1252,7 +1176,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
     }
 
-    public String loadfiletoArray(String fStartString){
+    public String LoadFileToMatrix(String fStartString){
         String result = null;
 
         try {
@@ -1267,8 +1191,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             baos.close();
             in.close();
             result = new String(buff,"UTF-8");//AN
-            String[] AfterSplit =  result.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");// C
-            int  ArraySum =  (int)Math.sqrt(AfterSplit.length);  //  開根號 及 型別轉換
+            String[] AfterSplit =  result.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
+            int ArraySum = (int)Math.sqrt(AfterSplit.length);  //  開根號 及 型別轉換
             // ~~~~~~~~~~~~~~~~~~設定各種大小~~~~~~~~~~~~~~~~~~~~
             mVexs = new int[ArraySum];// 純標記
 
@@ -1301,40 +1225,25 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     //endregion #########################################################  Dijkstra   ####################################################
 
-    //region #############################################  test   ####################################################
-
     // Fragment Communicating
     String StartStr , EndStr;
 
     protected void displayReceivedData(String message) {
-//        GlobalVariable globalVariable = (GlobalVariable)getActivity().getApplicationContext();
-//        StartStr = globalVariable.Start;
-//
-//        EndStr   = globalVariable.End;
-//        txtData.setText("Data received: "+message);
-//        Toast.makeText( MapFragment.this.getActivity(),  message , Toast.LENGTH_LONG).show();
-//
-//        tileView.defineBounds(0, 0, 25960, 12088);
-//        Draw_Dijkstra();
-//        tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE);//變成GPS座標
+        //txtData.setText("Data received: "+message);
     }
 
     private MarkerLayout.MarkerTapListener markerTapListener = new MarkerLayout.MarkerTapListener() {
-
         @Override
         public void onMarkerTap(View view, int x, int y) {
             // get reference to the TileView
             // tileView = this.getActivity().getTileView();
-            Toast.makeText( MapFragment.this.getActivity(),
-                    "X = " + String.valueOf(x)
-                            + " Y = " + String.valueOf(y),
-                    Toast.LENGTH_LONG).show();
+            Toast.makeText( MapFragment.this.getActivity(), "X = " + String.valueOf(x) + " Y = " + String.valueOf(y), Toast.LENGTH_LONG).show();
 
             if( !(view instanceof TextView) ){ // View != TextView
                 // we saved the coordinate in the marker's tag
                 double[] position = (double[]) view.getTag();
                 // lets center the screen to that coordinate
-                //tileView.slideToAndCenter(position[0], position[1]);//移動
+                //tileView.slideToAndCenter(position[0], position[1]);
                 // create a simple callout
                 SampleCallout callout = new SampleCallout(view.getContext());
                 // add it to the view tree at the same position and offset as the marker that invoked it
@@ -1347,51 +1256,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
         }
     };
-
-    private void callout_dialog() {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getActivity());
-        alertDialogBuilder.setTitle("Info");
-        alertDialogBuilder.setMessage("");
-        alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        alertDialogBuilder.setNeutralButton("No", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // nothing to do
-            }
-        });
-        alertDialogBuilder.setCancelable(true);
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        alertDialog.show();
-    }
-
-    private ArrayList<JSONStructure> data;
-    private DataAdapter adapter;
-    private void loadJSON(){
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        RequestInterface request = retrofit.create(RequestInterface.class);
-        Call<com.vine.projectdemo.JSONResponse> call = request.getJSON();
-        call.enqueue(new Callback<com.vine.projectdemo.JSONResponse>() {
-            @Override
-            public void onResponse(Call<com.vine.projectdemo.JSONResponse> call, Response<com.vine.projectdemo.JSONResponse> response) { //沒連上時 不會進入迴圈
-                com.vine.projectdemo.JSONResponse jsonResponse = response.body();
-                data = new ArrayList<>(Arrays.asList(jsonResponse.getAndroid()));
-            }
-            @Override
-            public void onFailure(Call<com.vine.projectdemo.JSONResponse> call, Throwable t) { //沒連上時 不會進入迴圈
-                Log.d("Error",t.getMessage());
-            }
-        });
-    }
-    //endregion #########################################################  test   ##################################################
 
     @Override
     public void onResume() {

@@ -27,11 +27,6 @@
         </activity>
 
         <activity
-            android:theme="@style/AppTheme.ActionBar.Transparent"
-            android:name="com.vine.projectdemo.VineMapView.MapMainActivity">
-        </activity>
-
-        <activity
             android:theme="@style/AppTheme.NoActionBar"
             android:name="com.vine.projectdemo.VinePHPMySQL.PHPMainActivity"
             android:screenOrientation="portrait">
