@@ -1,11 +1,11 @@
 package com.vine.projectdemo.VinePHPMySQL;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.AppCompatButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.widget.AppCompatButton;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +14,10 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.vine.projectdemo.R;
 import com.vine.projectdemo.VinePHPMySQL.models.ServerRequest;
 import com.vine.projectdemo.VinePHPMySQL.models.ServerResponse;
 import com.vine.projectdemo.VinePHPMySQL.models.User;
-import com.vine.projectdemo.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;

@@ -1,18 +1,18 @@
 package com.vine.projectdemo.VinePHPMySQL;
 
-import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -34,7 +34,6 @@ import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
 import com.vine.projectdemo.DataObject;
 import com.vine.projectdemo.R;
-
 import com.vine.projectdemo.VinePHPMySQL.models.ServerRequest;
 import com.vine.projectdemo.VinePHPMySQL.models.ServerResponse;
 import com.vine.projectdemo.VinePHPMySQL.models.User;

@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.Toolbar
+        <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarJSON"
             android:theme="@style/ToolbarColoredBackArrow"
             android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         <!--即大的圖縮小，小的圖放大。但是，如果該圖非正方形者，會依其短邊來與ImageView的邊相等，因此其會將ImageView完全的填滿。-->
 
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/card_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

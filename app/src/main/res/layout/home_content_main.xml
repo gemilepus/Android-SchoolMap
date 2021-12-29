@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="4dp" />
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginLeft="10dp"
@@ -33,9 +33,9 @@
 
             android:inputType="text" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_marginLeft="10dp"
@@ -51,7 +51,7 @@
             android:hint="目的位置"
             android:inputType="text" />
 
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/LIhome"
@@ -85,7 +85,7 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
 
         android:layout_width="match_parent"

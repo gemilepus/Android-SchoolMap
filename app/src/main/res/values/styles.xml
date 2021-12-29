@@ -9,13 +9,12 @@
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/colorAccent</item>
 
-        <item name="android:actionBarStyle">@style/AppTheme.MyActionBar</item>
+        <item name="actionBarStyle">@style/AppTheme.MyActionBar</item>
 
     </style>
 
     <style name="AppTheme.MyActionBar" parent="@android:style/Widget.Holo.Light.ActionBar">
-        <item name="android:background">#FF9D21</item>
-        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+        <item name="titleTextStyle">@style/MyActionBarTitleText</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -39,7 +38,7 @@
         <item name="colorPrimary">@android:color/transparent</item>
 
         <!-- Text顏色BUG 只能改VIEW的 -->
-        <item name="android:titleTextStyle">@color/colorPrimary</item>
+        <item name="titleTextStyle">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/abc_primary_text_material_dark</item>
         <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
         <item name="actionMenuTextColor">@color/colorPrimaryDark</item>
@@ -59,7 +58,7 @@
         <!--背景颜色及透明程度-->
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--是否有标题 -->
-        <item name="android:windowNoTitle">true</item>
+        <item name="windowNoTitle">true</item>
         <!--是否浮现在activity之上-->
         <item name="android:windowIsFloating">true</item>
         <!--是否模糊-->
