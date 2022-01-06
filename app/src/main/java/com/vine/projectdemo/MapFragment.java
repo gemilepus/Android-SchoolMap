@@ -1,6 +1,7 @@
 package com.vine.projectdemo;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -16,9 +17,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
@@ -62,19 +65,25 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         return new MapFragment();
     }
 
-    // TileView
-    TileView tileView;
-    int tileView_Run = 1;
-    public static final double NORTH_WEST_LATITUDE = 24.547866; // 緯度 0.0117471872931833
-    public static final double NORTH_WEST_LONGITUDE = 120.7832; // 經度 0.012904468412943
-    public static final double SOUTH_EAST_LATITUDE = 24.533648;
-    public static final double SOUTH_EAST_LONGITUDE = 120.8167;
+    // TileView Setting
+    private TileView tileView;
+    private boolean tileView_Run = true;
+    private static final double NORTH_WEST_LATITUDE = 24.547866;// 緯度 0.0117471872931833
+    private static final double NORTH_WEST_LONGITUDE = 120.7832;// 經度 0.012904468412943
+    private static final double SOUTH_EAST_LATITUDE = 24.533648;
+    private static final double SOUTH_EAST_LONGITUDE = 120.8167;
+    // TileView Label
+    TextView[] marker_Text_array = new TextView[60];
+    int List_Length;
+    // Marker
+    ImageView[] PathMarker = new ImageView[25];//ImageView[] PathMarker[];
+    int PathMarker_Num = 0;
+    ImageView NowMarker;
 
     // GPS
     private LocationManager locationManager;
-    private static final int MinTime = 1000;// 更新時間
-    private static final float MinDistance = 1;// 移動多少 M 才會監聽
-    int GPS_Run = 0;
+    private static final int MinTime = 1000;
+    private static final float MinDistance = 1;
 
     // Dijkstra
     private static final int INF = Integer.MAX_VALUE;
@@ -88,20 +97,11 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     String[] AfterSplitStartString;
     String[] AfterSplitEndString;
 
+    ArrayList<double[]> DrawPointsList = new ArrayList<>();
+
     int Doflag = 0, Plusflag = 0; //  跨區旗標
     int StartPointMin = 0, EndPointMin = 0;  // 最近短距離的 起點 終點
     int ListStFlag = 0;
-
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  Label  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    List<DataObject> list;
-    TextView[] marker_Text_array = new TextView[60]; // Test Array
-    int List_Length;
-    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  dot  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    ImageView[] marker_Movedot_array = new ImageView[25];
-    // ImageView[] marker_Movedot_array[] ;
-    int marker_Move_dot_num = 0;
-    ImageView marker_MoveHere;//作為全域使用  removeMarker
-    ArrayList<double[]> DrawPointsList = new ArrayList<>();
     
     // ~~~~~~~~~~~~~~~  ElectronicCompass  ~~~~~~~~~~~~~~~
     private float currentDegree = 0f;
@@ -138,6 +138,25 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
         });
 
+        // checkSelfPermission
+        if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
+        } else {
+            locationStart();
+        }
+
+        SetTileView(v);
+        DrawLabel();
+
+        return v;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void SetTileView(View v){
         tileView = new TileView(this.getActivity());
 
         // let the image explode
@@ -209,76 +228,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         float mScale= (float)size.y/size.x;
         tileView.setScaleY(mScale);
         tileView.setScaleX(mScale);
-
-        list = new ArrayList<DataObject>();
-        list.add(0, new DataObject("二坪校區正門", "二坪校區", "126"));
-        list.add(1, new DataObject("J1活動中心", "二坪校區", "139-142"));
-        list.add(2, new DataObject("H1行政大樓", "二坪校區", "144-157-170"));
-        list.add(3, new DataObject("F1第一研究大樓", "二坪校區", "147-172"));
-        list.add(4, new DataObject("F2建築系館&設計學院", "二坪校區", "150-160"));
-        list.add(5, new DataObject("K2教學大樓", "二坪校區", "153-178"));
-        list.add(6, new DataObject("K3教學大樓", "二坪校區", "154-182"));
-        list.add(7, new DataObject("景觀餐廳", "二坪校區", "163"));
-        list.add(8, new DataObject("C1管理學院", "二坪校區", "168"));
-        list.add(9, new DataObject("F3工業設計系館", "二坪校區", "175"));
-        list.add(10, new DataObject("M2男一舍", "二坪校區", "184"));
-        list.add(11, new DataObject("M8男二舍", "二坪校區", "180"));
-        list.add(12, new DataObject("M4男三舍-影山樓", "二坪校區", "208-211"));
-        list.add(13, new DataObject("M3女一舍&學生餐廳", "二坪校區", "199"));
-        list.add(14, new DataObject("M7女二舍", "二坪校區", "173-196"));
-        list.add(15, new DataObject("M6女三舍", "二坪校區", "193"));
-        list.add(16, new DataObject("M1女五舍", "二坪校區", "203"));
-        list.add(17, new DataObject("P1教職員工宿舍", "二坪校區", "215-217"));
-        list.add(18, new DataObject("操場&籃球場", "二坪校區", "140"));
-        list.add(19, new DataObject("蓮荷水世界", "二坪校區", "214"));
-        list.add(20, new DataObject("網球場", "二坪校區", "218"));
-        list.add(21, new DataObject("第一機車停車場", "二坪校區", "134-135"));
-        list.add(22, new DataObject("第二機車停車場", "二坪校區", "190"));
-        list.add(23, new DataObject("汽車停車場", "二坪校區", "225"));
-        list.add(24, new DataObject("蓮荷文藝空間", "二坪校區", "188"));
-        list.add(25, new DataObject("淑女坡", "二坪校區", "137"));
-        list.add(26, new DataObject("好漢坡", "二坪校區", "219"));
-        list.add(27, new DataObject("好客坡", "二坪校區", "186"));
-        list.add(28, new DataObject("電機系館", "八甲校區", "73"));
-        list.add(29, new DataObject("電子系館", "八甲校區", "40-74"));
-        list.add(30, new DataObject("光電系館", "八甲校區", "52"));
-        list.add(31, new DataObject("資訊系館", "八甲校區", "51-50"));
-        list.add(32, new DataObject("國鼎圖書館", "八甲校區", "75"));
-        list.add(33, new DataObject("資訊處", "八甲校區", "76"));
-        list.add(34, new DataObject("理工學院一館", "八甲校區", "122-123-47-125"));
-        list.add(35, new DataObject("理工學院二館", "八甲校區", "118-119"));
-        list.add(36, new DataObject("共同教育委員會", "八甲校區", "80-81-82-83-84-85-86-94"));
-        list.add(37, new DataObject("人文社會學院", "八甲校區", "88-89-90-91-92-93-96-97-98-99-100-101"));
-        list.add(38, new DataObject("客家學院", "八甲校區", "105-106-107-108-109-112-113-114-115"));
-        list.add(39, new DataObject("藝文教學中心", "八甲校區", "110-111-116"));
-        list.add(40, new DataObject("學生餐廳", "八甲校區", "120"));
-        list.add(41, new DataObject("第五男生宿舍", "八甲校區", "121"));
-        list.add(42, new DataObject("風雨球場", "八甲校區", "59"));
-
-        //GPS 服務檢查
-        if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
-            //請求權限的對話框
-        } else {
-            locationStart();
-            GPS_Run = 1;
-        }
-
-        DrawLable();
-
-        return v;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    public TileView getTileView(){
-        return tileView;
-    }
-
-    public void DrawLable() {
+    private void DrawLabel() {
 
         //region 標記所有點
 //        ArrayList<double[]> map_point = new ArrayList<>();{}
@@ -307,13 +259,13 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 //        }
         //endregion
 
-        List_Length = (int) list.size();
+        List_Length = (int) HomeFragment.list.size();
         double x, y;
         for (int i = 0; i < List_Length; i++) {
             x = 0;
             y = 0;
-            String TextString = list.get(i).getHeading();
-            String ValueString = list.get(i).getValue();
+            String TextString = HomeFragment.list.get(i).getHeading();
+            String ValueString = HomeFragment.list.get(i).getValue();
             String[] ValueStringArray = ValueString.split("-");
             
             for (String s : ValueStringArray) {
@@ -346,6 +298,10 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
         }
         tileView.moveToMarker(tileView.getMarkerLayout().getChildAt(num-1),false);
+    }
+
+    public TileView getTileView(){
+        return tileView;
     }
 
     //region ###################################################  Timer  ####################################################
@@ -630,10 +586,13 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MinTime, MinDistance, this);// 對GPS做一些設定
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MinTime, MinDistance, this);
 
             Log.d("debug", "gpsEnable, startActivity");
         } else {
+
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MinTime, MinDistance, this);
+
             Log.d("debug", "gpsEnabled");
         }
 
@@ -667,6 +626,25 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            // Check for the integer request code originally supplied to startResolutionForResult().
+            case 0x01:
+                switch (resultCode) {
+                    case Activity.RESULT_OK:
+
+                        locationStart();
+
+                        break;
+                    case Activity.RESULT_CANCELED:
+
+                        break;
+                }
+                break;
+        }
+    }
+
+    @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         switch (status) {
             case LocationProvider.AVAILABLE:
@@ -694,39 +672,39 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     @Override
     public void onLocationChanged(Location location) {  // GPS更新監聽
-        if(tileView_Run == 1){ // 檢查 tileview 啟動
+        if(tileView_Run){ // 檢查 tileview 啟動
             // path marker
             double[]  point3 = {location.getLongitude() ,location.getLatitude()};
-            marker_Movedot_array[marker_Move_dot_num] = new ImageView(this.getActivity());
-            marker_Movedot_array[marker_Move_dot_num].setTag(point3);
-            marker_Movedot_array[marker_Move_dot_num].setImageResource(R.drawable.dot);
-            tileView.addMarker(marker_Movedot_array[marker_Move_dot_num], point3[0], point3[1], null, null);  // 使GPS座標設定Marker的位置
-            marker_Movedot_array[marker_Move_dot_num].setScaleY((float) 0.6); // 縮小
-            marker_Movedot_array[marker_Move_dot_num].setScaleX((float) 0.6); // 縮小
-            marker_Move_dot_num = marker_Move_dot_num ++;
+            PathMarker[PathMarker_Num] = new ImageView(this.getActivity());
+            PathMarker[PathMarker_Num].setTag(point3);
+            PathMarker[PathMarker_Num].setImageResource(R.drawable.dot);
+            tileView.addMarker(PathMarker[PathMarker_Num], point3[0], point3[1], null, null);  // 使GPS座標設定Marker的位置
+            PathMarker[PathMarker_Num].setScaleY((float) 0.6); // 縮小
+            PathMarker[PathMarker_Num].setScaleX((float) 0.6); // 縮小
+            PathMarker_Num = PathMarker_Num ++;
 
-            if( marker_Move_dot_num == 26){
-                marker_Move_dot_num = 0;
+            if( PathMarker_Num == 26){
+                PathMarker_Num = 0;
             }
 
             // here marker
             double[] point2 = {location.getLongitude() ,location.getLatitude()};
-            tileView.removeMarker(marker_MoveHere);
-            marker_MoveHere = new ImageView(this.getActivity());
+            tileView.removeMarker(NowMarker);
+            NowMarker = new ImageView(this.getActivity());
 
             // save the coordinate for centering and callout positioning
-            marker_MoveHere.setTag(point2);
+            NowMarker.setTag(point2);
 
             // rotation
-            marker_MoveHere.setImageResource(R.drawable.map_min_m);
+            NowMarker.setImageResource(R.drawable.map_min_m);
 
             // add it to the view tree
-            tileView.addMarker(marker_MoveHere, point2[0], point2[1], null, null);// 使GPS座標設定Marker的位置
-            marker_MoveHere.setRotation( (int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ) ); //旋轉 TEST
+            tileView.addMarker(NowMarker, point2[0], point2[1], null, null);// 使GPS座標設定Marker的位置
+            NowMarker.setRotation( (int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ) ); //旋轉 TEST
             tileView.setRotation((int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ));
 
             // moveToMarker
-            getTileView().moveToMarker( marker_MoveHere,false);
+            getTileView().moveToMarker( NowMarker,false);
             Toast.makeText(MapFragment.this.getActivity(), "GPS : " +  String.valueOf( location.getLongitude()) +" , "+  String.valueOf(location.getLatitude())  , Toast.LENGTH_SHORT).show();
 
             lasttLatitude = location.getLatitude();
@@ -1216,7 +1194,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     // Fragment Communicating
     String StartStr , EndStr;
-
     protected void displayReceivedData(String message) {
         //txtData.setText("Data received: "+message);
     }
@@ -1246,12 +1223,15 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
     };
 
+
     @Override
     public void onResume() {
         super.onResume();
 
         tileView.resume();
-        tileView_Run = 1;
+        tileView_Run = true;
+
+        locationStart();
 
         // 註冊感應監聽器
         Sensor accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -1264,18 +1244,26 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     public void onDestroy() {
         super.onDestroy();
 
-        tileView_Run = 0;
+        tileView_Run = false;
         tileView.destroy();
         tileView = null;
     }
 
+    @Override
     public void onPause() {
         super.onPause();
+
+        tileView_Run = false;
         tileView.pause();
-        tileView_Run = 0;
 
         // 停止GPS更新
-        //stopLocationUpdates();
+        if (locationManager != null) {
+            Log.d("LocationActivity", "locationManager.removeUpdates");
+            if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                return;
+            }
+            locationManager.removeUpdates(this);
+        }
 
         // 停止感應監聽器
         mSensorManager.unregisterListener(this);

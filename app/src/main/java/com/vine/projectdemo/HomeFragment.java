@@ -43,7 +43,7 @@ public class HomeFragment extends Fragment {
     Button buttonTest;
     RecyclerView recyclerView;
     HomeFragment.RecyclerviewAdapter myRecAdapter;
-    List<DataObject> list;
+    public static List<DataObject> list;
     int ListOpenFlag = 0;
 
     private EditText searchTextStart , searchTextEnd;
