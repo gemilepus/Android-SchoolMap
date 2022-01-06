@@ -73,7 +73,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     private static final double SOUTH_EAST_LATITUDE = 24.533648;
     private static final double SOUTH_EAST_LONGITUDE = 120.8167;
     // TileView Label
-    TextView[] marker_Text_array = new TextView[60];
+    TextView[] LabelMarker = new TextView[60];
     int List_Length;
     // Marker
     ImageView[] PathMarker = new ImageView[25];//ImageView[] PathMarker[];
@@ -99,7 +99,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     ArrayList<double[]> DrawPointsList = new ArrayList<>();
 
-    int Doflag = 0, Plusflag = 0; //  跨區旗標
+    int IsUsedMapAB = 0;// 跨區
+    int Doflag = 0;// not used
     int StartPointMin = 0, EndPointMin = 0;  // 最近短距離的 起點 終點
     int ListStFlag = 0;
     
@@ -276,12 +277,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             y = y / ValueStringArray.length;
 
             // create marker
-            marker_Text_array[i] = new TextView(this.getActivity());
-            marker_Text_array[i].setText(TextString);
-            marker_Text_array[i].setTextColor(Color.parseColor("#ff007acc"));
-            marker_Text_array[i].setBackgroundColor(Color.parseColor("#4032abfc"));
+            LabelMarker[i] = new TextView(this.getActivity());
+            LabelMarker[i].setText(TextString);
+            LabelMarker[i].setTextColor(Color.parseColor("#ff007acc"));
+            LabelMarker[i].setBackgroundColor(Color.parseColor("#4032abfc"));
             //tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
-            tileView.addMarker(marker_Text_array[i], x, y, null, null);
+            tileView.addMarker(LabelMarker[i], x, y, null, null);
         }
         tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE);
     }
@@ -317,7 +318,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                     tileView.setRotation(RotationFlag);//地圖選轉
                     //marker.
                     for (int N = 0; N < List_Length; N++) { // 先只取一點
-                        marker_Text_array[N].setRotation(-RotationFlag);//地圖選轉
+                        LabelMarker[N].setRotation(-RotationFlag);//地圖選轉
                     }
                     RotationFlag = RotationFlag + 10;
                     if (RotationFlag == 360) {
@@ -331,7 +332,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     int MyTimerTaskATime = 0;
     float raAnima;
-    int raAnimaLo;
 
     public class MyTimerTaskA extends TimerTask {
         public void run() {
@@ -462,8 +462,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
                     // 將動作放入圖片
                    // tileView.startAnimation(ra);
-
-
                     // tileView.onAnimationEnd();
 
 
@@ -545,7 +543,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
                     //marker.
                     for (int N = 0; N < List_Length; N++) { // 先只取一點
-                        marker_Text_array[N].startAnimation(ra_U);
+                        LabelMarker[N].startAnimation(ra_U);
 
                     }
 
@@ -592,7 +590,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         } else {
 
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MinTime, MinDistance, this);
-
             Log.d("debug", "gpsEnabled");
         }
 
@@ -602,8 +599,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             Log.d("debug", "checkSelfPermission false");
             return;
         }
-
-        //locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 50, this);//重複的動作
     }
 
     // 結果の受け取り
@@ -748,7 +743,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
         for (int PointNum = 0; PointNum <  AfterSplitStartString.length ; PointNum++) {
             vsTemp =  Integer.parseInt(AfterSplitStartString[PointNum]) -1;  //  設定起點  點的起始為1
-            if(Plusflag == 1){ // 二坪用
+            if(IsUsedMapAB == 1){ // 二坪用
                 vsTemp = vsTemp - 125;
             }
 
@@ -793,13 +788,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             //  存入各點之間的距離大小
             for (int N = 0; N <  AfterSplitEndString.length ; N++) {
                 //dist[N] 距離
-                if(Plusflag == 1){ // 二坪用 -125  (125)
+                if(IsUsedMapAB == 1){ // 二坪用 -125  (125)
                     PointNumTemp[PointNum][N] = dist[Integer.parseInt(AfterSplitEndString[N])-125];
                 }
                 else{
                     PointNumTemp[PointNum][N] = dist[Integer.parseInt(AfterSplitEndString[N]) -1]; // 給終點 取出最短路徑
                 }
-
             }
 
         }
@@ -812,7 +806,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                     MinxPoint = qx;
                     MinyPoint = qy;
                 }
-
             }
         }
 
@@ -820,16 +813,14 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1; // 最近短距離的 起點
         //EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1;   // 最近短距離的 終點
 
-        if(Plusflag == 1){ // 二坪用
+        if(IsUsedMapAB == 1){ // 二坪用
             // 設定最短的起點+終點   從別的Activity取得原始的值
             StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1 -125; // 最近短距離的 起點
             EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1 -125;   // 最近短距離的 終點
-
         }
         else{
             StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1; // 最近短距離的 起點
             EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1;   // 最近短距離的 終點
-
         }
     }
 
@@ -916,7 +907,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
         //PrintPath(parent, EndPointTemp);//加入路徑座標
         //DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
-        if(Plusflag == 1){ // 二坪用
+        if(IsUsedMapAB == 1){ // 二坪用
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp+125][0] ,GPS_Dot.Xys_List[StartPointTemp+125][1]});//加入起點座標
             PrintPath(parent, EndPointTemp);//加入路徑座標
             //DrawPointsList.add(new double[]{24.538329, 120.792896});
@@ -976,7 +967,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             String contentStr = ("map_b.txt");//讀ASSETS~~~~~~~
             LoadFileToMatrix(contentStr);
 
-            Plusflag = 0;
+            IsUsedMapAB = 0;
             GetMIN();   //  取得最短的組合
             vs = StartPointMin;
             GetDijkstra();
@@ -985,7 +976,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             String contentStr = ("map_a.txt");//讀ASSETS~~~~~~~!! 用二坪的檔案
             LoadFileToMatrix(contentStr);
 
-            Plusflag = 1;
+            IsUsedMapAB = 1;
             GetMIN();   //  取得最短的組合
             vs = StartPointMin;
             GetDijkstra();
@@ -993,7 +984,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             if (Integer.parseInt(AfterSplitStartString[0]) < 125) { // 八甲開始
 
                 Doflag = 1; //  跨區旗標 = 1 終點圖示改變    (目前未使用
-                Plusflag = 0;
+                IsUsedMapAB = 0;
 
                 String contentStr = ("map_b.txt");
                 LoadFileToMatrix(contentStr);
@@ -1007,7 +998,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 AfterSplitEndString = EndString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");//恢復
 
                 Doflag = 2; //  跨區旗標 = 2 起點圖示改變
-                Plusflag = 1;
+                IsUsedMapAB = 1;
 
 //            DrawPointsList.add(new double[]{ 120.79289624,24.538329});
 //            DrawPointsList.add(new double[]{120.795621, 24.539129});
@@ -1032,7 +1023,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             } else {  // 二坪開始
 
                 Doflag = 2; //  跨區旗標 = 2 起點圖示改變
-                Plusflag = 1;
+                IsUsedMapAB = 1;
 
                 String contentStr = ("map_a.txt");
                 LoadFileToMatrix(contentStr);
@@ -1047,7 +1038,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
 
                 Doflag = 1; //  跨區旗標 = 1 終點圖示改變
-                Plusflag = 0;
+                IsUsedMapAB = 0;
 
                 contentStr = ("map_b.txt");
                 LoadFileToMatrix(contentStr);
@@ -1125,7 +1116,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     private void PrintPath(int parent[], int j) {
         // Base Case : If j is source
         if (parent[j]==-1) {
-            if(Plusflag == 1){ // 二坪用
+            if(IsUsedMapAB == 1){ // 二坪用
                 DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
             }
             else{
@@ -1135,7 +1126,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
         PrintPath(parent, parent[j]);
 
-        if(Plusflag == 1){ // 二坪用
+        if(IsUsedMapAB == 1){ // 二坪用
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
         }
         else{

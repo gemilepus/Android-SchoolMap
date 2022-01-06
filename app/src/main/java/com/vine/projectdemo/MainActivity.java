@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private BottomNavigationView mBottomNavigationView;
     private FloatingActionButton fab_Go,fab_help;
     private Animation fab_open,fab_close, fab_right;
-    private Animation rotate_forward,rotate_backward;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,8 +161,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         fab_open        = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_open);
         fab_close       = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-        rotate_forward  = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_backward);
         fab_right       = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_right);
 
         fab_Go = (FloatingActionButton)findViewById(R.id.fab1);

@@ -47,7 +47,6 @@ public class HomeFragment extends Fragment {
     int ListOpenFlag = 0;
 
     private EditText searchTextStart , searchTextEnd;
-    TextWatcher textWatcher;
     Button btnStart;
     int StartTextFlag = 0 , EndTextFlag = 0; // 起點 終點 的以選擇標記
     String searchString = "", StartPoints, EndPoints;
