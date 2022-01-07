@@ -131,11 +131,13 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         int height = size.y;
          */
         mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
+
         ElectronicCompassBtn = (Button) v.findViewById(R.id.BTNN);
         ElectronicCompassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mSensorManager.unregisterListener(MapFragment.this);
+                ElectronicCompassON = false;
+                StopElectronicCompass();
             }
         });
 
@@ -403,6 +405,20 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     //endregion ###################################################  Timer  ####################################################
 
     //region ###################################################  Sensor  ####################################################
+    private boolean ElectronicCompassON = true;
+    private void StartElectronicCompass(){
+        // 註冊感應監聽器
+        Sensor accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    private void StopElectronicCompass(){
+        // 停止感應監聽器
+        mSensorManager.unregisterListener(this);
+    }
+
     int Animation_Run = 0;
     public void onSensorChanged(SensorEvent event) {
 
@@ -414,8 +430,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
         if (mGravity != null && mGeomagnetic != null) {
 
-            SensorManager.getRotationMatrix(Rotation, null, mGravity,
-                    mGeomagnetic);
+            SensorManager.getRotationMatrix(Rotation, null, mGravity, mGeomagnetic);
             SensorManager.getOrientation(Rotation, degree);
 
             degree[0] = (float) Math.toDegrees(degree[0]);
@@ -444,120 +459,59 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             else {
                 vector="南";
             }
+
             //if( Animation_Run == 0) {
                 if (currentDegree - (-degree[0]) > 5 || currentDegree - (-degree[0]) < -5 && MyTimerTaskATime == 0) {
+                    //Toast.makeText( MapFragment.this.getActivity(),  String.valueOf( -degree[0]) , Toast.LENGTH_LONG).show();
 
-                    //  Toast.makeText( MapFragment.this.getActivity(),  String.valueOf( -degree[0]) , Toast.LENGTH_LONG).show();
+                    tileView.setRotation(-degree[0]);
 
-                    // tvHeading.setText("Heading: " + (int) degree[0] + " degrees  " + vector);
+                    RotateAnimation ra_U = new RotateAnimation(
+                            -currentDegree, degree[0],
+                            Animation.RELATIVE_TO_SELF, 0.5f, // x座標
+                            Animation.RELATIVE_TO_SELF, 0.5f); // y座標
+                    // 轉動時間
+                    ra_U.setDuration(210);
+                    // 預設狀態結束後的動作設定
+                    ra_U.setFillAfter(true);
+                    // marker.
+                    for (int N = 0; N < List_Length; N++) { // 先只取一點
+                        LabelMarker[N].startAnimation(ra_U);
+                    }
+                    currentDegree = -degree[0];
 
+                    /*
                     // currentDegree-初始角度,-degree逆時針旋轉結束角度
                     RotateAnimation ra = new RotateAnimation(currentDegree, -degree[0], Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f); // y座標 // x座標
-
                     // 轉動時間
                     ra.setDuration(200);
-
                     // 預設狀態結束後的動作設定
                     ra.setFillAfter(true);
-
                     // 將動作放入圖片
-                   // tileView.startAnimation(ra);
-                    // tileView.onAnimationEnd();
-
-
+                    // tileView.startAnimation(ra);
                     ra.setAnimationListener(new Animation.AnimationListener() {
-
                         @Override
                         public void onAnimationStart(Animation animation) {
                             Animation_Run = 1;
                         }
-
                         @Override
                         public void onAnimationEnd(Animation arg0) {
-                            //Functionality here
-
-
                             tileView.setRotation(-degree[0]);
                             //tileView.clearAnimation();
                             Animation_Run = 0;
                         }
-
                         @Override
-                        public void onAnimationRepeat(Animation animation) {
-
-                        }
+                        public void onAnimationRepeat(Animation animation) { }
                     });
-
-
-//                tileView.getAnimation().setAnimationListener(new Animation.AnimationListener() {
-//                    @Override
-//                    public void onAnimationEnd(Animation arg0) {
-//                        //Functionality here
-//                    }
-//                });
-
-
-                    // onAnimationStart()
-                    //   onAnimationEnd()
-
-
-                    // 自定的旋轉動畫
-//                float raAnima ;
-//                int   raAnimaLo;
-//                raAnimaLo = (int)( Math.abs(currentDegree -(-degree[0])))*30;
-//                raAnima = Math.abs(currentDegree -(-degree[0]))/raAnimaLo ;
-//
-//                if(currentDegree > -degree[0]){
-//                    for (int r = 0; r < raAnimaLo ; r++) {
-//                        tileView.setRotation(currentDegree - r * raAnima);
-//                    }
-//                }else{
-//                    for (int r = 0; r < raAnimaLo ; r++) {
-//                        tileView.setRotation(currentDegree + r * raAnima);
-//                    }
-//                }
-
-                    //raAnimaLo = (int)( Math.abs(currentDegree -(-degree[0])))*30;
-                    //raAnima = Math.abs(currentDegree -(-degree[0]))/30 ;
-
-
-                    //timerAnima.schedule(new MyTimerTaskA(), 50, 50);  //long delay, long period  設 Timer
-
-
-                    //startTimer();
-
-
-                    //  Animation 不轉動實際VIEW 手勢方向會異常
-                    tileView.setRotation(-degree[0]);
-
-                    RotateAnimation ra_U = new RotateAnimation(-currentDegree, degree[0],
-                            Animation.RELATIVE_TO_SELF, 0.5f, // x座標
-                            Animation.RELATIVE_TO_SELF, 0.5f); // y座標
-
-                    // 轉動時間
-                    ra_U.setDuration(210);
-
-                    // 預設狀態結束後的動作設定
-                    ra_U.setFillAfter(true);
-
-
-                    //marker.
-                    for (int N = 0; N < List_Length; N++) { // 先只取一點
-                        LabelMarker[N].startAnimation(ra_U);
-
-                    }
-
-                    //  image.startAnimation(ra);
-                    currentDegree = -degree[0];
-
+                    */
                 }
             //}
         }
     }
 
-    /* 改變經確度 */
+    @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // not in use
+
     }
     //endregion ################################################  Sensor  ####################################################
 
@@ -1224,11 +1178,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
         locationStart();
 
-        // 註冊感應監聽器
-        Sensor accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        Sensor magnetometer = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mSensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-        mSensorManager.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
+        if (ElectronicCompassON){
+            StartElectronicCompass();
+        }
     }
 
     @Override
@@ -1256,7 +1208,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             locationManager.removeUpdates(this);
         }
 
-        // 停止感應監聽器
-        mSensorManager.unregisterListener(this);
+        if (ElectronicCompassON){
+            StopElectronicCompass();
+        }
     }
 }
