@@ -35,6 +35,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -112,7 +113,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     float[] mGeomagnetic;
     float Rotation[] = new float[9];
     float[] degree = new float[3];
-    Button ElectronicCompassBtn;
+    ImageButton ElectronicCompassBtn;
     Timer timer = new Timer(true);
     Timer timerAnima = new Timer(true);
 
@@ -133,12 +134,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         // ElectronicCompass
         mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
 
-        ElectronicCompassBtn = (Button) v.findViewById(R.id.BTNN);
+        ElectronicCompassBtn = (ImageButton) v.findViewById(R.id.imageButton);
         ElectronicCompassBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ElectronicCompassON = false;
-                StopElectronicCompass();
+                ElectronicCompassON = true;
+                StartElectronicCompass();
             }
         });
 
@@ -306,6 +307,22 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         return tileView;
     }
 
+    private void RotateMap(int mDegree){
+        tileView.setRotation(-mDegree);
+
+        RotateAnimation ra_U = new RotateAnimation(LabelMarker[0].getRotation(),mDegree,
+                Animation.RELATIVE_TO_SELF, 0.5f, // x座標
+                Animation.RELATIVE_TO_SELF, 0.5f); // y座標
+        // 轉動時間
+        ra_U.setDuration(210);
+        // 預設狀態結束後的動作設定
+        ra_U.setFillAfter(true);
+        // marker.
+        for (int i = 0; i < List_Length; i++) { // 先只取一點
+            LabelMarker[i].startAnimation(ra_U);
+        }
+    }
+
     //region ###################################################  Sensor  ####################################################
     private boolean ElectronicCompassON = true;
     private void StartElectronicCompass(){
@@ -380,7 +397,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 //                    for (int N = 0; N < List_Length; N++) { // 先只取一點
 //                        LabelMarker[N].startAnimation(ra_U);
 //                    }
-//                    currentDegree = -degree[0];
+                    RotateMap((int)degree[0]);
+                    currentDegree = -degree[0];
 
                     /*
                     // currentDegree-初始角度,-degree逆時針旋轉結束角度
@@ -406,6 +424,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                         public void onAnimationRepeat(Animation animation) { }
                     });
                     */
+
+                    ElectronicCompassON = false;
+                    StopElectronicCompass();
                 }
             //}
         }
