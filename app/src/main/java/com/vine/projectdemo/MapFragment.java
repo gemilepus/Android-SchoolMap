@@ -366,21 +366,21 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 if (currentDegree - (-degree[0]) > 5 || currentDegree - (-degree[0]) < -5) {
                     Log.d("debug", "degree: " + String.valueOf( -degree[0]));
 
-                    tileView.setRotation(-degree[0]);
-
-                    RotateAnimation ra_U = new RotateAnimation(
-                            -currentDegree, degree[0],
-                            Animation.RELATIVE_TO_SELF, 0.5f, // x座標
-                            Animation.RELATIVE_TO_SELF, 0.5f); // y座標
-                    // 轉動時間
-                    ra_U.setDuration(210);
-                    // 預設狀態結束後的動作設定
-                    ra_U.setFillAfter(true);
-                    // marker.
-                    for (int N = 0; N < List_Length; N++) { // 先只取一點
-                        LabelMarker[N].startAnimation(ra_U);
-                    }
-                    currentDegree = -degree[0];
+//                    tileView.setRotation(-degree[0]);
+//
+//                    RotateAnimation ra_U = new RotateAnimation(
+//                            -currentDegree, degree[0],
+//                            Animation.RELATIVE_TO_SELF, 0.5f, // x座標
+//                            Animation.RELATIVE_TO_SELF, 0.5f); // y座標
+//                    // 轉動時間
+//                    ra_U.setDuration(210);
+//                    // 預設狀態結束後的動作設定
+//                    ra_U.setFillAfter(true);
+//                    // marker.
+//                    for (int N = 0; N < List_Length; N++) { // 先只取一點
+//                        LabelMarker[N].startAnimation(ra_U);
+//                    }
+//                    currentDegree = -degree[0];
 
                     /*
                     // currentDegree-初始角度,-degree逆時針旋轉結束角度
@@ -548,8 +548,21 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
             // add it to the view tree
             tileView.addMarker(NowMarker, point2[0], point2[1], null, null);// 使GPS座標設定Marker的位置
-            NowMarker.setRotation( (int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ) ); //旋轉 TEST
-            tileView.setRotation((int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ));
+            NowMarker.setRotation((int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ) ); //旋轉 TEST
+            tileView.setRotation(-(int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ));
+            RotateAnimation ra_U = new RotateAnimation(
+                    LabelMarker[0].getRotation(), (int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ) ,
+                    Animation.RELATIVE_TO_SELF, 0.5f, // x座標
+                    Animation.RELATIVE_TO_SELF, 0.5f); // y座標
+            // 轉動時間
+            ra_U.setDuration(210);
+            // 預設狀態結束後的動作設定
+            ra_U.setFillAfter(true);
+            // marker.
+            for (int N = 0; N < List_Length; N++) { // 先只取一點
+                LabelMarker[N].startAnimation(ra_U);
+            }
+
 
             // moveToMarker
             getTileView().moveToMarker( NowMarker,false);
@@ -663,17 +676,14 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
 
         // 取出對應的點
-        //StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1; // 最近短距離的 起點
-        //EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1;   // 最近短距離的 終點
-
         if(IsUsedMapAB == 1){ // 二坪用
             // 設定最短的起點+終點   從別的Activity取得原始的值
             StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1 -125; // 最近短距離的 起點
-            EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1 -125;   // 最近短距離的 終點
+            EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1 -125; // 最近短距離的 終點
         }
         else{
             StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1; // 最近短距離的 起點
-            EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1;   // 最近短距離的 終點
+            EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1; // 最近短距離的 終點
         }
     }
 
@@ -750,21 +760,17 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
         }
          */
-
         //txtScreen.setText(displaytext);//顯示結果
+
+
         //int EndPointTemp = Integer.parseInt(EndString)-1;
         //int StartPointTemp Integer.parseInt(StartString)-1;
 
         int StartPointTemp = StartPointMin;
         int EndPointTemp = EndPointMin;
-        //DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
-        //PrintPath(parent, EndPointTemp);//加入路徑座標
-        //DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
         if(IsUsedMapAB == 1){ // 二坪用
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp+125][0] ,GPS_Dot.Xys_List[StartPointTemp+125][1]});//加入起點座標
             PrintPath(parent, EndPointTemp);//加入路徑座標
-            //DrawPointsList.add(new double[]{24.538329, 120.792896});
-            //DrawPointsList.add(new double[]{24.539129, 120.795621});
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp+125+1][0] ,GPS_Dot.Xys_List[EndPointTemp+125][1]});//加入終點座標
         }
         else{
