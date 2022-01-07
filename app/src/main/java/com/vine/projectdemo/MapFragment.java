@@ -95,12 +95,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     int[] dist;
     int[] parent;
 
-    String[] AfterSplitStartString;
-    String[] AfterSplitEndString;
+    String[] StartPointArr;
+    String[] EndPointArr;
 
     ArrayList<double[]> DrawPointsList = new ArrayList<>();
 
-    int IsUsedMapAB = 0;// 跨區
+    int IsUsedMapA = 0;// 跨區
     int Doflag = 0;// not used
     int StartPointMin = 0, EndPointMin = 0;  // 最近短距離的 起點 終點
     int ListStFlag = 0;
@@ -625,12 +625,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     private void GetMIN(){
 
-        int[][] PointNumTemp = new int[ AfterSplitStartString.length ][ AfterSplitEndString.length ]; // 個路徑的距離紀錄
+        int[][] PointNumTemp = new int[ StartPointArr.length ][ EndPointArr.length ]; // 個路徑的距離紀錄
         int vsTemp; //  起點
 
-        for (int PointNum = 0; PointNum <  AfterSplitStartString.length ; PointNum++) {
-            vsTemp =  Integer.parseInt(AfterSplitStartString[PointNum]) -1;  //  設定起點  點的起始為1
-            if(IsUsedMapAB == 1){ // 二坪用
+        for (int PointNum = 0; PointNum <  StartPointArr.length ; PointNum++) {
+            vsTemp =  Integer.parseInt(StartPointArr[PointNum]) -1;  //  設定起點  點的起始為1
+            if(IsUsedMapA == 1){ // 二坪用
                 vsTemp = vsTemp - 125;
             }
 
@@ -673,13 +673,13 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
 
             //  存入各點之間的距離大小
-            for (int N = 0; N <  AfterSplitEndString.length ; N++) {
+            for (int N = 0; N <  EndPointArr.length ; N++) {
                 //dist[N] 距離
-                if(IsUsedMapAB == 1){ // 二坪用 -125  (125)
-                    PointNumTemp[PointNum][N] = dist[Integer.parseInt(AfterSplitEndString[N])-125];
+                if(IsUsedMapA == 1){ // 二坪用 -125  (125)
+                    PointNumTemp[PointNum][N] = dist[Integer.parseInt(EndPointArr[N])-125];
                 }
                 else{
-                    PointNumTemp[PointNum][N] = dist[Integer.parseInt(AfterSplitEndString[N]) -1]; // 給終點 取出最短路徑
+                    PointNumTemp[PointNum][N] = dist[Integer.parseInt(EndPointArr[N]) -1]; // 給終點 取出最短路徑
                 }
             }
 
@@ -687,8 +687,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
         // 最小位置
         int MinxPoint=0 ,  MinyPoint=0;
-        for (int qx = 0;qx < AfterSplitStartString.length ; qx++) {
-            for (int qy = 0; qy < AfterSplitEndString.length ; qy++) {
+        for (int qx = 0;qx < StartPointArr.length ; qx++) {
+            for (int qy = 0; qy < EndPointArr.length ; qy++) {
                 if (PointNumTemp[MinxPoint][MinyPoint] > PointNumTemp[qx][qy]) {
                     MinxPoint = qx;
                     MinyPoint = qy;
@@ -697,14 +697,14 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
 
         // 取出對應的點
-        if(IsUsedMapAB == 1){ // 二坪用
+        if(IsUsedMapA == 1){ // 二坪用
             // 設定最短的起點+終點   從別的Activity取得原始的值
-            StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1 -125; // 最近短距離的 起點
-            EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1 -125; // 最近短距離的 終點
+            StartPointMin = Integer.parseInt(StartPointArr[MinxPoint]) -1 -125; // 最近短距離的 起點
+            EndPointMin   = Integer.parseInt(EndPointArr[MinyPoint])   -1 -125; // 最近短距離的 終點
         }
         else{
-            StartPointMin = Integer.parseInt(AfterSplitStartString[MinxPoint]) -1; // 最近短距離的 起點
-            EndPointMin   = Integer.parseInt(AfterSplitEndString[MinyPoint])   -1; // 最近短距離的 終點
+            StartPointMin = Integer.parseInt(StartPointArr[MinxPoint]) -1; // 最近短距離的 起點
+            EndPointMin   = Integer.parseInt(EndPointArr[MinyPoint])   -1; // 最近短距離的 終點
         }
     }
 
@@ -789,7 +789,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
         int StartPointTemp = StartPointMin;
         int EndPointTemp = EndPointMin;
-        if(IsUsedMapAB == 1){ // 二坪用
+        if(IsUsedMapA == 1){ // 二坪用
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp+125][0] ,GPS_Dot.Xys_List[StartPointTemp+125][1]});//加入起點座標
             PrintPath(parent, EndPointTemp);//加入路徑座標
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp+125+1][0] ,GPS_Dot.Xys_List[EndPointTemp+125][1]});//加入終點座標
@@ -824,61 +824,56 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         // remove point list
         DrawPointsList = new ArrayList<>();
 
-
         tileView.defineBounds(0, 0, 25960, 12088);
         GlobalVariable globalVariable = (GlobalVariable)getActivity().getApplicationContext();
         StartStr = globalVariable.Start;
         EndStr   = globalVariable.End;
         //~~~~~~~~~~~~~~取得傳遞過來的資料~~~~~~~~~~~~~~
-//        Intent intent = this.getActivity().getIntent();
-//        StartString = intent.getStringExtra("startstring");
-//        EndString = intent.getStringExtra("endstring");
+        //Intent intent = this.getActivity().getIntent();
+        //StartString = intent.getStringExtra("startstring");
+        //EndString = intent.getStringExtra("endstring");
 
         StartString =  StartStr;
         EndString   = EndStr;
 
-        //   String   切割  -
-        AfterSplitStartString = StartString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");
-        AfterSplitEndString = EndString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");
+        StartPointArr = StartString.split("-");
+        EndPointArr   = EndString.split("-");
 
-        //    跨校區 測試 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        if (Integer.parseInt(AfterSplitStartString[0]) < 125 && Integer.parseInt(AfterSplitEndString[0]) < 125) { //只有八甲
+        if ((Integer.parseInt(StartPointArr[0]) < 125 && Integer.parseInt(EndPointArr[0]) < 125) ||
+                (Integer.parseInt(StartPointArr[0]) > 125 && Integer.parseInt(EndPointArr[0]) > 125)) { //只有 八甲(b) OR 二坪(a)
 
-            String contentStr = ("map_b.txt");//讀ASSETS~~~~~~~
+            String contentStr;
+            if(Integer.parseInt(StartPointArr[0]) < 125){
+                contentStr =  ("map_b.txt");
+                IsUsedMapA = 0;
+            }else{
+                contentStr =  ("map_a.txt");
+                IsUsedMapA = 1;
+            }
             LoadFileToMatrix(contentStr);
 
-            IsUsedMapAB = 0;
-            GetMIN();   //  取得最短的組合
-            vs = StartPointMin;
-            GetDijkstra();
-        } else if (Integer.parseInt(AfterSplitStartString[0]) > 125 && Integer.parseInt(AfterSplitEndString[0]) > 125) {  //只有二坪
-
-            String contentStr = ("map_a.txt");//讀ASSETS~~~~~~~!! 用二坪的檔案
-            LoadFileToMatrix(contentStr);
-
-            IsUsedMapAB = 1;
             GetMIN();   //  取得最短的組合
             vs = StartPointMin;
             GetDijkstra();
         } else { // 跨校區
-            if (Integer.parseInt(AfterSplitStartString[0]) < 125) { // 八甲開始
+            if (Integer.parseInt(StartPointArr[0]) < 125) { // 八甲開始
 
                 Doflag = 1; //  跨區旗標 = 1 終點圖示改變    (目前未使用
-                IsUsedMapAB = 0;
+                IsUsedMapA = 0;
 
                 String contentStr = ("map_b.txt");
                 LoadFileToMatrix(contentStr);
 
-                AfterSplitEndString = new String[0]; // 清空陣列
-                AfterSplitEndString = new String[1];
-                AfterSplitEndString[0] = String.valueOf(123); //校門口
+                EndPointArr = new String[0]; // 清空陣列
+                EndPointArr = new String[1];
+                EndPointArr[0] = String.valueOf(123); //校門口
                 GetMIN();   //  取得最短的組合
                 vs = StartPointMin;
                 GetDijkstra();
-                AfterSplitEndString = EndString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");//恢復
+                EndPointArr = EndString.split("-");//恢復
 
                 Doflag = 2; //  跨區旗標 = 2 起點圖示改變
-                IsUsedMapAB = 1;
+                IsUsedMapA = 1;
 
 //            DrawPointsList.add(new double[]{ 120.79289624,24.538329});
 //            DrawPointsList.add(new double[]{120.795621, 24.539129});
@@ -891,47 +886,45 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
                 contentStr = ("map_a.txt");
                 LoadFileToMatrix(contentStr);
-                AfterSplitStartString = new String[0]; // 清空陣列
-                AfterSplitStartString = new String[1];
-                AfterSplitStartString[0] = String.valueOf(200); //校門口
+                StartPointArr = new String[0]; // 清空陣列
+                StartPointArr = new String[1];
+                StartPointArr[0] = String.valueOf(200); //校門口
                 GetMIN();   //  取得最短的組合
                 vs = StartPointMin;
                 GetDijkstra();
-                AfterSplitStartString = StartString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");//恢復
-
+                StartPointArr = StartString.split("-");//恢復
 
             } else {  // 二坪開始
 
                 Doflag = 2; //  跨區旗標 = 2 起點圖示改變
-                IsUsedMapAB = 1;
+                IsUsedMapA = 1;
 
                 String contentStr = ("map_a.txt");
                 LoadFileToMatrix(contentStr);
 
-                AfterSplitEndString = new String[0]; // 清空陣列
-                AfterSplitEndString = new String[1];
-                AfterSplitEndString[0] = String.valueOf(200); //校門口
+                EndPointArr = new String[0]; // 清空陣列
+                EndPointArr = new String[1];
+                EndPointArr[0] = String.valueOf(200); //校門口
                 GetMIN();   //  取得最短的組合
                 vs = StartPointMin;
                 GetDijkstra();
-                AfterSplitEndString = EndString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");//恢復
+                EndPointArr = EndString.split("-");//恢復
 
 
                 Doflag = 1; //  跨區旗標 = 1 終點圖示改變
-                IsUsedMapAB = 0;
+                IsUsedMapA = 0;
 
                 contentStr = ("map_b.txt");
                 LoadFileToMatrix(contentStr);
-                AfterSplitStartString = new String[0]; // 清空陣列
-                AfterSplitStartString = new String[1];
-                AfterSplitStartString[0] = String.valueOf(123); //校門口
+                StartPointArr = new String[0]; // 清空陣列
+                StartPointArr = new String[1];
+                StartPointArr[0] = String.valueOf(123); //校門口
                 GetMIN();   //  取得最短的組合
                 vs = StartPointMin;
                 GetDijkstra();
-                AfterSplitStartString = StartString.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split("-");//恢復
+                StartPointArr = StartString.split("-");//恢復
             }
         }
-        //   跨校區 測試 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~畫線 & 標記~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -996,7 +989,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     private void PrintPath(int parent[], int j) {
         // Base Case : If j is source
         if (parent[j]==-1) {
-            if(IsUsedMapAB == 1){ // 二坪用
+            if(IsUsedMapA == 1){ // 二坪用
                 DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
             }
             else{
@@ -1006,7 +999,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
         PrintPath(parent, parent[j]);
 
-        if(IsUsedMapAB == 1){ // 二坪用
+        if(IsUsedMapA == 1){ // 二坪用
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
         }
         else{
