@@ -306,103 +306,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         return tileView;
     }
 
-    //region ###################################################  Timer  ####################################################
-
-    int RotationFlag = 0;
-
-    public class MyTimerTask extends TimerTask {
-        public void run() {
-            MapFragment.this.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(MapFragment.this.getActivity(), " R ", Toast.LENGTH_LONG).show();
-                    tileView.setRotation(RotationFlag);//地圖選轉
-                    //marker.
-                    for (int N = 0; N < List_Length; N++) { // 先只取一點
-                        LabelMarker[N].setRotation(-RotationFlag);//地圖選轉
-                    }
-                    RotationFlag = RotationFlag + 10;
-                    if (RotationFlag == 360) {
-                        RotationFlag = 0;
-                    }
-                }
-            });
-            // Toast.makeText(this,  String.valueOf(ra) , Toast.LENGTH_SHORT).show(); // 距離
-        }
-    }
-
-    int MyTimerTaskATime = 0;
-    float raAnima;
-
-    public class MyTimerTaskA extends TimerTask {
-        public void run() {
-            // do something (cut)
-
-            // and at the end show info
-            MapFragment.this.getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (currentDegree > -degree[0]) {
-                        tileView.setRotation(currentDegree - MyTimerTaskATime * raAnima);
-                    } else {
-                        tileView.setRotation(currentDegree + MyTimerTaskATime * raAnima);
-                    }
-                    MyTimerTaskATime++;
-                    if (MyTimerTaskATime == 30) {
-                        MyTimerTaskATime = 0;
-                        timerAnima.cancel();//  timer 停止
-                    }
-                }
-            });
-            // Toast.makeText(this,  String.valueOf(ra) , Toast.LENGTH_SHORT).show(); // 距離
-        }
-    }
-
-    private Timer mTimer = null;
-    private TimerTask mTimerTask = null;
-    private void startTimer() {
-        if (mTimer == null) {
-            mTimer = new Timer();
-        }
-        if (mTimerTask == null) {
-            mTimerTask = new TimerTask() {
-                @Override
-                public void run() {
-                    // and at the end show info
-                    MapFragment.this.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (currentDegree > -degree[0]) {
-                                tileView.setRotation(currentDegree - MyTimerTaskATime * raAnima);
-                            } else {
-                                tileView.setRotation(currentDegree + MyTimerTaskATime * raAnima);
-                            }
-                            MyTimerTaskATime++;
-                            if (MyTimerTaskATime == 30) {
-                                MyTimerTaskATime = 0;
-                                stopTimer();
-                            }
-                        }
-                    });
-                }
-            };
-        }
-        if (mTimer != null && mTimerTask != null)
-            mTimer.schedule(mTimerTask, 50, 50);
-    }
-
-    private void stopTimer() {
-        if (mTimer != null) {
-            mTimer.cancel();
-            mTimer = null;
-        }
-        if (mTimerTask != null) {
-            mTimerTask.cancel();
-            mTimerTask = null;
-        }
-    }
-    //endregion ###################################################  Timer  ####################################################
-
     //region ###################################################  Sensor  ####################################################
     private boolean ElectronicCompassON = true;
     private void StartElectronicCompass(){
@@ -460,7 +363,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
 
             //if( Animation_Run == 0) {
-                if (currentDegree - (-degree[0]) > 5 || currentDegree - (-degree[0]) < -5 && MyTimerTaskATime == 0) {
+                if (currentDegree - (-degree[0]) > 5 || currentDegree - (-degree[0]) < -5) {
                     Log.d("debug", "degree: " + String.valueOf( -degree[0]));
 
                     tileView.setRotation(-degree[0]);
