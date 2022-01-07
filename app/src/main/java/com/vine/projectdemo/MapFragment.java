@@ -543,11 +543,11 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     public void onLocationChanged(Location location) {  // GPS更新監聽
         if(tileView_Run){ // 檢查 tileview 啟動
             // path marker
-            double[]  point3 = {location.getLongitude() ,location.getLatitude()};
+            double[] PathMarker_Point = {location.getLongitude() ,location.getLatitude()};
             PathMarker[PathMarker_Num] = new ImageView(this.getActivity());
-            PathMarker[PathMarker_Num].setTag(point3);
+            PathMarker[PathMarker_Num].setTag(PathMarker_Point);
             PathMarker[PathMarker_Num].setImageResource(R.drawable.dot);
-            tileView.addMarker(PathMarker[PathMarker_Num], point3[0], point3[1], null, null);  // 使GPS座標設定Marker的位置
+            tileView.addMarker(PathMarker[PathMarker_Num], PathMarker_Point[0], PathMarker_Point[1], null, null);  // 使GPS座標設定Marker的位置
             PathMarker[PathMarker_Num].setScaleY((float) 0.6); // 縮小
             PathMarker[PathMarker_Num].setScaleX((float) 0.6); // 縮小
             PathMarker_Num = PathMarker_Num ++;
@@ -556,37 +556,25 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 PathMarker_Num = 0;
             }
 
-            // here marker
-            double[] point2 = {location.getLongitude() ,location.getLatitude()};
+            // Now marker
+            double[] NowMarker_Point = {location.getLongitude() ,location.getLatitude()};
             tileView.removeMarker(NowMarker);
             NowMarker = new ImageView(this.getActivity());
 
             // save the coordinate for centering and callout positioning
-            NowMarker.setTag(point2);
-
-            // rotation
-            NowMarker.setImageResource(R.drawable.map_min_m);
-
+            NowMarker.setTag(NowMarker_Point);
+            NowMarker.setImageResource(R.drawable.map_min);
             // add it to the view tree
-            tileView.addMarker(NowMarker, point2[0], point2[1], null, null);// 使GPS座標設定Marker的位置
-            NowMarker.setRotation((int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ) ); //旋轉 TEST
-            tileView.setRotation(-(int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ));
-            RotateAnimation ra_U = new RotateAnimation(
-                    LabelMarker[0].getRotation(), (int)GetAngle( lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude() ) ,
-                    Animation.RELATIVE_TO_SELF, 0.5f, // x座標
-                    Animation.RELATIVE_TO_SELF, 0.5f); // y座標
-            // 轉動時間
-            ra_U.setDuration(210);
-            // 預設狀態結束後的動作設定
-            ra_U.setFillAfter(true);
-            // marker.
-            for (int N = 0; N < List_Length; N++) { // 先只取一點
-                LabelMarker[N].startAnimation(ra_U);
-            }
-
-
+            tileView.addMarker(NowMarker, NowMarker_Point[0], NowMarker_Point[1], null, null);// 使GPS座標設定Marker的位置
+            NowMarker.setScaleY((float) 0.4);
+            NowMarker.setScaleX((float) 0.4);
             // moveToMarker
             getTileView().moveToMarker( NowMarker,false);
+            // rotation
+            int RotateValue = (int)GetAngle(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
+            NowMarker.setRotation(RotateValue);
+            RotateMap(RotateValue);
+
             Toast.makeText(MapFragment.this.getActivity(), "GPS : " +  String.valueOf( location.getLongitude()) +" , "+  String.valueOf(location.getLatitude())  , Toast.LENGTH_SHORT).show();
 
             lasttLatitude = location.getLatitude();
