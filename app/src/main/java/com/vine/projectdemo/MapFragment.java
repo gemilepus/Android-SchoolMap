@@ -121,7 +121,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.map_content_main, container, false);
 
-        // ElectronicCompass
         WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
         /*
         Display display = wm.getDefaultDisplay();
@@ -130,6 +129,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         int width = size.x;
         int height = size.y;
          */
+
+        // ElectronicCompass
         mSensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
 
         ElectronicCompassBtn = (Button) v.findViewById(R.id.BTNN);
@@ -141,11 +142,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
         });
 
-        // checkSelfPermission
+        // check Permission
         if (ContextCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION,}, 1000);
-        } else {
-            locationStart();
         }
 
         SetTileView(v);
@@ -462,7 +461,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
             //if( Animation_Run == 0) {
                 if (currentDegree - (-degree[0]) > 5 || currentDegree - (-degree[0]) < -5 && MyTimerTaskATime == 0) {
-                    //Toast.makeText( MapFragment.this.getActivity(),  String.valueOf( -degree[0]) , Toast.LENGTH_LONG).show();
+                    Log.d("debug", "degree: " + String.valueOf( -degree[0]));
 
                     tileView.setRotation(-degree[0]);
 
@@ -519,8 +518,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     private void locationStart() {
         Log.d("debug", "locationStart()");
+
         // LocationManager インスタンス生成
-        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);  // TabFragment 改
+        locationManager = (LocationManager) getActivity().getSystemService(LOCATION_SERVICE);
 
         final boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         if (!gpsEnabled) {
@@ -539,10 +539,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 return;
             }
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MinTime, MinDistance, this);
-
             Log.d("debug", "gpsEnable, startActivity");
         } else {
-
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MinTime, MinDistance, this);
             Log.d("debug", "gpsEnabled");
         }
@@ -599,22 +597,20 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             case LocationProvider.AVAILABLE:
                 Log.d("debug", "LocationProvider.AVAILABLE");
 
-                Toast toast = Toast.makeText(MapFragment.this.getActivity(), "LocationProvider.AVAILABLE", Toast.LENGTH_SHORT);
-                toast.show();
+                Toast.makeText(MapFragment.this.getActivity(), "LocationProvider.AVAILABLE", Toast.LENGTH_SHORT).show();
 
                 break;
             case LocationProvider.OUT_OF_SERVICE:
                 Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
 
-                Toast toast1 = Toast.makeText(MapFragment.this.getActivity(), "LocationProvider.OUT_OF_SERVICE", Toast.LENGTH_SHORT);
-                toast1.show();
+                Toast.makeText(MapFragment.this.getActivity(), "LocationProvider.OUT_OF_SERVICE", Toast.LENGTH_SHORT).show();
 
                 break;
             case LocationProvider.TEMPORARILY_UNAVAILABLE:
                 Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE");
 
-                Toast toast2 = Toast.makeText(MapFragment.this.getActivity(), "LocationProvider.TEMPORARILY_UNAVAILABLE", Toast.LENGTH_SHORT);
-                toast2.show();
+                Toast.makeText(MapFragment.this.getActivity(), "LocationProvider.TEMPORARILY_UNAVAILABLE", Toast.LENGTH_SHORT).show();
+
                 break;
         }
     }
