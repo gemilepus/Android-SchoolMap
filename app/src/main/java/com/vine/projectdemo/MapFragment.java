@@ -100,12 +100,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     ArrayList<double[]> DrawPointsList = new ArrayList<>();
 
-    int IsUsedMapA = 0;// 跨區
+    int IsUsedMapA = 0;
     int Doflag = 0;// not used
     int StartPointMin = 0, EndPointMin = 0;  // 最近短距離的 起點 終點
     int ListStFlag = 0;
     
-    // ~~~~~~~~~~~~~~~  ElectronicCompass  ~~~~~~~~~~~~~~~
+    // ElectronicCompass
     private float currentDegree = 0f;
     private SensorManager mSensorManager;
     String vector;
@@ -543,6 +543,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     public void onLocationChanged(Location location) {  // GPS更新監聽
         if(tileView_Run){ // 檢查 tileview 啟動
             // path marker
+            tileView.removeMarker(PathMarker[PathMarker_Num % 10]);
             double[] PathMarker_Point = {location.getLongitude() ,location.getLatitude()};
             PathMarker[PathMarker_Num] = new ImageView(this.getActivity());
             PathMarker[PathMarker_Num].setTag(PathMarker_Point);
@@ -550,9 +551,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             tileView.addMarker(PathMarker[PathMarker_Num], PathMarker_Point[0], PathMarker_Point[1], null, null);  // 使GPS座標設定Marker的位置
             PathMarker[PathMarker_Num].setScaleY((float) 0.6); // 縮小
             PathMarker[PathMarker_Num].setScaleX((float) 0.6); // 縮小
-            PathMarker_Num = PathMarker_Num ++;
-
-            if( PathMarker_Num == 26){
+            PathMarker_Num ++;
+            if(PathMarker_Num == 10){
                 PathMarker_Num = 0;
             }
 
@@ -568,6 +568,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             tileView.addMarker(NowMarker, NowMarker_Point[0], NowMarker_Point[1], null, null);// 使GPS座標設定Marker的位置
             NowMarker.setScaleY((float) 0.4);
             NowMarker.setScaleX((float) 0.4);
+            NowMarker.setY(30);
             // moveToMarker
             getTileView().moveToMarker( NowMarker,false);
             // rotation
