@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -108,14 +109,14 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     // ElectronicCompass
     private float currentDegree = 0f;
     private SensorManager mSensorManager;
+    private ImageButton ElectronicCompassBtn;
     String vector;
     float[] mGravity;
     float[] mGeomagnetic;
     float Rotation[] = new float[9];
     float[] degree = new float[3];
-    ImageButton ElectronicCompassBtn;
-    Timer timer = new Timer(true);
-    Timer timerAnima = new Timer(true);
+
+    private Timer timer;
 
     @Nullable
     @Override
@@ -150,6 +151,10 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
         SetTileView(v);
         DrawLabel();
+
+        timer = new Timer();
+        mTimerTask timerTask = new mTimerTask();
+        timer.schedule(timerTask, 0, 50);
 
         return v;
     }
@@ -307,14 +312,41 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         return tileView;
     }
 
-    private void RotateMap(int mDegree){
-        tileView.setRotation(-mDegree);
+    private ArrayList DegreeList = new ArrayList();
+    class mTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            if(DegreeList.size() > 0){
+                tileView.setRotation(-(float)DegreeList.get(0));
+                DegreeList.remove(0);
+            }
+        }
+    }
 
-        RotateAnimation ra_U = new RotateAnimation(LabelMarker[0].getRotation(),mDegree,
+    private float lastDegree = 0;
+    private void RotateMap(float mDegree){
+        if(DegreeList.size()>60){
+            DegreeList.clear();
+        }
+        float mSpacing = Math.abs((mDegree - lastDegree)%360)/20;
+        for (int i=0;i<20;i++){
+            if(mDegree > lastDegree){
+                DegreeList.add(lastDegree+mSpacing*i);
+            }else{
+                DegreeList.add(lastDegree-mSpacing*i);
+            }
+        }
+        DegreeList.add(mDegree);
+        lastDegree = mDegree;
+        Log.d("debug", "fromDegree: " + tileView.getRotation()
+                +" Spacing: " + mSpacing
+                + " toDegree: "+ mDegree);
+
+        RotateAnimation ra_U = new RotateAnimation(lastDegree,mDegree,
                 Animation.RELATIVE_TO_SELF, 0.5f, // x座標
                 Animation.RELATIVE_TO_SELF, 0.5f); // y座標
-        // 轉動時間
-        ra_U.setDuration(210);
+        ra_U.setDuration(1000);
+        ra_U.setInterpolator(new LinearInterpolator());
         // 預設狀態結束後的動作設定
         ra_U.setFillAfter(true);
         // marker.
@@ -572,7 +604,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             // moveToMarker
             getTileView().moveToMarker( NowMarker,false);
             // rotation
-            int RotateValue = (int)GetAngle(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
+            float RotateValue = (float)GetAngle(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
             NowMarker.setRotation(RotateValue);
             RotateMap(RotateValue);
 
