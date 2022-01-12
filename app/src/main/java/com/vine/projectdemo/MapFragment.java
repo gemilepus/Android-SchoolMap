@@ -603,9 +603,10 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             getTileView().moveToMarker( NowMarker,false);
             // rotation
             float RotateValue = (float)GetAngle(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
-
             NowMarker.setRotation(RotateValue);
-            RotateMap(RotateValue);
+            if(distanceInmBetweenEarthCoordinates(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude())>1.5){
+                RotateMap(RotateValue);
+            }
 
             //Toast.makeText(MapFragment.this.getActivity(), "Lon: " +  String.valueOf( location.getLongitude()) + " Lat: " + String.valueOf(location.getLatitude()),Toast.LENGTH_SHORT).show();
             Log.d("debug", "Lon: " +  String.valueOf( location.getLongitude()) + " Lat: " + String.valueOf(location.getLatitude()));
