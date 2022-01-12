@@ -1,6 +1,5 @@
 package com.vine.projectdemo.VineJsonParsing;
 
-
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

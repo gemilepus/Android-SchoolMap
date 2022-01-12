@@ -30,7 +30,7 @@ public class PHPMainActivity extends AppCompatActivity {
             }
         });
 
-        setSupportActionBar(toolbar);  // 建立 toolbar
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         pref = getPreferences(0);
@@ -38,13 +38,13 @@ public class PHPMainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {  // Toolbar 上的  onClick
+    public boolean onOptionsItemSelected(MenuItem item) {  // Toolbar
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == android.R.id.home) {  // Toolbar 上的返回圖示 按下
+        if (id == android.R.id.home) {
             PHPMainActivity.this.finish();
             return true;
         }
@@ -54,9 +54,7 @@ public class PHPMainActivity extends AppCompatActivity {
     private void initFragment(){
         Fragment fragment;
         if(pref.getBoolean(Constants.IS_LOGGED_IN,false)){
-          //  fragment = new ProfileFragment();
             fragment = new ProfileFragment();
-
         }else {
             fragment = new LoginFragment();
         }

@@ -1,6 +1,5 @@
 package com.vine.projectdemo.VinePHPMySQL;
 
-
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import com.vine.projectdemo.R;
 import java.util.ArrayList;
-
 
 public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHolder> {
     private ArrayList<AndroidVersion> android;
@@ -32,33 +30,28 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
         viewHolder.itemView.setTag(i); // 標記  position
         // viewHolder.tv_Btn_Del.setTag( Integer.parseInt( android.get(i).getSno() ) ); // Tag
         viewHolder.tv_Btn_Del.setTag(i); // 標記  position
-        viewHolder.tv_Btn_Del.setAlpha(200 ); // 透明度
-        viewHolder.tv_Btn_Del.setScaleY((float)7/10.f); // 放大
-        viewHolder.tv_Btn_Del.setScaleX((float)7/10.f); // 放大
+        viewHolder.tv_Btn_Del.setAlpha(200 );
+        viewHolder.tv_Btn_Del.setScaleY((float)7/10.f);
+        viewHolder.tv_Btn_Del.setScaleX((float)7/10.f);
         viewHolder.tv_Btn_Del.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-
-                int position =   (int) v.getTag(); // 1
-
-                mOnImgClickListener.onImgClick( v , position ); // 2
+                int position = (int) v.getTag();
+                mOnImgClickListener.onImgClick( v , position );
             }
-
         });
-        if(mOnItemClickListener != null){ //为ItemView设置监听器
+        if(mOnItemClickListener != null){
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
-                  //  int position =   viewHolder2.getLayoutPosition(); // 1
-//                    int position =   (int)viewHolder2.itemView.getTag(); // 1
+//                    int position =   viewHolder2.getLayoutPosition();
+//                    int position =   (int)viewHolder2.itemView.getTag();
 //                    //int position =  viewHolder.getLayoutPosition();
-//                    mOnItemClickListener.onItemClick( viewHolder2.itemView , position ); // 2
+//                    mOnItemClickListener.onItemClick( viewHolder2.itemView , position );
 
-                    int position =   (int)v.getTag(); // 1
-                    //int position =  viewHolder.getLayoutPosition();
-                    mOnItemClickListener.onItemClick( v , position ); // 2
+                    int position = (int)v.getTag();
+                    //int position = viewHolder.getLayoutPosition();
+                    mOnItemClickListener.onItemClick( v , position );
                 }
 
             });
@@ -68,14 +61,11 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
             @Override
             public boolean onLongClick(View v) {
 
-                int position =   (int)v.getTag(); // 1
-                mOnItemLongClickListener.onItemLongClick( v , position ); // 2
+                int position =  (int)v.getTag();
+                mOnItemLongClickListener.onItemLongClick( v , position );
                 return true;
             }
-
-
         });
-
     }
 
     @Override
@@ -93,10 +83,8 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
             tv_name = (TextView)view.findViewById(R.id.tv_name);
             tv_version = (TextView)view.findViewById(R.id.tv_version);
             tv_api_level = (TextView)view.findViewById(R.id.tv_api_level);
-
             tv_Btn_Del = (ImageButton)view.findViewById(R.id.Btn_Del);
         }
-
     }
 
     public interface OnItemClickListener{
@@ -121,11 +109,8 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
         this.mOnItemLongClickListener = mOnItemLongClickListener;
     }
 
-    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
     public interface OnImgClickListener{
         void onImgClick(View view,int position);
-
     }
 
     private OnImgClickListener mOnImgClickListener;
@@ -134,5 +119,4 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
         this.mOnImgClickListener = mOnImgClickListener;
 
     }
-    //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 }

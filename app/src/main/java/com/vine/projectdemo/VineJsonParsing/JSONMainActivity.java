@@ -42,10 +42,10 @@ public class JSONMainActivity extends AppCompatActivity {
         Toolbar toolbar =(Toolbar) findViewById(R.id.toolbarJSON);
         toolbar.setTitle("聯大校園公告");
         toolbar.setTitleTextColor(0xFFFFFFFF);
-        toolbar.setOnClickListener(new View.OnClickListener() {  // 整個ToolBar的  onClick
+        toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONMainActivity.this.finish(); // 結束
+                JSONMainActivity.this.finish();
             }
         });
 
@@ -95,7 +95,7 @@ public class JSONMainActivity extends AppCompatActivity {
     };
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {  // Toolbar onClick
+    public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.

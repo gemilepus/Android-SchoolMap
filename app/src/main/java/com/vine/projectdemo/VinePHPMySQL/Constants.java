@@ -12,7 +12,7 @@ public class Constants {
     public static final String UPDATE_INFO_OPERATION = "updateinfo" ;
     public static final String REMOVE_INFO_OPERATION = "removeinfo";
     //public static final String RE_JSON = "unijson";
-    public static final String PASSWORDTEMP = "passwordtemp";  //c
+    public static final String PASSWORDTEMP = "passwordtemp";
     public static final String SUCCESS = "success";
     public static final String FAILURE = "failure";
     public static final String IS_LOGGED_IN = "isLoggedIn";

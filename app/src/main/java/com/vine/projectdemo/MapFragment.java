@@ -238,35 +238,25 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         tileView.setScaleX(mScale);
     }
 
+    private void DrawAllPoint() {
+        ArrayList<double[]> map_point = new ArrayList<>();{}
+        for (int i = 0; i < 227; i++) {
+            map_point.add(new double[]{GPS_Dot.Xys_List[i][0] ,GPS_Dot.Xys_List[i][1]});
+        }
+
+        for (double[] point : map_point) {
+            //marker = new ImageView(this);
+            ImageView marker = new ImageView(this.getActivity());
+            // save the coordinate for centering and callout positioning
+            marker.setTag(point);
+            // give it a standard marker icon - this indicator points down and is centered, so we'll use appropriate anchors
+            marker.setImageResource(R.drawable.map_marker_123);
+
+            tileView.addMarker(marker, point[0], point[1], null, null);
+        }
+    }
+    
     private void DrawLabel() {
-
-        //region 標記所有點
-//        ArrayList<double[]> map_point = new ArrayList<>();{}
-//        for (int r = 0; r < 227; r++) {
-//            map_point.add(new double[]{GPS_Dot.Xys_List[r][0] ,GPS_Dot.Xys_List[r][1]});
-//        }
-//        for (double[] point : map_point) {  //建立標記圖示
-//            // any view will do...
-//            //marker = new ImageView(this);
-//            ImageView marker = new ImageView(this.getActivity());
-//            // save the coordinate for centering and callout positioning
-//            marker.setTag(point);
-//            // give it a standard marker icon - this indicator points down and is centered, so we'll use appropriate anchors
-//            //marker.setImageResource(Math.random() < 0.75 ? R.drawable.map_marker_normal : R.drawable.map_marker_featured);//random 隨機
-//            //random 隨機
-//            marker.setImageResource(R.drawable.map_marker_123);
-//            // on tap show further information about the area indicated
-//            // this could be done using a OnClickListener, which is a little more "snappy", since
-//            // MarkerTapListener uses GestureDetector.onSingleTapConfirmed, which has a delay of 300ms to
-//            // confirm it's not the start of a double-tap. But this would consume the touch event and
-//            // interrupt dragging
-//            // tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
-//            // add it to the view tree
-//
-//            tileView.addMarker(marker, point[0], point[1], null, null);
-//        }
-        //endregion
-
         List_Length = (int) HomeFragment.list.size();
         double x, y;
         for (int i = 0; i < List_Length; i++) {
@@ -348,6 +338,20 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         ra_U.setDuration(1000);
         ra_U.setInterpolator(new LinearInterpolator());
         ra_U.setFillAfter(true);
+        ra_U.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+            @Override
+            public void onAnimationEnd(Animation arg0) {
+
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
         for (int i = 0; i < List_Length; i++) {
             LabelMarker[i].startAnimation(ra_U);
         }
@@ -368,7 +372,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         mSensorManager.unregisterListener(this);
     }
 
-    int Animation_Run = 0;
     public void onSensorChanged(SensorEvent event) {
 
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
@@ -383,82 +386,27 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             SensorManager.getOrientation(Rotation, degree);
 
             degree[0] = (float) Math.toDegrees(degree[0]);
+            Log.d("debug", "degree: " + String.valueOf( -degree[0]));
 
-            //取方位
-            if ((int)degree[0]<30 && (int)degree[0]>-30) {
-                vector="北";}
-            else if ((int)degree[0]>=30 && (int)degree[0]<=60){
-                vector="東北";
-            }
-            else if ((int)degree[0]>60 && (int)degree[0]<120){
-                vector="東";
-            }
-            else if ((int)degree[0]>=120 && (int)degree[0]<=150){
-                vector="東南";
-            }
-            else if ((int)degree[0]>=-60 && (int)degree[0]<=-30){
-                vector="西北";
-            }
-            else if ((int)degree[0]>=-150 && (int)degree[0]<=-120){
-                vector="西南";
-            }
-            else if ((int)degree[0]>-120 && (int)degree[0]<-60){
-                vector="西";
-            }
-            else {
-                vector="南";
-            }
+            // 取方位
+            if((int)degree[0]<30 && (int)degree[0]>-30) { vector="北";}
+            else if((int)degree[0]>=30  && (int)degree[0]<=60){ vector="東北"; }
+            else if((int)degree[0]>60   && (int)degree[0]<120){ vector="東"; }
+            else if((int)degree[0]>=120 && (int)degree[0]<=150){ vector="東南"; }
+            else if((int)degree[0]>=-60 && (int)degree[0]<=-30){ vector="西北"; }
+            else if((int)degree[0]>=-150&& (int)degree[0]<=-120){ vector="西南"; }
+            else if((int)degree[0]>-120 && (int)degree[0]<-60){ vector="西"; }
+            else{ vector="南"; }
 
-            //if( Animation_Run == 0) {
-                if (currentDegree - (-degree[0]) > 5 || currentDegree - (-degree[0]) < -5) {
-                    Log.d("debug", "degree: " + String.valueOf( -degree[0]));
+            if (Math.abs(currentDegree - degree[0]) > 5) {
 
-//                    tileView.setRotation(-degree[0]);
-//
-//                    RotateAnimation ra_U = new RotateAnimation(
-//                            -currentDegree, degree[0],
-//                            Animation.RELATIVE_TO_SELF, 0.5f, // x座標
-//                            Animation.RELATIVE_TO_SELF, 0.5f); // y座標
-//                    // 轉動時間
-//                    ra_U.setDuration(210);
-//                    // 預設狀態結束後的動作設定
-//                    ra_U.setFillAfter(true);
-//                    // marker.
-//                    for (int N = 0; N < List_Length; N++) { // 先只取一點
-//                        LabelMarker[N].startAnimation(ra_U);
-//                    }
-                    RotateMap((int)degree[0]);
-                    currentDegree = -degree[0];
+                RotateMap((int)degree[0]);
+                currentDegree = -degree[0];
 
-                    /*
-                    // currentDegree-初始角度,-degree逆時針旋轉結束角度
-                    RotateAnimation ra = new RotateAnimation(currentDegree, -degree[0], Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f); // y座標 // x座標
-                    // 轉動時間
-                    ra.setDuration(200);
-                    // 預設狀態結束後的動作設定
-                    ra.setFillAfter(true);
-                    // 將動作放入圖片
-                    // tileView.startAnimation(ra);
-                    ra.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                            Animation_Run = 1;
-                        }
-                        @Override
-                        public void onAnimationEnd(Animation arg0) {
-                            tileView.setRotation(-degree[0]);
-                            //tileView.clearAnimation();
-                            Animation_Run = 0;
-                        }
-                        @Override
-                        public void onAnimationRepeat(Animation animation) { }
-                    });
-                    */
-
-                    ElectronicCompassON = false;
-                    StopElectronicCompass();
-                }
-            //}
+                // Stop ElectronicCompass
+                ElectronicCompassON = false;
+                StopElectronicCompass();
+            }
         }
     }
 

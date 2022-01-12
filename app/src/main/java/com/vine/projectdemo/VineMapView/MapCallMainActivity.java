@@ -24,10 +24,9 @@ import java.io.InputStream;
 public class MapCallMainActivity extends AppCompatActivity {
     Bitmap bmp;
     ImageView imgPhoto;
-    //int[] imgId = { R.mipmap.img01, R.mipmap.img02, R.mipmap.img03,
-           // R.mipmap.img04, R.mipmap.img05, R.mipmap.img06};
-    //int count = imgId.length; // 共有多少張圖片
-   //int btn_number=0;
+//    int[] imgId = { R.mipmap.img01, R.mipmap.img02, R.mipmap.img03, R.mipmap.img04, R.mipmap.img05, R.mipmap.img06};
+//    int count = imgId.length; // 共有多少張圖片
+//    int btn_number=0;
 
     String[] Assfile = null;
     AssetManager assets = null;
@@ -42,14 +41,13 @@ public class MapCallMainActivity extends AppCompatActivity {
         //toolbar.setLogo(R.drawable.ic_menu_back);
         toolbar.setTitle("室內地圖");
         toolbar.setTitleTextColor(0xFFFFFFFF);
-        toolbar.setOnClickListener(new View.OnClickListener() {  // 整個ToolBar的  onClick
+        toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText( JSONMainActivity.this, "返回", Toast.LENGTH_SHORT).show();
                 MapCallMainActivity.this.finish();
             }
         });
-        setSupportActionBar(toolbar);  // 建立 toolbar
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final LinearLayout lm = (LinearLayout) findViewById(R.id.linearMain);
@@ -178,7 +176,7 @@ public class MapCallMainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == android.R.id.home) {  // Toolbar 上的返回圖示 按下
+        if (id == android.R.id.home) {
 
             MapCallMainActivity.this.finish();
 
