@@ -154,7 +154,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
         timer = new Timer();
         mTimerTask timerTask = new mTimerTask();
-        timer.schedule(timerTask, 0, 50);
+        timer.schedule(timerTask, 0, 35);
 
         return v;
     }
@@ -347,10 +347,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 Animation.RELATIVE_TO_SELF, 0.5f); // y座標
         ra_U.setDuration(1000);
         ra_U.setInterpolator(new LinearInterpolator());
-        // 預設狀態結束後的動作設定
         ra_U.setFillAfter(true);
-        // marker.
-        for (int i = 0; i < List_Length; i++) { // 先只取一點
+        for (int i = 0; i < List_Length; i++) {
             LabelMarker[i].startAnimation(ra_U);
         }
     }
@@ -605,10 +603,13 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             getTileView().moveToMarker( NowMarker,false);
             // rotation
             float RotateValue = (float)GetAngle(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
+
             NowMarker.setRotation(RotateValue);
             RotateMap(RotateValue);
 
-            Toast.makeText(MapFragment.this.getActivity(), "GPS : " +  String.valueOf( location.getLongitude()) +" , "+  String.valueOf(location.getLatitude())  , Toast.LENGTH_SHORT).show();
+            //Toast.makeText(MapFragment.this.getActivity(), "Lon: " +  String.valueOf( location.getLongitude()) + " Lat: " + String.valueOf(location.getLatitude()),Toast.LENGTH_SHORT).show();
+            Log.d("debug", "Lon: " +  String.valueOf( location.getLongitude()) + " Lat: " + String.valueOf(location.getLatitude()));
+            Log.d("debug", "Distance: " + distanceInmBetweenEarthCoordinates(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude()));
 
             lasttLatitude = location.getLatitude();
             lastLongitude = location.getLongitude();
@@ -638,6 +639,24 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //return (bx < ax ? -angle : angle);
         //Toast.makeText( MapFragment.this.getActivity(),  "角度" + String.valueOf(WRotation) , Toast.LENGTH_LONG).show();
         return (WRotation);
+    }
+
+    private double degreesToRadians(double degrees) {
+        return degrees * Math.PI / 180;
+    }
+
+    private double distanceInmBetweenEarthCoordinates(double lat1,double lon1,double lat2,double lon2) {
+        double earthRadiusKm = 6371;
+        double dLat = degreesToRadians(lat2-lat1);
+        double dLon = degreesToRadians(lon2-lon1);
+
+        lat1 = degreesToRadians(lat1);
+        lat2 = degreesToRadians(lat2);
+
+        double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return earthRadiusKm * c * 1000;
     }
 
     //endregion #######################################################  GPS   ####################################################
