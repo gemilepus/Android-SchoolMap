@@ -44,7 +44,6 @@ public class HomeFragment extends Fragment {
     RecyclerView recyclerView;
     HomeFragment.RecyclerviewAdapter myRecAdapter;
     public static List<DataObject> list;
-    int ListOpenFlag = 0;
 
     private EditText searchTextStart , searchTextEnd;
     Button btnStart;
@@ -65,14 +64,6 @@ public class HomeFragment extends Fragment {
             public void onClick(View v) {
                 MainActivity activity = (MainActivity)getActivity();
                 activity.animateFAB();
-
-                if(ListOpenFlag == 1){
-                    ListOpenFlag = 0;
-                    buttonTest.setText("+");
-                }else{
-                    ListOpenFlag = 1;
-                    buttonTest.setText("-");
-                }
 
                 final List<DataObject> filteredModelList = filter(list, "");//清單重置
                 // RecyclerView 主體
@@ -373,14 +364,6 @@ public class HomeFragment extends Fragment {
             final String text = model.getHeading().toLowerCase();
             if (text.contains(query)) {
                 filteredModelList.add(model); // 加入 搜尋到的清單
-                // Toast.makeText(getApplicationContext(), String.valueOf(model) ,Toast.LENGTH_SHORT).show();// position 為 顯示的清單 第1個~最後
-                if( ListOpenFlag == 1){
-
-                    filteredModelList.add(new DataObject("子清單","Hello","YEEEE")); // 加入子清單
-                    //filteredModelList.removeAll();
-                }else{
-                    filteredModelList.remove("YEEEE");
-                }
             }
         }
         myRecAdapter = new HomeFragment.RecyclerviewAdapter(filteredModelList, HomeFragment.this.getActivity());

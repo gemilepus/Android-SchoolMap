@@ -51,6 +51,7 @@ import com.vine.projectdemo.VineReValues.GlobalVariable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -78,7 +79,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     TextView[] LabelMarker = new TextView[60];
     int List_Length;
     // Marker
-    ImageView[] PathMarker = new ImageView[25];//ImageView[] PathMarker[];
+    ImageView[] PathMarker = new ImageView[25];
     int PathMarker_Num = 0;
     ImageView NowMarker;
 
@@ -510,7 +511,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
                 locationStart();
                 Toast.makeText(MapFragment.this.getActivity(), "GPS 啟動", Toast.LENGTH_SHORT).show();
-                return;
             } else {
                 // それでも拒否された時の対応
                 Toast toast = Toast.makeText(MapFragment.this.getActivity(), "これ以上なにもできません", Toast.LENGTH_SHORT);
@@ -563,17 +563,17 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     }
 
     @Override
-    public void onLocationChanged(Location location) {  // GPS更新監聽
-        if(tileView_Run){ // 檢查 tileview 啟動
+    public void onLocationChanged(Location location) {
+        if(tileView_Run){
             // path marker
             tileView.removeMarker(PathMarker[PathMarker_Num % 10]);
             double[] PathMarker_Point = {location.getLongitude() ,location.getLatitude()};
             PathMarker[PathMarker_Num] = new ImageView(this.getActivity());
             PathMarker[PathMarker_Num].setTag(PathMarker_Point);
             PathMarker[PathMarker_Num].setImageResource(R.drawable.dot);
-            tileView.addMarker(PathMarker[PathMarker_Num], PathMarker_Point[0], PathMarker_Point[1], null, null);  // 使GPS座標設定Marker的位置
-            PathMarker[PathMarker_Num].setScaleY((float) 0.6); // 縮小
-            PathMarker[PathMarker_Num].setScaleX((float) 0.6); // 縮小
+            tileView.addMarker(PathMarker[PathMarker_Num], PathMarker_Point[0], PathMarker_Point[1], null, null);
+            PathMarker[PathMarker_Num].setScaleY((float) 0.6);
+            PathMarker[PathMarker_Num].setScaleX((float) 0.6);
             PathMarker_Num ++;
             if(PathMarker_Num == 10){
                 PathMarker_Num = 0;
@@ -588,17 +588,19 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             NowMarker.setTag(NowMarker_Point);
             NowMarker.setImageResource(R.drawable.map_min);
             // add it to the view tree
-            tileView.addMarker(NowMarker, NowMarker_Point[0], NowMarker_Point[1], null, null);// 使GPS座標設定Marker的位置
+            tileView.addMarker(NowMarker, NowMarker_Point[0], NowMarker_Point[1], null, null);
             NowMarker.setScaleY((float) 0.4);
             NowMarker.setScaleX((float) 0.4);
             NowMarker.setY(30);
             // moveToMarker
             getTileView().moveToMarker( NowMarker,false);
             // rotation
-            float RotateValue = (float)GetAngle(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
-            NowMarker.setRotation(RotateValue);
-            if(distanceInmBetweenEarthCoordinates(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude())>1.5){
-                RotateMap(RotateValue);
+            if(lasttLatitude != 0){
+                float RotateValue = (float)GetAngle(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
+                NowMarker.setRotation(RotateValue);
+                if(distanceInmBetweenEarthCoordinates(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude())>1.5){
+                    RotateMap(RotateValue);
+                }
             }
 
             //Toast.makeText(MapFragment.this.getActivity(), "Lon: " +  String.valueOf( location.getLongitude()) + " Lat: " + String.valueOf(location.getLatitude()),Toast.LENGTH_SHORT).show();
@@ -620,7 +622,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     }
 
-    double  lasttLatitude,lastLongitude; // 紀錄
+    double  lasttLatitude = 0,lastLongitude = 0; // 紀錄
     public double GetAngle(double ax, double ay,double bx,double by){
         // 這邊需要過濾掉位置相同的問題
         if ( ax == bx && ay >= by ) return 0;
@@ -659,7 +661,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     private void GetMIN(){
 
-        int[][] PointNumTemp = new int[ StartPointArr.length ][ EndPointArr.length ]; // 個路徑的距離紀錄
+        int[][] PointNumTemp = new int[ StartPointArr.length ][ EndPointArr.length ]; // 各路徑的距離紀錄
         int vsTemp; //  起點
 
         for (int PointNum = 0; PointNum <  StartPointArr.length ; PointNum++) {
@@ -909,14 +911,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 Doflag = 2; //  跨區旗標 = 2 起點圖示改變
                 IsUsedMapA = 1;
 
-//            DrawPointsList.add(new double[]{ 120.79289624,24.538329});
-//            DrawPointsList.add(new double[]{120.795621, 24.539129});
-//            DrawPointsList.add(new double[]{ 120.797069,24.541462});
-//            DrawPointsList.add(new double[]{120.799379, 24.543649});
-
+                //DrawPointsList.add(new double[]{ 120.79289624,24.538329});
+                //DrawPointsList.add(new double[]{120.795621, 24.539129});
+                //DrawPointsList.add(new double[]{ 120.797069,24.541462});
+                //DrawPointsList.add(new double[]{120.799379, 24.543649});
 
                 ListStFlag = DrawPointsList.size(); //   八甲校區已經畫了幾點
-
 
                 contentStr = ("map_a.txt");
                 LoadFileToMatrix(contentStr);
@@ -960,38 +960,36 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
         }
 
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~畫線 & 標記~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // 畫線 & 標記
 
-        int pointnum = 0;// 迴圈計次 (路徑點數)
-        for (double[] point : DrawPointsList) {  //建立標記圖示
+        int pointnum = 0;
+        for (double[] point : DrawPointsList) {
             //marker = new ImageView(this);
             ImageView marker = new ImageView(this.getActivity());
             // save the coordinate for centering and callout positioning
             marker.setTag(point);
             // give it a standard marker icon - this indicator points down and is centered, so we'll use appropriate anchors
 
-            if (pointnum == 0) {  // 標記起點
+            if (pointnum == 0) { 
+                // 標記起點
                 marker.setImageResource(R.drawable.map_marker_green_f);
-
-            } else if (pointnum == DrawPointsList.size() - 1) {  // 標記終點
+            } else if (pointnum == DrawPointsList.size() - 1) { 
+                // 標記終點
                 marker.setImageResource(R.drawable.map_marker_red_f);
-
             } else {
                 marker.setImageResource(R.drawable.map_marker_123);
             }
 
-            marker.setScaleY((float) 0.5); // 縮小
-            marker.setScaleX((float) 0.5); // 縮小
+            marker.setScaleY((float) 0.5);
+            marker.setScaleX((float) 0.5);
             marker.setScrollY(-100);
 
 //            Drawable d = getResources().getDrawable(R.drawable.map_marker_green_f);
 //            int h = d.getIntrinsicHeight();
 //            int w = d.getIntrinsicWidth();
-
             // marker.getHeight();
             // Toast.makeText(this,  " 高 " + String.valueOf(h) , Toast.LENGTH_SHORT).show(); // 距離
-
-
+            
             // on tap show further information about the area indicated
             // this could be done using a OnClickListener, which is a little more "snappy", since
             // MarkerTapListener uses GestureDetector.onSingleTapConfirmed, which has a delay of 300ms to
@@ -1003,27 +1001,26 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             tileView.addMarker(marker, point[0], point[1], null, null);
 
             if(pointnum==0){
-                // tileView move to start
                 tileView.moveToMarker(marker,false);
             }
 
-            pointnum++; // (路徑點數)
+            pointnum++;
         }
 
-        if (ListStFlag != 0) { // 跨區時 分開價點測試
+        if (ListStFlag != 0) {
             tileView.drawPath(DrawPointsList.subList(0, pointnum), null);//  點數  畫線
         } else {
             tileView.drawPath(DrawPointsList.subList(0, pointnum), null);//  點數  畫線
         }
 
         mMatrix = new int[0][0];
-        tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE); // to GPS座標
+        tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE);
     }
 
     private void PrintPath(int parent[], int j) {
         // Base Case : If j is source
         if (parent[j]==-1) {
-            if(IsUsedMapA == 1){ // 二坪用
+            if(IsUsedMapA == 1){ // 二坪(A)
                 DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
             }
             else{
@@ -1033,7 +1030,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
         PrintPath(parent, parent[j]);
 
-        if(IsUsedMapA == 1){ // 二坪用
+        if(IsUsedMapA == 1){ // 二坪(A)
             DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
         }
         else{
@@ -1055,28 +1052,29 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             byte[] buff=baos.toByteArray();
             baos.close();
             in.close();
-            result = new String(buff,"UTF-8");//AN
+            result = new String(buff, StandardCharsets.UTF_8);
             String[] AfterSplit =  result.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
             int ArraySum = (int)Math.sqrt(AfterSplit.length);  //  開根號 及 型別轉換
+
             // ~~~~~~~~~~~~~~~~~~設定各種大小~~~~~~~~~~~~~~~~~~~~
             mVexs = new int[ArraySum];// 純標記
-
             mMatrix = new int[mVexs.length][mVexs.length];
             prev = new int[mVexs.length];
             dist = new int[mVexs.length];
             parent = new int[mVexs.length];
+
             //~~~~~~~~~~~~~~~~~~ 一維轉二維陣列 ~~~~~~~~~~~~~~~~~~~~
-            int NumSplit = 0;
+            int k = 0;
             for (int i = 0; i< ArraySum ; i++){
                 for (int j = 0 ; j < ArraySum ; j++){
-                    int temp= Integer.parseInt(AfterSplit[NumSplit]);
+                    int temp= Integer.parseInt(AfterSplit[k]);
                     if(temp == 9999){
                         mMatrix[i][j] = INF;
                     }
                     else{
                         mMatrix[i][j] = temp;
                     }
-                    NumSplit++;
+                    k++;
                 }
             }
             result=result.replaceAll("\\r\\n","\n");
