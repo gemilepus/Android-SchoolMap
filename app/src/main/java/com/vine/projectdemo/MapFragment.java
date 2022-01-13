@@ -117,6 +117,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     float[] degree = new float[3];
 
     private Timer timer;
+    private mTimerTask timerTask;
 
     @Nullable
     @Override
@@ -152,9 +153,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         SetTileView(v);
         DrawLabel();
 
-        timer = new Timer();
-        mTimerTask timerTask = new mTimerTask();
-        timer.schedule(timerTask, 0, 35);
+        startTimer();
 
         return v;
     }
@@ -284,6 +283,31 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE);
     }
 
+    private MarkerLayout.MarkerTapListener markerTapListener = new MarkerLayout.MarkerTapListener() {
+        @Override
+        public void onMarkerTap(View view, int x, int y) {
+            // get reference to the TileView
+            // tileView = this.getActivity().getTileView();
+            Toast.makeText( MapFragment.this.getActivity(), "X = " + String.valueOf(x) + " Y = " + String.valueOf(y), Toast.LENGTH_LONG).show();
+
+            if( !(view instanceof TextView) ){ // View != TextView
+                // we saved the coordinate in the marker's tag
+                double[] position = (double[]) view.getTag();
+                // lets center the screen to that coordinate
+                //tileView.slideToAndCenter(position[0], position[1]);
+                // create a simple callout
+                SampleCallout callout = new SampleCallout(view.getContext());
+                // add it to the view tree at the same position and offset as the marker that invoked it
+                tileView.addCallout(callout, position[0], position[1], -0.5f, -1.0f);
+                // a little sugar
+                callout.transitionIn();
+                // stub out some text
+                callout.setTitle("Info");
+                callout.setSubtitle("位置 : " + position[1] + ", " + position[0]);
+            }
+        }
+    };
+
     public void MoveToA(){ // 二坪校區
         tileView.moveToMarker(tileView.getMarkerLayout().getChildAt(0),false);
     }
@@ -307,14 +331,34 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         @Override
         public void run() {
             if(DegreeList.size() > 0){
-                tileView.setRotation(-(float)DegreeList.get(0));
+                if(DegreeList.get(0)!= null){
+                    tileView.setRotation(-(float)DegreeList.get(0));
+                }
                 DegreeList.remove(0);
             }
         }
     }
 
+    private void startTimer() {
+        timer = new Timer();
+        timerTask = new mTimerTask();
+        timer.schedule(timerTask, 0, 35);
+    }
+
+    private void stopTimer() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+        if (timerTask != null) {
+            timerTask.cancel();
+            timerTask = null;
+        }
+    }
+
     private float lastDegree = 0;
     private void RotateMap(float mDegree){
+        stopTimer();
         if(DegreeList.size()>60){
             DegreeList.clear();
         }
@@ -331,6 +375,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         Log.d("debug", "fromDegree: " + tileView.getRotation()
                 +" Spacing: " + mSpacing
                 + " toDegree: "+ mDegree);
+        startTimer();
 
         RotateAnimation ra_U = new RotateAnimation(lastDegree,mDegree,
                 Animation.RELATIVE_TO_SELF, 0.5f, // x座標
@@ -1050,32 +1095,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     protected void displayReceivedData(String message) {
         //txtData.setText("Data received: "+message);
     }
-
-    private MarkerLayout.MarkerTapListener markerTapListener = new MarkerLayout.MarkerTapListener() {
-        @Override
-        public void onMarkerTap(View view, int x, int y) {
-            // get reference to the TileView
-            // tileView = this.getActivity().getTileView();
-            Toast.makeText( MapFragment.this.getActivity(), "X = " + String.valueOf(x) + " Y = " + String.valueOf(y), Toast.LENGTH_LONG).show();
-
-            if( !(view instanceof TextView) ){ // View != TextView
-                // we saved the coordinate in the marker's tag
-                double[] position = (double[]) view.getTag();
-                // lets center the screen to that coordinate
-                //tileView.slideToAndCenter(position[0], position[1]);
-                // create a simple callout
-                SampleCallout callout = new SampleCallout(view.getContext());
-                // add it to the view tree at the same position and offset as the marker that invoked it
-                tileView.addCallout(callout, position[0], position[1], -0.5f, -1.0f);
-                // a little sugar
-                callout.transitionIn();
-                // stub out some text
-                callout.setTitle("Info");
-                callout.setSubtitle("位置 : " + position[1] + ", " + position[0]);
-            }
-        }
-    };
-
 
     @Override
     public void onResume() {
