@@ -58,26 +58,10 @@ public class HomeFragment extends Fragment {
         LinearLayout LI_Home = (LinearLayout) v.findViewById(R.id.LIhome);
         LI_Home.setVisibility(View.GONE);
 
-        buttonTest = (Button)v.findViewById(R.id.button2);
-        buttonTest.setOnClickListener(new View.OnClickListener() { // 展開清單
-            @Override
-            public void onClick(View v) {
-                MainActivity activity = (MainActivity)getActivity();
-                activity.animateFAB();
-
-                final List<DataObject> filteredModelList = filter(list, "");//清單重置
-                // RecyclerView 主體
-                recyclerView.getLayoutManager().scrollToPosition(10);// 移動到對 X 個
-
-                //ViewGroup.LayoutParams laParams =  recyclerView.getLayoutParams();
-                //laParams.
-                //myRecAdapter.notifyItemRemoved(10);
-            }});
-
         btnStart = (Button) v.findViewById(R.id.Btn);
         btnStart.setEnabled(false);
         btnStart.setBackgroundColor(0xFF2F8FBB);
-        btnStart.setOnClickListener(new View.OnClickListener() { // 展開清單
+        btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -150,8 +134,7 @@ public class HomeFragment extends Fragment {
         searchTextStart.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before , int count) {
-                //textView.setText(searchTextStart.getText());
-                //SelectStatus=1;
+
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -173,13 +156,13 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-        searchTextStart.setOnFocusChangeListener(new View.OnFocusChangeListener() { //FocusChange
+        searchTextStart.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 
             public void onFocusChange(View v, boolean hasFocus) {
                 SelectStatus=1;
             }
         });
-        searchTextEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {//FocusChange
+        searchTextEnd.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 SelectStatus=2;
             }
@@ -189,8 +172,7 @@ public class HomeFragment extends Fragment {
         searchTextEnd.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before , int count) {
-                // textView1.setText(searchTextEnd.getText());
-                //  SelectStatus=2;
+
             }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -220,6 +202,18 @@ public class HomeFragment extends Fragment {
         int x = location[0];
         int y = location[1];
 
+        buttonTest = (Button)v.findViewById(R.id.button2);
+        buttonTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity activity = (MainActivity)getActivity();
+                activity.animateFAB();
+
+                final List<DataObject> filteredModelList = filter(list, "");
+                recyclerView.getLayoutManager().scrollToPosition(10);
+                //ViewGroup.LayoutParams laParams =  recyclerView.getLayoutParams();
+            }});
+
         return v;
     }
 
@@ -246,45 +240,18 @@ public class HomeFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(HomeFragment.RecyclerviewAdapter.VH holder, int position) { // 這裡產生 清單
+        public void onBindViewHolder(HomeFragment.RecyclerviewAdapter.VH holder, int position) {
             holder.htxt.setText(DataList.get(position).getHeading());
             holder.dtxt.setText(DataList.get(position).getDescription());
             holder.vtxt.setText(DataList.get(position).getValue());
             //HomeFragment.RecyclerviewAdapter.this.notifyItemRemoved(1);
-            if( DataList.get(position).getDescription() == "Hello"){
-                holder.itemView.setBackgroundColor(Color.parseColor("#4ba1fc")); // 改變顏色
-                // holder.itemView.setBackground(R.drawable.back_blue);
-                // holder.itemView.setBackground();
-                // holder.itemView.getLayoutParams().resolveLayoutDirection(10);
-
-                // HomeFragment.RecyclerviewAdapter.this.
-                ViewGroup.LayoutParams laParams =holder.itemView.getLayoutParams();
-
-                holder.itemView.getWidth();
-                laParams.height = 150;
-                laParams.width = 800; //800
-                //holder.itemView.setLeft(800);//NO
-                //myRecAdapter.
-                holder.itemView.scrollTo(200,0);//OK (-200)
-                //holder.itemView.requestLayout(); // RE
-                holder.itemView.setLayoutParams(laParams);
-//                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) view.getLayoutParams();
-//                params.rightMargin = 30;
-//                view.setLayoutParams(params);
-                //  ViewGroup.LayoutParams layoutParams = holder.itemView.getLayoutParams( );
-                // layoutParams.setMargins(30, 20, 30, 0);
-            }else{
-                holder.itemView.setBackgroundColor(Color.parseColor("#ffffff")); // 改變顏色
-                ViewGroup.LayoutParams laParams =holder.itemView.getLayoutParams();
-                holder.itemView.getWidth();
-                laParams.height = 150;
-                laParams.width = MATCH_PARENT;
-                holder.itemView.scrollTo(0,0);
-                //holder.itemView.setLeft(800);//NO
-                //myRecAdapter.
-                //holder.itemView.scrollTo(+200,0);
-                holder.itemView.setLayoutParams(laParams);
-            }
+            holder.itemView.setBackgroundColor(Color.parseColor("#ffffff"));
+            ViewGroup.LayoutParams laParams =holder.itemView.getLayoutParams();
+            holder.itemView.getWidth();
+            laParams.height = 150;
+            laParams.width = MATCH_PARENT;
+            holder.itemView.scrollTo(0,0);
+            holder.itemView.setLayoutParams(laParams);
 
             DataObject txt = DataList.get(position);
             String startstring = txt.getHeading().toLowerCase(Locale.getDefault());
@@ -296,7 +263,6 @@ public class HomeFragment extends Fragment {
                 spanString.setSpan(new ForegroundColorSpan(Color.RED), startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 // red color of matching text
                 holder.htxt.setText(spanString);
-                // Toast.makeText(getApplicationContext(), String.valueOf(position) ,Toast.LENGTH_SHORT).show();// position 為 顯示的清單 第1個~最後
             }
         }
 
@@ -324,7 +290,7 @@ public class HomeFragment extends Fragment {
                             globalVariable.Start =  StartPoints;
                             searchTextStart.setText("(" + startstring + ")");
                             searchTextStart.setTextColor(Color.parseColor("#136388"));
-                            final List<DataObject> filteredModelList = filter(list, "");//清單重置
+                            final List<DataObject> filteredModelList = filter(list, ""); //清單重置
                             searchTextEnd.requestFocus();//  Focus 下一個 edittext
                             StartTextFlag = 1; // 起點已選擇
                         }
@@ -335,8 +301,8 @@ public class HomeFragment extends Fragment {
                             globalVariable.End =  EndPoints;
                             searchTextEnd.setText("(" + startstring + ")");
                             searchTextEnd.setTextColor(Color.parseColor("#136388"));
-                            final List<DataObject> filteredModelList = filter(list, "");//清單重置
-                            btnStart.setEnabled(true);//  解除鎖定 Button
+                            final List<DataObject> filteredModelList = filter(list, ""); //清單重置
+                            btnStart.setEnabled(true);
                             btnStart.setBackgroundColor(0xFF47C5FF);
                             EndTextFlag = 1; // 終點已選擇
                         }

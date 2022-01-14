@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -47,17 +48,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setupBottomNavigation();
         setViewPager(); // add Tab
         setupFab();
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);// EditText 取得焦點 但不會立刻彈出鍵盤
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
 
     //  Fragment Communicating........................
     int MapStart = 0 , MapEnd = 0 ;
     @Override
     public void sendData(String message) {
-        if( message == "START"){
+        if(message.equals("START")){
             MapStart = 1;
         }
-        if( message == "END"){
+        if(message.equals("END")){
             MapEnd = 1;
         }
         if(  MapStart == 1 &&  MapEnd == 1 ){
@@ -135,8 +137,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setupBottomNavigation() {
         mBottomNavigationView = (BottomNavigationView)findViewById(R.id.bottom_navigation);
-        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-
+        mBottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener(){
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FragmentManager manager = getSupportFragmentManager();
@@ -151,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 return false;
             }
-
         });
         mBottomNavigationView.setVisibility(View.GONE); 
     }
@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 animateFAB();
                 hideSoftKeyboard();
 
-                //SM.sendData("test".trim());  // PassingDataBetweenFragments
             }
         });
 
