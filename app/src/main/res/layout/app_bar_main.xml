@@ -49,8 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="90dp"
-
-        android:layout_marginRight="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:src="@android:drawable/ic_media_play"
         android:visibility="visible"
         app:backgroundTint="@color/colorAccent"

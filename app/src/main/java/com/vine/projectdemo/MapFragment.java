@@ -17,11 +17,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.core.content.ContextCompat;
@@ -35,7 +33,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -53,7 +50,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -250,7 +246,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             // save the coordinate for centering and callout positioning
             marker.setTag(point);
             // give it a standard marker icon - this indicator points down and is centered, so we'll use appropriate anchors
-            marker.setImageResource(R.drawable.map_marker_123);
+            marker.setImageResource(R.drawable.map_path_marker);
 
             tileView.addMarker(marker, point[0], point[1], null, null);
         }
@@ -392,6 +388,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             @Override
             public void onAnimationEnd(Animation arg0) {
 
+
             }
             @Override
             public void onAnimationRepeat(Animation animation) {
@@ -399,7 +396,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             }
         });
         for (int i = 0; i < List_Length; i++) {
-            LabelMarker[i].startAnimation(ra_U);
+            LabelMarker[i].setRotation(mDegree);
+           // LabelMarker[i].startAnimation(ra_U);
         }
     }
 
@@ -977,7 +975,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 // 標記終點
                 marker.setImageResource(R.drawable.map_marker_red_f);
             } else {
-                marker.setImageResource(R.drawable.map_marker_123);
+                marker.setImageResource(R.drawable.map_path_marker);
             }
 
             marker.setScaleY((float) 0.5);

@@ -11,11 +11,12 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.core.view.GravityCompat;
-import androidx.viewpager.widget.ViewPager;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,13 +26,14 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.vine.projectdemo.VineJsonParsing.JSONMainActivity;
 import com.vine.projectdemo.VinePHPMySQL.PHPMainActivity;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , HomeFragment.SendMessage{
 
     // Fragment
-    private ViewPager mViewPager;
+    private ViewPager2 mViewPager;
     public HomeFragment homeFragment;
     public MapFragment mapFragment;
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setupFab();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     //  Fragment Communicating........................
@@ -67,15 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fab_Go.startAnimation(fab_open);
             fab_Go.setClickable(true);
         }
-        //【FragmentPagerAdapter】
-        String tag = "android:switcher:" + R.id.pager + ":" + 1;
-        MapFragment f = (MapFragment) getSupportFragmentManager().findFragmentByTag(tag);
-        f.displayReceivedData(message);
-
-        //【FragmentStatePagerAdapter】
-        //FragmentManager manager = getSupportFragmentManager();
-        //mapFragment = (MapFragment) manager.findFragmentById(R.id.pager);
-        //mapFragment.displayReceivedData(message);
     }
 
     public void hideSoftKeyboard() {
@@ -84,14 +78,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
     }
-
+    ViewPagerAdapter mViewPagerAdapter;
     private void setViewPager() {
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        ViewPagerAdapter mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mViewPager = (ViewPager2) findViewById(R.id.pager);
+        mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),getLifecycle());
+        mViewPager.setOrientation(ViewPager2.ORIENTATION_HORIZONTAL);
+        mViewPager.setOffscreenPageLimit(3);
+        mViewPager.setUserInputEnabled(false);
         mViewPager.setAdapter(mViewPagerAdapter);
         TabLayout mTabLayout = (TabLayout) findViewById(R.id.tab);
-        mTabLayout.setupWithViewPager(mViewPager);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        new TabLayoutMediator(mTabLayout, mViewPager,
+                (tab, position) -> {
+                    if (position == 0) {
+                        tab.setText(HomeFragment.TITLE);
+                    } else if (position == 1) {
+                        tab.setText(MapFragment.TITLE);
+                    }
+                }
+        ).attach();
+
+        mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -141,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 FragmentManager manager = getSupportFragmentManager();
-                mapFragment = (MapFragment) manager.findFragmentById(R.id.pager);
+                mapFragment = (MapFragment) manager.getFragments().get(1);
                 switch (item.getItemId()) {
                     case R.id.action_a:
                         mapFragment.MoveToA();
@@ -171,7 +177,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View view) {
                 FragmentManager manager = getSupportFragmentManager();
-                mapFragment = (MapFragment) manager.findFragmentById(R.id.pager);
+                //mapFragment = (MapFragment) manager.findFragmentById(R.id.pager);
+                mapFragment = (MapFragment) manager.getFragments().get(1);
+
                 mapFragment.Draw_Dijkstra();
                 mViewPager.setCurrentItem(1);
 
@@ -271,7 +279,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onPause() {
         super.onPause();
         Log.d("debug", "onPause()");
-        fab_Go.clearAnimation();
+
+        if(mViewPager.getCurrentItem() != 0){
+            fab_Go.clearAnimation();
+        }
     }
 
     @Override

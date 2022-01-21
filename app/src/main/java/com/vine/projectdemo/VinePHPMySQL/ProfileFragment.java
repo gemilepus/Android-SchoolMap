@@ -28,11 +28,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
-import com.vine.projectdemo.DataObject;
 import com.vine.projectdemo.HomeFragment;
 import com.vine.projectdemo.R;
 import com.vine.projectdemo.VinePHPMySQL.models.ServerRequest;
@@ -42,7 +40,6 @@ import com.vine.projectdemo.VineReValues.GPS_Dot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Timer;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -562,7 +559,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         for (double[] point : map_point) {  //建立標記圖示
             ImageView marker = new ImageView(this.getActivity());
             marker.setTag(point);
-            marker.setImageResource(R.drawable.map_marker_123);
+            marker.setImageResource(R.drawable.map_path_marker);
             tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
             // add it to the view tree
             tileView.addMarker(marker, point[0], point[1], null, null);
