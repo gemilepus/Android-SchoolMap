@@ -274,6 +274,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             LabelMarker[i].setText(TextString);
             LabelMarker[i].setTextColor(Color.parseColor("#ff007acc"));
             LabelMarker[i].setBackgroundColor(Color.parseColor("#4032abfc"));
+            LabelMarker[i].setScaleY((float) 0.75);
+            LabelMarker[i].setScaleX((float) 0.75);
             //tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
             tileView.addMarker(LabelMarker[i], x, y, null, null);
         }
