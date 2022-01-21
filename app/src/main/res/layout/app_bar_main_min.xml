@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.vine.projectdemo.VineJsonParsing.JSONMainActivity">
+    tools:context="com.vine.projectdemo.DataView.JSONMainActivity">
 
     <include layout="@layout/jsonparsing_activity_main" />
 

@@ -27,8 +27,9 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.vine.projectdemo.VineJsonParsing.JSONMainActivity;
-import com.vine.projectdemo.VinePHPMySQL.PHPMainActivity;
+import com.vine.projectdemo.Adapter.ViewPagerAdapter;
+import com.vine.projectdemo.DataView.JSONMainActivity;
+import com.vine.projectdemo.AccountView.PHPMainActivity;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , HomeFragment.SendMessage{
 

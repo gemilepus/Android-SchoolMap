@@ -22,7 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vine.projectdemo.VineReValues.GlobalVariable;
+import com.vine.projectdemo.Adapter.SpacesItemDecoration;
+import com.vine.projectdemo.Model.DataObject;
+import com.vine.projectdemo.Values.GlobalVariable;
 
 import java.util.ArrayList;
 import java.util.List;

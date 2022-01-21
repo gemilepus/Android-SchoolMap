@@ -41,10 +41,10 @@ import android.widget.Toast;
 
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
-import com.vine.projectdemo.VineMapView.SampleCallout;
+import com.vine.projectdemo.MapView.SampleCallout;
 
-import com.vine.projectdemo.VineReValues.GPS_Dot;
-import com.vine.projectdemo.VineReValues.GlobalVariable;
+import com.vine.projectdemo.Values.GPS_Dot;
+import com.vine.projectdemo.Values.GlobalVariable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
