@@ -77,7 +77,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     // Marker
     ImageView[] PathMarker = new ImageView[25];
     int PathMarker_Num = 0;
-    ImageView NowMarker;
+    private LinearLayout NowMarker;
 
     // GPS
     private LocationManager locationManager;
@@ -572,8 +572,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             PathMarker[PathMarker_Num].setTag(PathMarker_Point);
             PathMarker[PathMarker_Num].setImageResource(R.drawable.dot);
             tileView.addMarker(PathMarker[PathMarker_Num], PathMarker_Point[0], PathMarker_Point[1], null, null);
-            PathMarker[PathMarker_Num].setScaleY((float) 0.6);
-            PathMarker[PathMarker_Num].setScaleX((float) 0.6);
+            PathMarker[PathMarker_Num].setScaleY((float) 0.3);
+            PathMarker[PathMarker_Num].setScaleX((float) 0.3);
             PathMarker_Num ++;
             if(PathMarker_Num == 10){
                 PathMarker_Num = 0;
@@ -582,22 +582,24 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             // Now marker
             double[] NowMarker_Point = {location.getLongitude() ,location.getLatitude()};
             tileView.removeMarker(NowMarker);
-            NowMarker = new ImageView(this.getActivity());
-
+            NowMarker = new LinearLayout(getActivity());
+            LinearLayout.LayoutParams mLayoutParams = new LinearLayout.LayoutParams(44, 44, 1);
+            NowMarker.setLayoutParams(mLayoutParams);
             // save the coordinate for centering and callout positioning
             NowMarker.setTag(NowMarker_Point);
-            NowMarker.setImageResource(R.drawable.map_min);
+            // set ICON
+            ImageView mICON = new ImageView(NowMarker.getContext());
+            mICON.setImageResource(R.drawable.map_min);
+            NowMarker.addView(mICON,mLayoutParams);
+            mICON.setY(22);
             // add it to the view tree
             tileView.addMarker(NowMarker, NowMarker_Point[0], NowMarker_Point[1], null, null);
-            NowMarker.setScaleY((float) 0.4);
-            NowMarker.setScaleX((float) 0.4);
-            NowMarker.setY(30);
             // moveToMarker
             getTileView().moveToMarker( NowMarker,false);
             // rotation
             if(lasttLatitude != 0){
                 float RotateValue = (float)GetAngle(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
-                NowMarker.setRotation(RotateValue);
+                mICON.setRotation(RotateValue);
                 if(distanceInmBetweenEarthCoordinates(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude())>1.5){
                     RotateMap(RotateValue);
                 }
