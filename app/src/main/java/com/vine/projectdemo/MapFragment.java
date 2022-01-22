@@ -75,7 +75,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     TextView[] LabelMarker = new TextView[60];
     int List_Length;
     // Marker
-    ImageView[] PathMarker = new ImageView[25];
+    private LinearLayout[] PathMarker = new LinearLayout[25];
     int PathMarker_Num = 0;
     private LinearLayout NowMarker;
 
@@ -568,12 +568,17 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             // path marker
             tileView.removeMarker(PathMarker[PathMarker_Num % 10]);
             double[] PathMarker_Point = {location.getLongitude() ,location.getLatitude()};
-            PathMarker[PathMarker_Num] = new ImageView(this.getActivity());
+            PathMarker[PathMarker_Num] = new LinearLayout(getActivity());
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(6, 6, 1);
+            PathMarker[PathMarker_Num].setLayoutParams(layoutParams);
             PathMarker[PathMarker_Num].setTag(PathMarker_Point);
-            PathMarker[PathMarker_Num].setImageResource(R.drawable.dot);
+            // set ICON
+            ImageView mDot = new ImageView( PathMarker[PathMarker_Num].getContext());
+            mDot.setImageResource(R.drawable.dot);
+            PathMarker[PathMarker_Num].addView(mDot,layoutParams);
+            mDot.setY(6);
+            // add it to the view tree
             tileView.addMarker(PathMarker[PathMarker_Num], PathMarker_Point[0], PathMarker_Point[1], null, null);
-            PathMarker[PathMarker_Num].setScaleY((float) 0.3);
-            PathMarker[PathMarker_Num].setScaleX((float) 0.3);
             PathMarker_Num ++;
             if(PathMarker_Num == 10){
                 PathMarker_Num = 0;
