@@ -8,24 +8,11 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-
-    <!--<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:id="@+id/pager"-->
-        <!--android:layout_width="368dp"-->
-        <!--android:layout_height="500dp"-->
-        <!--tools:layout_editor_absoluteX="8dp"-->
-        <!--tools:layout_editor_absoluteY="8dp" />-->
-
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:ignore="MissingConstraints" />
-
-    <!--tools:layout_editor_absoluteX="8dp"-->
-    <!--tools:layout_editor_absoluteY="8dp"-->
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

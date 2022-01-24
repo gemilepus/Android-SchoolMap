@@ -4,6 +4,6 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="什麼都沒有"
+        android:title="QAQ"
         app:showAsAction="never" />
 </menu>

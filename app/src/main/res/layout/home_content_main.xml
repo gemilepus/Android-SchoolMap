@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:weightSum="1"
     app:layout_collapseParallaxMultiplier="1.0">
-    <!--android:background="@drawable/hawaiianprintt"-->
 
     <Space
         android:layout_width="match_parent"
@@ -21,16 +20,14 @@
         android:layout_marginRight="10dp"
         android:gravity="center">
 
-
         <EditText
             android:id="@+id/editTextStart"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:drawableRight="@drawable/map_marker_green"
+            android:drawableEnd="@drawable/map_marker_green"
             android:hint="目前位置"
-
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -47,7 +44,7 @@
             android:layout_height="55dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:drawableRight="@drawable/map_marker_red"
+            android:drawableEnd="@drawable/map_marker_red"
             android:hint="目的位置"
             android:inputType="text" />
 
@@ -83,25 +80,14 @@
             android:text="+"
             android:textColor="@color/cardview_light_background"
             android:textSize="18sp" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
-
         android:layout_width="match_parent"
         android:layout_height="552dp"
-
-
         android:layout_marginTop="20dp"
         android:clickable="true" />
-
-    <!--<android.support.v7.widget.AppCompatButton-->
-    <!--android:id="@+id/btn"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@color/colorPrimary"-->
-    <!--android:text="登入"-->
-    <!--android:textColor="@android:color/white" />-->
-
 
 </LinearLayout>

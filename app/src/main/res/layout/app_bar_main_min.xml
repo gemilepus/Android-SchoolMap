@@ -33,14 +33,6 @@
             android:elevation="1dp"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-
-
-
-
     </com.google.android.material.appbar.AppBarLayout>
-
-
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

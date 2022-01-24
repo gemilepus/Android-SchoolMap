@@ -17,15 +17,11 @@
             android:id="@+id/Btn_Del"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-
-
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:background="@color/Color004"
             card_view:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
             tools:background="#00ffffff" />
-
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,6 +63,7 @@
                 android:layout_height="wrap_content" />
 
         </LinearLayout>
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

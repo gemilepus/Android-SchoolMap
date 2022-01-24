@@ -51,14 +51,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-
                 android:inputType="textMultiLine"
                 android:gravity="left|top"
                 android:minLines="6"
-
-
-                android:hint="內容"
-              />
+                android:hint="內容" />
 
             <Button
                 android:id="@+id/btnLocal"
@@ -71,7 +67,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-
                 android:hint="輸入密碼認證"
                 android:inputType="textPassword" />
 
@@ -92,7 +87,9 @@
                 android:drawableLeft="@drawable/ic_error"
                 android:gravity="center"
                 android:visibility="gone" />
+
         </LinearLayout>
+
     </ScrollView>
 
 </LinearLayout>

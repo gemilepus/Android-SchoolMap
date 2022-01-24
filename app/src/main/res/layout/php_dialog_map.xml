@@ -17,7 +17,8 @@
             android:id="@+id/LinearLayout_Map"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"></LinearLayout>
+            android:orientation="vertical">
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,6 +40,7 @@
                 android:layout_weight="1"
                 android:background="@color/Color004"
                 android:text="二坪校區" />
+
         </LinearLayout>
 
     </RelativeLayout>

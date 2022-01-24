@@ -6,7 +6,6 @@
     android:scrollbars="vertical"
     tools:context=".DataView.JSONMainActivity">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -17,9 +16,7 @@
             android:theme="@style/ToolbarColoredBackArrow"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@color/colorPrimary" />
-
-        <!--Toolbar 圖示的顏色 受theme得影響-->
+            android:background="@color/colorPrimary"/>
 
         <TextView
             android:id="@+id/textViewJSON"
@@ -31,8 +28,7 @@
             android:layout_marginTop="0dp"
             android:gravity="center_horizontal"
             android:text="TextView"
-            android:textColor="@color/Color003"
-            />
+            android:textColor="@color/Color003"/>
 
         <ImageView
             android:id="@+id/imageViewBar"
@@ -44,12 +40,12 @@
         <!--CENTER_CROP：當圖片比ImageView大/小時，會依圖片之等比例縮放，並將其放在框的中間顯示，-->
         <!--即大的圖縮小，小的圖放大。但是，如果該圖非正方形者，會依其短邊來與ImageView的邊相等，因此其會將ImageView完全的填滿。-->
 
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/card_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical" />
+
     </LinearLayout>
 
 </LinearLayout>

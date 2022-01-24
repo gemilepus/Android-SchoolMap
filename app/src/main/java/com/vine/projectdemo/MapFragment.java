@@ -325,13 +325,13 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         return tileView;
     }
 
-    private ArrayList DegreeList = new ArrayList();
+    private ArrayList<Float> DegreeList = new ArrayList<>();
     class mTimerTask extends TimerTask {
         @Override
         public void run() {
             if(DegreeList.size() > 0){
                 if(DegreeList.get(0)!= null){
-                    tileView.setRotation(-(float)DegreeList.get(0));
+                    tileView.setRotation(-DegreeList.get(0));
                 }
                 DegreeList.remove(0);
             }
@@ -377,8 +377,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         startTimer();
 
         RotateAnimation ra_U = new RotateAnimation(lastDegree,mDegree,
-                Animation.RELATIVE_TO_SELF, 0.5f, // x座標
-                Animation.RELATIVE_TO_SELF, 0.5f); // y座標
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f);
         ra_U.setDuration(1000);
         ra_U.setInterpolator(new LinearInterpolator());
         ra_U.setFillAfter(true);
