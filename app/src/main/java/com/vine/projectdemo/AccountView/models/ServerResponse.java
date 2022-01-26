@@ -1,7 +1,5 @@
 package com.vine.projectdemo.AccountView.models;
 
-import com.vine.projectdemo.DataView.AndroidVersion;
-
 public class ServerResponse {
 
     private String result;
@@ -16,10 +14,5 @@ public class ServerResponse {
     }
     public User getUser() {
         return user;
-    }
-
-    private AndroidVersion[] android;
-    public AndroidVersion[] getAndroid() {
-        return android;
     }
 }

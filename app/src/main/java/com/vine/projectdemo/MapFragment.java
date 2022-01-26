@@ -41,9 +41,9 @@ import android.widget.Toast;
 
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
-import com.vine.projectdemo.MapView.SampleCallout;
+import com.vine.projectdemo.View.SampleCallout;
 
-import com.vine.projectdemo.Values.GPS_Dot;
+import com.vine.projectdemo.Values.GPS_Point;
 import com.vine.projectdemo.Values.GlobalVariable;
 
 import java.io.ByteArrayOutputStream;
@@ -237,7 +237,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     private void DrawAllPoint() {
         ArrayList<double[]> map_point = new ArrayList<>();{}
         for (int i = 0; i < 227; i++) {
-            map_point.add(new double[]{GPS_Dot.Xys_List[i][0] ,GPS_Dot.Xys_List[i][1]});
+            map_point.add(new double[]{GPS_Point.Xys_List[i][0] , GPS_Point.Xys_List[i][1]});
         }
 
         for (double[] point : map_point) {
@@ -263,8 +263,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             String[] ValueStringArray = ValueString.split("-");
             
             for (String s : ValueStringArray) {
-                x = x + GPS_Dot.Xys_List[Integer.parseInt(s) - 1][0];
-                y = y + GPS_Dot.Xys_List[Integer.parseInt(s) - 1][1];
+                x = x + GPS_Point.Xys_List[Integer.parseInt(s) - 1][0];
+                y = y + GPS_Point.Xys_List[Integer.parseInt(s) - 1][1];
             }
             x = x / ValueStringArray.length;
             y = y / ValueStringArray.length;
@@ -833,14 +833,14 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         int StartPointTemp = StartPointMin;
         int EndPointTemp = EndPointMin;
         if(IsUsedMapA == 1){ // 二坪用
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp+125][0] ,GPS_Dot.Xys_List[StartPointTemp+125][1]});//加入起點座標
+            DrawPointsList.add(new double[]{GPS_Point.Xys_List[StartPointTemp+125][0] , GPS_Point.Xys_List[StartPointTemp+125][1]});//加入起點座標
             PrintPath(parent, EndPointTemp);//加入路徑座標
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp+125+1][0] ,GPS_Dot.Xys_List[EndPointTemp+125][1]});//加入終點座標
+            DrawPointsList.add(new double[]{GPS_Point.Xys_List[EndPointTemp+125+1][0] , GPS_Point.Xys_List[EndPointTemp+125][1]});//加入終點座標
         }
         else{
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[StartPointTemp][0] ,GPS_Dot.Xys_List[StartPointTemp][1]});//加入起點座標
+            DrawPointsList.add(new double[]{GPS_Point.Xys_List[StartPointTemp][0] , GPS_Point.Xys_List[StartPointTemp][1]});//加入起點座標
             PrintPath(parent, EndPointTemp);//加入路徑座標
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[EndPointTemp][0] ,GPS_Dot.Xys_List[EndPointTemp][1]});//加入終點座標
+            DrawPointsList.add(new double[]{GPS_Point.Xys_List[EndPointTemp][0] , GPS_Point.Xys_List[EndPointTemp][1]});//加入終點座標
         }
         Toast.makeText(this.getActivity(),  String.valueOf(dist[EndPointTemp]) , Toast.LENGTH_SHORT).show(); // 距離
     }
@@ -1028,20 +1028,20 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         // Base Case : If j is source
         if (parent[j]==-1) {
             if(IsUsedMapA == 1){ // 二坪(A)
-                DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
+                DrawPointsList.add(new double[]{GPS_Point.Xys_List[j+125][0] , GPS_Point.Xys_List[j+125][1]});
             }
             else{
-                DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j][0] ,GPS_Dot.Xys_List[j][1]});
+                DrawPointsList.add(new double[]{GPS_Point.Xys_List[j][0] , GPS_Point.Xys_List[j][1]});
             }
             return;
         }
         PrintPath(parent, parent[j]);
 
         if(IsUsedMapA == 1){ // 二坪(A)
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j+125][0] ,GPS_Dot.Xys_List[j+125][1]});
+            DrawPointsList.add(new double[]{GPS_Point.Xys_List[j+125][0] , GPS_Point.Xys_List[j+125][1]});
         }
         else{
-            DrawPointsList.add(new double[]{GPS_Dot.Xys_List[j][0] ,GPS_Dot.Xys_List[j][1]});
+            DrawPointsList.add(new double[]{GPS_Point.Xys_List[j][0] , GPS_Point.Xys_List[j][1]});
         }
     }
 

@@ -1,4 +1,4 @@
-package com.vine.projectdemo.MapView;
+package com.vine.projectdemo.View;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;

@@ -31,14 +31,17 @@ import android.widget.TextView;
 
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
-import com.vine.projectdemo.API.RequestInterfaceID;
+import com.vine.projectdemo.API.RequestInterface;
+import com.vine.projectdemo.API.RequestInterfaceByID;
 import com.vine.projectdemo.Constants;
 import com.vine.projectdemo.HomeFragment;
+import com.vine.projectdemo.Model.JSONResponse;
+import com.vine.projectdemo.Model.JSONStructure;
 import com.vine.projectdemo.R;
 import com.vine.projectdemo.AccountView.models.ServerRequest;
 import com.vine.projectdemo.AccountView.models.ServerResponse;
 import com.vine.projectdemo.AccountView.models.User;
-import com.vine.projectdemo.Values.GPS_Dot;
+import com.vine.projectdemo.Values.GPS_Point;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,7 +57,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private SharedPreferences pref;
 
     private RecyclerView recyclerView;
-    private ArrayList<AndroidVersion> data;
+    private ArrayList<JSONStructure> data;
     private PHPDataAdapter adapter;
 
     private TextView tv_name,tv_email,tv_message;
@@ -106,7 +109,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        tv_name = (TextView)view.findViewById(R.id.tv_name);
+        tv_name = (TextView)view.findViewById(R.id.txt_head);
         tv_email = (TextView)view.findViewById(R.id.tv_email);
         btn_change_password = (AppCompatButton)view.findViewById(R.id.btn_chg_password);
         btn_logout = (AppCompatButton)view.findViewById(R.id.btn_logout);
@@ -259,7 +262,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 String longitude = String.valueOf(Select_Point[0]);
                 String latitude  = String.valueOf(Select_Point[1]);
 
-                // tv_name.setText("Welcome : "+pref.getString(Constants.NAME,""));
+                // txt_head.setText("Welcome : "+pref.getString(Constants.NAME,""));
                 // tv_email.setText(pref.getString(Constants.EMAIL,""));
                 if(!new_head.isEmpty() && !new_type.isEmpty()){
                     progress_info.setVisibility(View.VISIBLE);
@@ -373,7 +376,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        RequestInterfaceID request = retrofit.create(RequestInterfaceID.class);
+        RequestInterfaceByID request = retrofit.create(RequestInterfaceByID.class);
         //String uni = pref.getString(Constants.UNIQUE_ID,"");
         Call<JSONResponse> call = request.getJSON(pref.getString(Constants.UNIQUE_ID,""));
         call.enqueue(new Callback<JSONResponse>() {
@@ -555,8 +558,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         ((LinearLayout) view.findViewById(R.id.LinearLayout_Map)).addView(tileView,lp);
 
         ArrayList<double[]> map_point = new ArrayList<>();
-        for (int r = 0;r < GPS_Dot.Xys_List.length; r++) {
-            map_point.add(new double[]{GPS_Dot.Xys_List[r][0] , GPS_Dot.Xys_List[r][1]});
+        for (int r = 0; r < GPS_Point.Xys_List.length; r++) {
+            map_point.add(new double[]{GPS_Point.Xys_List[r][0] , GPS_Point.Xys_List[r][1]});
         }
         for (double[] point : map_point) {  //建立標記圖示
             ImageView marker = new ImageView(this.getActivity());
@@ -580,8 +583,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             for (int N = 0; N < ValueStringArray.length  ; N++) {
                 //Integer.valueOf( ValueStringArray[N])
                 // ValueStringArray[]
-                x = x + GPS_Dot.Xys_List[Integer.valueOf( ValueStringArray[N])-1][0];
-                y = y + GPS_Dot.Xys_List[Integer.valueOf( ValueStringArray[N])-1][1];
+                x = x + GPS_Point.Xys_List[Integer.valueOf( ValueStringArray[N])-1][0];
+                y = y + GPS_Point.Xys_List[Integer.valueOf( ValueStringArray[N])-1][1];
 
             }
             x = x / ValueStringArray.length;

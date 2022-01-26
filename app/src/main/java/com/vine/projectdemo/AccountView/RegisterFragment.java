@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.vine.projectdemo.API.RequestInterface;
 import com.vine.projectdemo.Constants;
 import com.vine.projectdemo.R;
 import com.vine.projectdemo.AccountView.models.ServerRequest;

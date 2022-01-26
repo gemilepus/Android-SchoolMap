@@ -6,13 +6,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.vine.projectdemo.Model.JSONStructure;
 import com.vine.projectdemo.R;
 import java.util.ArrayList;
 
 public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHolder> {
-    private ArrayList<AndroidVersion> android;
+    private ArrayList<JSONStructure> android;
 
-    public PHPDataAdapter(ArrayList<AndroidVersion> android) {
+    public PHPDataAdapter(ArrayList<JSONStructure> android) {
         this.android = android;
     }
 
@@ -80,9 +82,9 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
 
         public ViewHolder(View view) {
             super(view);
-            tv_name = (TextView)view.findViewById(R.id.tv_name);
-            tv_version = (TextView)view.findViewById(R.id.tv_version);
-            tv_api_level = (TextView)view.findViewById(R.id.tv_api_level);
+            tv_name = (TextView)view.findViewById(R.id.txt_head);
+            tv_version = (TextView)view.findViewById(R.id.txt_type);
+            tv_api_level = (TextView)view.findViewById(R.id.txt_text);
             tv_Btn_Del = (ImageButton)view.findViewById(R.id.Btn_Del);
         }
     }

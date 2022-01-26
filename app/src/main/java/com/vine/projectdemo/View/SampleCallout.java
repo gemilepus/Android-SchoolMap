@@ -1,4 +1,4 @@
-package com.vine.projectdemo.MapView;
+package com.vine.projectdemo.View;
 
 import android.content.Context;
 import android.graphics.Canvas;

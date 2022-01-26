@@ -1,5 +1,6 @@
 package com.vine.projectdemo.Adapter;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         this.android = android;
     }
 
+    @NonNull
     @Override
     public DataAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.jsonparsing_card_row, viewGroup, false);
@@ -40,9 +42,11 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
         private TextView tv_name,tv_version,tv_api_level;
         public ViewHolder(View view) {
             super(view);
-            tv_name = (TextView)view.findViewById(R.id.tv_name);
-            tv_version = (TextView)view.findViewById(R.id.tv_version);
-            tv_api_level = (TextView)view.findViewById(R.id.tv_api_level);
+
+            tv_name = (TextView)view.findViewById(R.id.txt_head);
+            tv_version = (TextView)view.findViewById(R.id.txt_type);
+            tv_api_level = (TextView)view.findViewById(R.id.txt_text);
+
         }
     }
 }

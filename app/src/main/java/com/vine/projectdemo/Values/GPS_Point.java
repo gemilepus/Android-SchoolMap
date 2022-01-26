@@ -1,6 +1,6 @@
 package com.vine.projectdemo.Values;
 
-public class GPS_Dot {
+public class GPS_Point {
 
     public static final double[][] Reals_List = {
 

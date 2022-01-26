@@ -1,11 +1,13 @@
 package com.vine.projectdemo.API;
 
-import com.vine.projectdemo.DataView.JSONResponse;
+import com.vine.projectdemo.AccountView.models.ServerRequest;
+import com.vine.projectdemo.AccountView.models.ServerResponse;
 
 import retrofit2.Call;
-import retrofit2.http.GET;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 
 public interface RequestInterface {
-    @GET("login-register/api/")
-    Call<JSONResponse> getJSON();
+    @POST("login-register/")
+    Call<ServerResponse> operation(@Body ServerRequest request);
 }

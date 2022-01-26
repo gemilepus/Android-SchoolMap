@@ -1,4 +1,4 @@
-package com.vine.projectdemo.MapView;
+package com.vine.projectdemo.View;
 
 /**
  * Created by user on 2017/5/10.

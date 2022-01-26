@@ -11,7 +11,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.vine.projectdemo.API.RequestInterface;
+import com.vine.projectdemo.API.RequestInterfaceAll;
+import com.vine.projectdemo.Adapter.DataAdapter;
+import com.vine.projectdemo.Model.JSONResponse;
+import com.vine.projectdemo.Model.JSONStructure;
 import com.vine.projectdemo.R;
 
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ import static com.vine.projectdemo.Constants.BASE_URL;
 
 public class JSONMainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private ArrayList<AndroidVersion> data;
+    private ArrayList<JSONStructure> data;
     private DataAdapter adapter;
     private TextView textViewJSON;
     private int dataSize = 0;
@@ -114,7 +117,7 @@ public class JSONMainActivity extends AppCompatActivity {
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        RequestInterface request = retrofit.create(RequestInterface.class);
+        RequestInterfaceAll request = retrofit.create(RequestInterfaceAll.class);
         Call<JSONResponse> call = request.getJSON();
         call.enqueue(new Callback<JSONResponse>() {
             @Override
