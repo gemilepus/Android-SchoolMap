@@ -91,9 +91,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         new TabLayoutMediator(mTabLayout, mViewPager,
                 (tab, position) -> {
                     if (position == 0) {
-                        tab.setText(HomeFragment.TITLE);
+                        tab.setText(getResources().getString(R.string.plan_route));
                     } else if (position == 1) {
-                        tab.setText(MapFragment.TITLE);
+                        tab.setText(getResources().getString(R.string.campus_map));
                     }
                 }
         ).attach();

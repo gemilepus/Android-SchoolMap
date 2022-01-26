@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vine.projectdemo.API.RequestInterface;
 import com.vine.projectdemo.R;
 
 import java.util.ArrayList;

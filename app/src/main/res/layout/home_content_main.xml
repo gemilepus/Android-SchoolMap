@@ -27,7 +27,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:drawableEnd="@drawable/map_marker_green"
-            android:hint="目前位置"
+            android:hint="@string/start_point"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -45,7 +45,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:drawableEnd="@drawable/map_marker_red"
-            android:hint="目的位置"
+            android:hint="@string/destination"
             android:inputType="text" />
 
     </com.google.android.material.textfield.TextInputLayout>

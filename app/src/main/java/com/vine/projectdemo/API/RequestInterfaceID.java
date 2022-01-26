@@ -1,4 +1,6 @@
-package com.vine.projectdemo.AccountView;
+package com.vine.projectdemo.API;
+
+import com.vine.projectdemo.AccountView.JSONResponse;
 
 import retrofit2.Call;
 import retrofit2.http.POST;

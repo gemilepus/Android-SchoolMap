@@ -3,14 +3,14 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="action_settings">Settings</string>
 
     <string name="text_home">Home</string>
     <string name="text_profile">Profile</string>
-
     <string name="text_settings">Settings</string>
-    <string name="destination">目的位置</string>
-    <string name="start_point">目前位置</string>
-    <string name="campus_map">校園地圖</string>
-    <string name="plan_route">查詢路線</string>
+    <string name="destination">Destination</string>
+    <string name="start_point">Start point</string>
+    <string name="campus_map">Campus map</string>
+    <string name="plan_route">Plan route</string>
 </resources>
