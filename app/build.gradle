@@ -32,8 +32,8 @@ dependencies {
     implementation 'com.qozix:tileview:2.2.7'
     implementation 'net.objecthunter:exp4j:0.4.8'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.6.4'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.4'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     testImplementation 'junit:junit:4.13.2'
 }
