@@ -13,7 +13,6 @@ public class User {
     private String sno;
     private String longitude;
     private String latitude;
-    private String infoselect;
     private String note;
 
     public String getSno() {
@@ -78,10 +77,6 @@ public class User {
 
     public void setLatitude(String latitude) {
         this.latitude =latitude;
-    }
-
-    public void setInfoselect(String infoselect) {
-        this.infoselect =infoselect;
     }
 
     public void setNote(String note) {

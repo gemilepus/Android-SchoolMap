@@ -1,6 +1,7 @@
 package com.vine.projectdemo;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -27,6 +28,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -115,7 +117,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     private Timer timer;
     private mTimerTask timerTask;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -160,6 +161,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         super.onViewCreated(view, savedInstanceState);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void SetTileView(View v){
         tileView = new TileView(this.getActivity());
 
@@ -233,6 +235,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         tileView.setScaleY(mScale);
         tileView.setScaleX(mScale);
     }
+    float TempDegree;
+
 
     private void DrawAllPoint() {
         ArrayList<double[]> map_point = new ArrayList<>();{}
@@ -326,6 +330,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     }
 
     private ArrayList<Float> DegreeList = new ArrayList<>();
+
     class mTimerTask extends TimerTask {
         @Override
         public void run() {
@@ -432,7 +437,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             SensorManager.getOrientation(Rotation, degree);
 
             degree[0] = (float) Math.toDegrees(degree[0]);
-            Log.d("debug", "degree: " + String.valueOf( -degree[0]));
+            //Log.d("debug", "degree: " + String.valueOf( -degree[0]));
 
             // 取方位
             if((int)degree[0]<30 && (int)degree[0]>-30) { vector="北";}

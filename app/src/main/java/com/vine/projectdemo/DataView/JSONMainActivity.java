@@ -123,10 +123,10 @@ public class JSONMainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 JSONResponse jsonResponse = response.body();
-                data = new ArrayList<>(Arrays.asList(jsonResponse.getAndroid()));
+                data = new ArrayList<>(Arrays.asList(jsonResponse.getData()));
                 adapter = new DataAdapter(data);
                 recyclerView.setAdapter(adapter);
-                dataSize = data.size(); // 清單大小
+                dataSize = data.size();
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
@@ -136,7 +136,7 @@ public class JSONMainActivity extends AppCompatActivity {
     }
     
     @Override
-    public void onDestroy() { //  Activity 銷毀
+    public void onDestroy() {
         super.onDestroy();
     }
 }

@@ -383,7 +383,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 JSONResponse jsonResponse = response.body();
-                data = new ArrayList<>(Arrays.asList(jsonResponse.getAndroid()));
+                data = new ArrayList<>(Arrays.asList(jsonResponse.getData()));
                 adapter = new PHPDataAdapter(data);
                 adapter.setOnImgClickListener(new  PHPDataAdapter.OnImgClickListener() {
                     @Override

@@ -13,10 +13,10 @@ import com.vine.projectdemo.R;
 import java.util.ArrayList;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
-    private ArrayList<JSONStructure> android;
+    private ArrayList<JSONStructure> date;
 
-    public DataAdapter(ArrayList<JSONStructure> android) {
-        this.android = android;
+    public DataAdapter(ArrayList<JSONStructure> date) {
+        this.date = date;
     }
 
     @NonNull
@@ -28,24 +28,24 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(DataAdapter.ViewHolder viewHolder, int i) {
-        viewHolder.tv_name.setText(android.get(i).getHead());
-        viewHolder.tv_version.setText(android.get(i).getType());
-        viewHolder.tv_api_level.setText(android.get(i).getText());
+        viewHolder.tv_head.setText(date.get(i).getHead());
+        viewHolder.tv_type.setText(date.get(i).getType());
+        viewHolder.tv_text.setText(date.get(i).getText());
     }
 
     @Override
     public int getItemCount() {
-        return android.size();
+        return date.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView tv_name,tv_version,tv_api_level;
+        private TextView tv_head,tv_type,tv_text;
         public ViewHolder(View view) {
             super(view);
 
-            tv_name = (TextView)view.findViewById(R.id.txt_head);
-            tv_version = (TextView)view.findViewById(R.id.txt_type);
-            tv_api_level = (TextView)view.findViewById(R.id.txt_text);
+            tv_head = (TextView)view.findViewById(R.id.txt_head);
+            tv_type = (TextView)view.findViewById(R.id.txt_type);
+            tv_text = (TextView)view.findViewById(R.id.txt_text);
 
         }
     }

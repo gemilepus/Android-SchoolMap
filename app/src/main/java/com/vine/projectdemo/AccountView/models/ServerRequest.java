@@ -1,6 +1,7 @@
 package com.vine.projectdemo.AccountView.models;
 
 public class ServerRequest {
+
     private String operation;
     private User user;
 
