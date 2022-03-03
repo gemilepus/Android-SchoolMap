@@ -29,8 +29,7 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
         viewHolder.tv_name.setText(android.get(i).getHead());
         viewHolder.tv_version.setText(android.get(i).getType());
         viewHolder.tv_api_level.setText(android.get(i).getText());
-        viewHolder.itemView.setTag(i); // 標記  position
-        // viewHolder.tv_Btn_Del.setTag( Integer.parseInt( android.get(i).getSno() ) ); // Tag
+        viewHolder.itemView.setTag(i);   // 標記  position
         viewHolder.tv_Btn_Del.setTag(i); // 標記  position
         viewHolder.tv_Btn_Del.setAlpha(200 );
         viewHolder.tv_Btn_Del.setScaleY((float)7/10.f);
@@ -46,13 +45,7 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
             viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    int position =   viewHolder2.getLayoutPosition();
-//                    int position =   (int)viewHolder2.itemView.getTag();
-//                    //int position =  viewHolder.getLayoutPosition();
-//                    mOnItemClickListener.onItemClick( viewHolder2.itemView , position );
-
                     int position = (int)v.getTag();
-                    //int position = viewHolder.getLayoutPosition();
                     mOnItemClickListener.onItemClick( v , position );
                 }
 
@@ -73,7 +66,6 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
     @Override
     public int getItemCount() {
         return android.size();
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{

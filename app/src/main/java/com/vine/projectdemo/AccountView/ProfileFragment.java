@@ -320,7 +320,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void NewInfoProcess(String email, String old_password, String head, String type, String texts , String unique ,String longitude , String latitude ){
-        //  NewInfoProcess(pref.getString(Constants.EMAIL,""),ck_pass,new_head,new_type,new_text);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -377,7 +376,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RequestInterfaceByID request = retrofit.create(RequestInterfaceByID.class);
-        //String uni = pref.getString(Constants.UNIQUE_ID,"");
         Call<JSONResponse> call = request.getJSON(pref.getString(Constants.UNIQUE_ID,""));
         call.enqueue(new Callback<JSONResponse>() {
             @Override
@@ -443,8 +441,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
                 Log.d(Constants.TAG,"failed");
-                //tv_message.setVisibility(View.VISIBLE);
-                //tv_message.setText(t.getLocalizedMessage());
                 Snackbar.make(getView(), "BOOM !!!!!!", Snackbar.LENGTH_LONG).show();
             }
         });
@@ -471,11 +467,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private void deleteCheck() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getActivity());
-        // AlertDialogのタイトル設定します
         alertDialogBuilder.setTitle("刪除");
-        // AlertDialogのメッセージ設定
         alertDialogBuilder.setMessage("確定刪除這筆？");
-        // AlertDialogのYesボタンのコールバックリスナーを登録
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                     @Override
@@ -483,52 +476,38 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         RemoveInfoProcess( data.get( data_position).getHead() , data.get( data_position ).getSno() , pref.getString(Constants.UNIQUE_ID,"") );
                     }
                 });
-        // AlertDialogのNoボタンのコールバックリスナーを登録
         alertDialogBuilder.setNeutralButton("No", new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        // nothing to do
+
                     }
                 });
-        // AlertDialogのキャンセルができるように設定
         alertDialogBuilder.setCancelable(true);
-
         AlertDialog alertDialog = alertDialogBuilder.create();
-        // AlertDialogの表示
         alertDialog.show();
     }
 
     private void MapCheck() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getActivity());
-        // AlertDialogのタイトル設定します
         alertDialogBuilder.setTitle("");
-        // AlertDialogのメッセージ設定
         alertDialogBuilder.setMessage("確定選擇這裡？");
-        // AlertDialogのYesボタンのコールバックリスナーを登録
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-
             @Override
             public void onClick(DialogInterface dialog, int which) {
                // MapDialog.dismiss();
             }
         });
-        // AlertDialogのNoボタンのコールバックリスナーを登録
         alertDialogBuilder.setNeutralButton("No", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Select_Point[0] = 0;
                 Select_Point[1] = 0;
-                // nothing to do
             }
         });
-
-        // AlertDialogのキャンセルができるように設定
         alertDialogBuilder.setCancelable(true);
-
         AlertDialog alertDialog = alertDialogBuilder.create();
-        // AlertDialogの表示
         alertDialog.show();
     }
 

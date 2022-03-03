@@ -82,7 +82,6 @@ public class JSONMainActivity extends AppCompatActivity {
             JSONMainActivity .this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //Toast.makeText(JSONMainActivity .this, String.valueOf(aa), Toast.LENGTH_LONG).show();
                     if(dataSize > 0){
                         //   已連線 BAR
                         textViewJSON.setBackgroundColor(0xFF79ff05);  // 綠色
