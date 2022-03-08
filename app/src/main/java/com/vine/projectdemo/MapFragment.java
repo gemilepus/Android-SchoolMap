@@ -43,6 +43,9 @@ import android.widget.Toast;
 
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
+import com.vine.projectdemo.DataView.JSONMainActivity;
+import com.vine.projectdemo.View.MainLinearLayout;
+import com.vine.projectdemo.View.RotationGestureDetector;
 import com.vine.projectdemo.View.SampleCallout;
 
 import com.vine.projectdemo.Values.GPS_Point;
@@ -59,7 +62,8 @@ import java.util.TimerTask;
 import static android.content.Context.LOCATION_SERVICE;
 import static android.content.Context.SENSOR_SERVICE;
 
-public class MapFragment extends Fragment implements SensorEventListener, LocationListener {
+public class MapFragment extends Fragment implements SensorEventListener, LocationListener ,
+        RotationGestureDetector.OnRotationGestureListener {
 
     public static final String TITLE = "校園地圖";
     public static MapFragment newInstance() {
@@ -117,6 +121,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     private Timer timer;
     private mTimerTask timerTask;
+    private RotationGestureDetector mRotationDetector;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -223,7 +229,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //tileView.setSaveEnabled(true);
 
         // Map Layout
-        LinearLayout MainLinearLayout = (LinearLayout) v.findViewById(R.id.LI);
+        MainLinearLayout mMainLinearLayout = (MainLinearLayout) v.findViewById(R.id.LI);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT, 1);
         ((LinearLayout) v.findViewById(R.id.LI)).addView(tileView, lp);
@@ -234,9 +240,48 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         float mScale= (float)size.y/size.x;
         tileView.setScaleY(mScale);
         tileView.setScaleX(mScale);
-    }
-    float TempDegree;
 
+        mRotationDetector = new RotationGestureDetector(this,mMainLinearLayout);
+        mMainLinearLayout.setOnInterceptTouchListener(new MainLinearLayout.OnInterceptTouchListener() {
+            @Override
+            public void onLITouchEvent(MotionEvent event) {
+                mRotationDetector.onTouchEvent(event);
+
+                switch (event.getActionMasked()) {
+                    case MotionEvent.ACTION_OUTSIDE:
+                        Log.d(String.valueOf(this), "ACTION_OUTSIDE");
+                        break;
+                    case MotionEvent.ACTION_POINTER_DOWN:
+                        Log.d(String.valueOf(this), "ACTION_POINTER_DOWN");
+                        Log.d(String.valueOf(this), "lastDegree " + String.valueOf(lastDegree));
+                        TempDegree = lastDegree;
+                    case MotionEvent.ACTION_POINTER_UP:
+                        Log.d(String.valueOf(this), "ACTION_POINTER_UP");
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+    }
+
+    private float TempDegree;
+
+    @Override
+    public void onRotation(RotationGestureDetector rotationDetector) {
+        float angle = rotationDetector.getAngle();
+        Log.d("RotationGestureDetector", "Rotation: " + Float.toString((TempDegree + angle)));
+        //RotateMap((TempDegree + angle));
+
+        stopTimer();
+        tileView.setRotation(-(TempDegree + angle));
+        lastDegree = TempDegree + angle;
+        for (int i = 0; i < List_Length; i++) {
+            LabelMarker[i].setRotation(TempDegree + angle);
+        }
+        startTimer();
+    }
 
     private void DrawAllPoint() {
         ArrayList<double[]> map_point = new ArrayList<>();{}
@@ -331,6 +376,8 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     private ArrayList<Float> DegreeList = new ArrayList<>();
 
+
+
     class mTimerTask extends TimerTask {
         @Override
         public void run() {
@@ -362,10 +409,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
 
     private float lastDegree = 0;
     private void RotateMap(float mDegree){
+
         stopTimer();
         if(DegreeList.size()>60){
             DegreeList.clear();
         }
+
         float mSpacing = Math.abs((mDegree - lastDegree)%360)/20;
         for (int i=0;i<20;i++){
             if(mDegree > lastDegree){
@@ -406,6 +455,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             LabelMarker[i].setRotation(mDegree);
            // LabelMarker[i].startAnimation(ra_U);
         }
+
     }
 
     //region ###################################################  Sensor  ####################################################
