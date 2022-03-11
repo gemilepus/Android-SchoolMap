@@ -1,17 +1,17 @@
-package com.vine.projectdemo.AccountView;
+package com.vine.projectdemo.Adapter;
 
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
 
+import com.vine.projectdemo.Adapter.PHPViewHolder;
 import com.vine.projectdemo.Model.JSONStructure;
 import com.vine.projectdemo.R;
 import java.util.ArrayList;
 
-public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHolder> {
+public class PHPDataAdapter extends RecyclerView.Adapter<PHPViewHolder> {
+
     private ArrayList<JSONStructure> android;
 
     public PHPDataAdapter(ArrayList<JSONStructure> android) {
@@ -19,13 +19,13 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
     }
 
     @Override
-    public PHPDataAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public PHPViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.php_card_row, viewGroup, false);
-        return new ViewHolder(view);
+        return new PHPViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(PHPDataAdapter.ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(PHPViewHolder viewHolder, int i) {
         viewHolder.tv_name.setText(android.get(i).getHead());
         viewHolder.tv_version.setText(android.get(i).getType());
         viewHolder.tv_api_level.setText(android.get(i).getText());
@@ -66,19 +66,6 @@ public class PHPDataAdapter extends RecyclerView.Adapter<PHPDataAdapter.ViewHold
     @Override
     public int getItemCount() {
         return android.size();
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView tv_name,tv_version,tv_api_level;
-        private ImageButton tv_Btn_Del;
-
-        public ViewHolder(View view) {
-            super(view);
-            tv_name = (TextView)view.findViewById(R.id.txt_head);
-            tv_version = (TextView)view.findViewById(R.id.txt_type);
-            tv_api_level = (TextView)view.findViewById(R.id.txt_text);
-            tv_Btn_Del = (ImageButton)view.findViewById(R.id.Btn_Del);
-        }
     }
 
     public interface OnItemClickListener{

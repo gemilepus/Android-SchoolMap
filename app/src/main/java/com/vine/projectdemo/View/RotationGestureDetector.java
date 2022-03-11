@@ -37,18 +37,16 @@ public class RotationGestureDetector {
             case MotionEvent.ACTION_MOVE:
                 if(ptrID1 != INVALID_POINTER_ID && ptrID2 != INVALID_POINTER_ID){
                     float nfX, nfY, nsX, nsY;
-                    float oldAngle = mAngle;
                     nsX = event.getX(event.findPointerIndex(ptrID1));
                     nsY = event.getY(event.findPointerIndex(ptrID1));
                     nfX = event.getX(event.findPointerIndex(ptrID2));
                     nfY = event.getY(event.findPointerIndex(ptrID2));
 
                     mAngle = angleBetweenLines(fX, fY, sX, sY, nfX, nfY, nsX, nsY);
-                    Log.d("debug", "Angle :" + String.valueOf(mAngle));
+
                     if (mListener != null ) {
                         mListener.onRotation(this);
                     }
-
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -69,10 +67,8 @@ public class RotationGestureDetector {
     {
         float angle1 = (float) Math.atan2( (fY - sY), (fX - sX) );
         float angle2 = (float) Math.atan2( (nfY - nsY), (nfX - nsX) );
-
         float angle = ((float)Math.toDegrees(angle1 - angle2)) % 360;
-        //if (angle < -180.f) angle += 360.0f;
-        //if (angle > 180.f) angle -= 360.0f;
+
         return angle;
     }
 

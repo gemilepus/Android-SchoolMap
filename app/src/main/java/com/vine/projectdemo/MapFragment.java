@@ -43,7 +43,6 @@ import android.widget.Toast;
 
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
-import com.vine.projectdemo.DataView.JSONMainActivity;
 import com.vine.projectdemo.View.MainLinearLayout;
 import com.vine.projectdemo.View.RotationGestureDetector;
 import com.vine.projectdemo.View.SampleCallout;
