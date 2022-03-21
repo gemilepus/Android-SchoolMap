@@ -72,10 +72,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     // TileView Setting
     private TileView tileView;
     private boolean tileView_Run = true;
-    private static final double NORTH_WEST_LATITUDE = 24.547866;// 緯度 0.0117471872931833
-    private static final double NORTH_WEST_LONGITUDE = 120.7832;// 經度 0.012904468412943
-    private static final double SOUTH_EAST_LATITUDE = 24.533648;
-    private static final double SOUTH_EAST_LONGITUDE = 120.8167;
+
     // TileView Label
     TextView[] LabelMarker = new TextView[60];
     int List_Length;
@@ -327,7 +324,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             //tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
             tileView.addMarker(LabelMarker[i], x, y, null, null);
         }
-        tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE);
+        tileView.defineBounds(Constants.NORTH_WEST_LONGITUDE, Constants.NORTH_WEST_LATITUDE, Constants.SOUTH_EAST_LONGITUDE, Constants.SOUTH_EAST_LATITUDE);
     }
 
     private MarkerLayout.MarkerTapListener markerTapListener = new MarkerLayout.MarkerTapListener() {
@@ -1075,7 +1072,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         }
 
         mMatrix = new int[0][0];
-        tileView.defineBounds(NORTH_WEST_LONGITUDE, NORTH_WEST_LATITUDE, SOUTH_EAST_LONGITUDE, SOUTH_EAST_LATITUDE);
+        tileView.defineBounds(Constants.NORTH_WEST_LONGITUDE, Constants.NORTH_WEST_LATITUDE, Constants.SOUTH_EAST_LONGITUDE, Constants.SOUTH_EAST_LATITUDE);
     }
 
     private void PrintPath(int parent[], int j) {

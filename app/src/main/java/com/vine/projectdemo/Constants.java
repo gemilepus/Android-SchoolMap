@@ -2,6 +2,12 @@ package com.vine.projectdemo;
 
 public class Constants {
 
+    // National United University
+    public static final double NORTH_WEST_LATITUDE = 24.547866;
+    public static final double NORTH_WEST_LONGITUDE = 120.7832;
+    public static final double SOUTH_EAST_LATITUDE = 24.533648;
+    public static final double SOUTH_EAST_LONGITUDE = 120.8167;
+
     public static final String BASE_URL = "http://10.0.2.2/";
 
     public static final String REGISTER_OPERATION = "register";
