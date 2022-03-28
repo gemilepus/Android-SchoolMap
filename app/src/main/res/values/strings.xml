@@ -13,4 +13,23 @@
     <string name="start_point">目前位置</string>
     <string name="campus_map">校園地圖</string>
     <string name="plan_route">查詢路線</string>
+    <string name="School_Gate">二坪校區正門</string>
+    <string name="C1_Li_teh_Building">C1管理學院</string>
+    <string name="F1_Architecture_Building_1">F1第一研究大樓</string>
+    <string name="F2_Architecture_Building_2">F2建築系館與設計學院</string>
+    <string name="F3_Kung_tao_Building_Department_of_Industrial_Design">F3工業設計系館</string>
+    <string name="H1_Industrial_Research_Innovation_and_Promotion_Building">H1行政大樓</string>
+    <string name="J1_Activity_Center_Building">J1活動中心</string>
+    <string name="K2_Teaching_Building">K2教學大樓</string>
+    <string name="K3_General_Building">K3教學大樓</string>
+    <string name="M1_Ladies_Dorm_5">M1女五舍</string>
+    <string name="M2_Mens_Dorm_1">M2男一舍</string>
+    <string name="M3_Ladies_Dorm_1">M3女一舍與學生餐廳</string>
+    <string name="M8_Mens_Dorm_2">M8男二舍</string>
+    <string name="M4_Mens_Dorm_1">M4男三舍-影山樓</string>
+    <string name="M7_Ladies_Dorm_2">M7女二舍</string>
+    <string name="M6_Ladies_Dorm_3">M6女三舍</string>
+    <string name="P1_Faculty_and_Staff_Residence_Hall">P1教職員工宿舍</string>
+    <string name="View_Restaurant">景觀餐廳</string>
+    <string name="Swimming_Pool">蓮荷水世界</string>
 </resources>

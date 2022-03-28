@@ -13,4 +13,23 @@
     <string name="start_point">Start point</string>
     <string name="campus_map">Campus map</string>
     <string name="plan_route">Plan route</string>
+    <string name="School_Gate">School Gate</string>
+    <string name="F1_Architecture_Building_1">F1 Architecture Building 1</string>
+    <string name="F2_Architecture_Building_2">F2 Architecture Building 2</string>
+    <string name="C1_Li_teh_Building">C1 Li-teh Building</string>
+    <string name="F3_Kung_tao_Building_Department_of_Industrial_Design">F3 Kung-tao Building Department of Industrial Design</string>
+    <string name="H1_Industrial_Research_Innovation_and_Promotion_Building">H1 Industrial Research Innovation and Promotion Building</string>
+    <string name="J1_Activity_Center_Building">J1 Activity Center Building</string>
+    <string name="K2_Teaching_Building">K2 Teaching Building</string>
+    <string name="K3_General_Building">K3 General Building</string>
+    <string name="M1_Ladies_Dorm_5">M1 Ladies Dorm 5</string>
+    <string name="M2_Mens_Dorm_1">M2 Ladies  Dorm 5</string>
+    <string name="M3_Ladies_Dorm_1">M3 Ladies Dorm 1</string>
+    <string name="M8_Mens_Dorm_2">M8 Men\'s Dorm 2</string>
+    <string name="M4_Mens_Dorm_1">M4 Men\'s Dorm 3</string>
+    <string name="M7_Ladies_Dorm_2">M7 Ladies Dorm 2</string>
+    <string name="M6_Ladies_Dorm_3">M6 Ladies Dorm 3</string>
+    <string name="P1_Faculty_and_Staff_Residence_Hall">P1 Faculty and Staff Residence Hall</string>
+    <string name="View_Restaurant">View Restaurant</string>
+    <string name="Swimming_Pool">Swimming Pool</string>
 </resources>

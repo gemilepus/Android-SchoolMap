@@ -30,6 +30,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="Large Text"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -39,6 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:gravity="right"
                 android:text="Small Text"
                 android:textAppearance="?android:attr/textAppearanceSmall"
