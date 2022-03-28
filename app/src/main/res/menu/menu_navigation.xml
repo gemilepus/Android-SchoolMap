@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item android:id="@+id/action_b"
-        android:title="八甲校區"
+        android:title="@string/Bajia_Campus"
         android:icon="@drawable/ic_home" />
+
     <item android:id="@+id/action_a"
-        android:title="二坪校區"
+        android:title="@string/Erping_Shan_Campus"
         android:icon="@drawable/ic_home" />
+
 </menu>

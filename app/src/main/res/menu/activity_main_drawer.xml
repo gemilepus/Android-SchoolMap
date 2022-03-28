@@ -10,15 +10,15 @@
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="觀看全校地圖" />
+            android:title="@string/campus_map" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="校園公告" />
+            android:title="@string/Announcement" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="校園公告管理系統" />
+            android:title="@string/Announcement_Management" />
     </group>
 
 </menu>
