@@ -62,4 +62,6 @@
     <string name="Announcement_Management">Announcement Management</string>
     <string name="Not_Registered_Register_Now">Not Registered? Register Now!</string>
     <string name="Login">Login</string>
+    <string name="Create_an_account">Create an account</string>
+    <string name="Sign_up">Sign up</string>
 </resources>

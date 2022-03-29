@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="註冊帳號"
+        android:text="@string/Create_an_account"
         android:textAlignment="center"
         android:textSize="22sp" />
 
@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/ic_person"
-            android:hint="姓名"
+            android:hint="Name"
             android:inputType="textPersonName" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -38,7 +38,7 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:hint="Email"
+            android:hint="E-mail"
             android:id="@+id/et_email"
             android:drawableRight="@drawable/ic_email"
             android:inputType="textEmailAddress"
@@ -58,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/ic_key"
-            android:hint="密碼"
+            android:hint="Password"
             android:inputType="textPassword" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -68,7 +68,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:text="註冊"
+        android:text="@string/Sign_up"
         android:textColor="@android:color/white" />
 
     <TextView
@@ -76,7 +76,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="已住冊? 立即登入 !"
+        android:text="@string/Not_Registered_Register_Now"
         android:textColor="@color/colorAccent" />
 
     <ProgressBar

@@ -62,4 +62,6 @@
     <string name="Announcement">校園公告</string>
     <string name="Not_Registered_Register_Now">未註冊 ? 立即註冊 !</string>
     <string name="Login">登入</string>
+    <string name="Create_an_account">建立帳號</string>
+    <string name="Sign_up">註冊</string>
 </resources>
