@@ -60,4 +60,6 @@
     <string name="Erping_Shan_Campus">二坪校區</string>
     <string name="Announcement_Management">校園公告管理系統</string>
     <string name="Announcement">校園公告</string>
+    <string name="Not_Registered_Register_Now">未註冊 ? 立即註冊 !</string>
+    <string name="Login">登入</string>
 </resources>

@@ -44,7 +44,7 @@ public class JSONMainActivity extends AppCompatActivity {
         setContentView(R.layout.jsonparsing_activity_main);
         
         Toolbar toolbar =(Toolbar) findViewById(R.id.toolbarJSON);
-        toolbar.setTitle("校園公告");
+        toolbar.setTitle(getResources().getString(R.string.Announcement));
         toolbar.setTitleTextColor(0xFFFFFFFF);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override

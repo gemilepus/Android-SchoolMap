@@ -31,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/Color004"
-                android:text="八甲校區" />
+                android:text="@string/Bajia_Campus" />
 
             <Button
                 android:id="@+id/button3"
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@color/Color004"
-                android:text="二坪校區" />
+                android:text="@string/Erping_Shan_Campus" />
 
         </LinearLayout>
 
