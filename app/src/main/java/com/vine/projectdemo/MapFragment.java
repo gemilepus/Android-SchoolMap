@@ -198,13 +198,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         );
          */
 
-        paint.setStrokeWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, metrics));  //  線寬
-//        paint.setPathEffect(
-//                new CornerPathEffect(
-//                        TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, metrics)
-//                )
-//        ); // 線的彎曲幅度
-        //paint.setPathEffect(null);
+        paint.setStrokeWidth(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, metrics));
         paint.setPathEffect(new DashPathEffect(new float[]{20, 10}, 0));
         //paint.setColor();
         //tileView.drawPath(points.subList(2, 5), null);
@@ -369,8 +363,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     }
 
     private ArrayList<Float> DegreeList = new ArrayList<>();
-
-
 
     class mTimerTask extends TimerTask {
         @Override
@@ -730,7 +722,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             boolean[] flag = new boolean[mVexs.length];
             // 初始化
             for (int i = 0; i < mVexs.length; i++) {
-                parent[i] = -1;//~~~
+                parent[i] = -1;//
                 flag[i] = false;          // 頂點i的最短路徑還沒獲取到。
                 //prev[i] = 0;              // 頂點i的前驅頂點為0。
                 dist[i] = mMatrix[vsTemp][i];  // 頂點i的最短路徑為"頂點vsTemp"到"頂點i"的權。
@@ -759,7 +751,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                     if (flag[j] == false && (tmp < dist[j])) {
                         dist[j] = tmp;
                         //prev[j] = k;
-                        parent[j] = k;//~~~
+                        parent[j] = k;//
                     }
                 }
             }
@@ -829,7 +821,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         boolean[] flag = new boolean[mVexs.length];
         // 初始化
         for (int i = 0; i < mVexs.length; i++) {
-            parent[i] = -1;//~~~
+            parent[i] = -1;//
             flag[i] = false;          // 頂點i的最短路徑還沒獲取到。
             //prev[i] = 0;              // 頂點i的前驅頂點為0。
             dist[i] = mMatrix[vs][i];  // 頂點i的最短路徑為"頂點vs"到"頂點i"的權。
@@ -858,7 +850,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
                 if (flag[j]==false && (tmp<dist[j]) ) {
                     dist[j] = tmp;
                     //prev[j] = k;
-                    parent[j] = k;//~~~
+                    parent[j] = k;//
                 }
             }
         }
@@ -870,11 +862,9 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             PrintPath(parent, i);
              displaytext +=  " ) ";
              displaytext += "\n";
-
         }
          */
-        //txtScreen.setText(displaytext);//顯示結果
-
+        //txtScreen.setText(displaytext);
 
         //int EndPointTemp = Integer.parseInt(EndString)-1;
         //int StartPointTemp Integer.parseInt(StartString)-1;
@@ -952,11 +942,11 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             if (Integer.parseInt(StartPointArr[0]) < 125) {
                 IsUsedMapA = 0;
                 MapFileName = ("map_b.txt");
-                EndPointArr = new String[]{"123"};
+                EndPointArr = new String[]{"67"};
             }else{
                 IsUsedMapA = 1;
                 MapFileName = ("map_a.txt");
-                EndPointArr = new String[]{"200"};
+                EndPointArr = new String[]{"126"};
             }
             LoadFileToMatrix(MapFileName);
             GetMIN();
@@ -970,12 +960,12 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             if (Integer.parseInt(StartPointArr[0]) < 125) {
                 IsUsedMapA = 1;
                 MapFileName = ("map_a.txt");
-                StartPointArr = new String[]{"200"};
+                StartPointArr = new String[]{"126"};
                
             }else{
                 IsUsedMapA = 0;
                 MapFileName = ("map_b.txt");
-                StartPointArr = new String[]{"123"};
+                StartPointArr = new String[]{"67"};
             }
             LoadFileToMatrix(MapFileName);
             GetMIN();
