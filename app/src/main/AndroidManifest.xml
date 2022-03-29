@@ -8,7 +8,7 @@
     <application
         android:allowBackup="true"
         android:name="com.vine.projectdemo.Values.GlobalVariable"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/baseline_my_location"
         android:label="@string/app_name"
         android:roundIcon="@drawable/baseline_my_location"
         android:supportsRtl="true"

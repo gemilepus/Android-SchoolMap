@@ -34,7 +34,6 @@
             android:id="@+id/imageViewBar"
             android:layout_width="match_parent"
             android:layout_height="5dp"
-            app:srcCompat="@mipmap/ic_launcher"
             android:scaleType="centerCrop"/>
 
         <!--CENTER_CROP：當圖片比ImageView大/小時，會依圖片之等比例縮放，並將其放在框的中間顯示，-->
