@@ -101,9 +101,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
     ArrayList<double[]> DrawPointsList = new ArrayList<>();
 
     int IsUsedMapA = 0;
-    int Doflag = 0;// not used
     int StartPointMin = 0, EndPointMin = 0;  // 最近短距離的 起點 終點
-    int ListStFlag = 0;
     
     // ElectronicCompass
     private float currentDegree = 0f;
@@ -927,100 +925,67 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         //StartString = intent.getStringExtra("startstring");
         //EndString = intent.getStringExtra("endstring");
 
-        StartString =  StartStr;
+        StartString = StartStr;
         EndString   = EndStr;
 
         StartPointArr = StartString.split("-");
         EndPointArr   = EndString.split("-");
+        String MapFileName;
 
         if ((Integer.parseInt(StartPointArr[0]) < 125 && Integer.parseInt(EndPointArr[0]) < 125) ||
                 (Integer.parseInt(StartPointArr[0]) > 125 && Integer.parseInt(EndPointArr[0]) > 125)) { //只有 八甲(b) OR 二坪(a)
 
-            String contentStr;
+
             if(Integer.parseInt(StartPointArr[0]) < 125){
-                contentStr =  ("map_b.txt");
+                MapFileName =  ("map_b.txt");
                 IsUsedMapA = 0;
             }else{
-                contentStr =  ("map_a.txt");
+                MapFileName =  ("map_a.txt");
                 IsUsedMapA = 1;
             }
-            LoadFileToMatrix(contentStr);
+            LoadFileToMatrix(MapFileName);
 
-            GetMIN();   //  取得最短的組合
+            GetMIN();
             vs = StartPointMin;
             GetDijkstra();
         } else { // 跨校區
-            if (Integer.parseInt(StartPointArr[0]) < 125) { // 八甲開始
-
-                Doflag = 1; //  跨區旗標 = 1 終點圖示改變    (目前未使用
+            if (Integer.parseInt(StartPointArr[0]) < 125) {
                 IsUsedMapA = 0;
-
-                String contentStr = ("map_b.txt");
-                LoadFileToMatrix(contentStr);
-
-                EndPointArr = new String[0]; // 清空陣列
-                EndPointArr = new String[1];
-                EndPointArr[0] = String.valueOf(123); //校門口
-                GetMIN();   //  取得最短的組合
-                vs = StartPointMin;
-                GetDijkstra();
-                EndPointArr = EndString.split("-");//恢復
-
-                Doflag = 2; //  跨區旗標 = 2 起點圖示改變
+                MapFileName = ("map_b.txt");
+                EndPointArr = new String[]{"123"};
+            }else{
                 IsUsedMapA = 1;
-
-                //DrawPointsList.add(new double[]{ 120.79289624,24.538329});
-                //DrawPointsList.add(new double[]{120.795621, 24.539129});
-                //DrawPointsList.add(new double[]{ 120.797069,24.541462});
-                //DrawPointsList.add(new double[]{120.799379, 24.543649});
-
-                ListStFlag = DrawPointsList.size(); //   八甲校區已經畫了幾點
-
-                contentStr = ("map_a.txt");
-                LoadFileToMatrix(contentStr);
-                StartPointArr = new String[0]; // 清空陣列
-                StartPointArr = new String[1];
-                StartPointArr[0] = String.valueOf(200); //校門口
-                GetMIN();   //  取得最短的組合
-                vs = StartPointMin;
-                GetDijkstra();
-                StartPointArr = StartString.split("-");//恢復
-
-            } else {  // 二坪開始
-
-                Doflag = 2; //  跨區旗標 = 2 起點圖示改變
-                IsUsedMapA = 1;
-
-                String contentStr = ("map_a.txt");
-                LoadFileToMatrix(contentStr);
-
-                EndPointArr = new String[0]; // 清空陣列
-                EndPointArr = new String[1];
-                EndPointArr[0] = String.valueOf(200); //校門口
-                GetMIN();   //  取得最短的組合
-                vs = StartPointMin;
-                GetDijkstra();
-                EndPointArr = EndString.split("-");//恢復
-
-
-                Doflag = 1; //  跨區旗標 = 1 終點圖示改變
-                IsUsedMapA = 0;
-
-                contentStr = ("map_b.txt");
-                LoadFileToMatrix(contentStr);
-                StartPointArr = new String[0]; // 清空陣列
-                StartPointArr = new String[1];
-                StartPointArr[0] = String.valueOf(123); //校門口
-                GetMIN();   //  取得最短的組合
-                vs = StartPointMin;
-                GetDijkstra();
-                StartPointArr = StartString.split("-");//恢復
+                MapFileName = ("map_a.txt");
+                EndPointArr = new String[]{"200"};
             }
+            LoadFileToMatrix(MapFileName);
+            GetMIN();
+            vs = StartPointMin;
+            GetDijkstra();
+            EndPointArr = EndString.split("-");//恢復
+
+            // TODO 畫八甲跟二坪之間的路徑
+            //DrawPointsList.add(new double[]{120.799379, 24.543649});
+
+            if (Integer.parseInt(StartPointArr[0]) < 125) {
+                IsUsedMapA = 1;
+                MapFileName = ("map_a.txt");
+                StartPointArr = new String[]{"200"};
+               
+            }else{
+                IsUsedMapA = 0;
+                MapFileName = ("map_b.txt");
+                StartPointArr = new String[]{"123"};
+            }
+            LoadFileToMatrix(MapFileName);
+            GetMIN();
+            vs = StartPointMin;
+            GetDijkstra();
+            StartPointArr = StartString.split("-");//恢復
         }
 
         // 畫線 & 標記
-
-        int pointnum = 0;
+        int PointNo = 0;
         for (double[] point : DrawPointsList) {
             //marker = new ImageView(this);
             ImageView marker = new ImageView(this.getActivity());
@@ -1028,10 +993,10 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             marker.setTag(point);
             // give it a standard marker icon - this indicator points down and is centered, so we'll use appropriate anchors
 
-            if (pointnum == 0) { 
+            if (PointNo == 0) { 
                 // 標記起點
                 marker.setImageResource(R.drawable.map_marker_green_f);
-            } else if (pointnum == DrawPointsList.size() - 1) { 
+            } else if (PointNo == DrawPointsList.size() - 1) { 
                 // 標記終點
                 marker.setImageResource(R.drawable.map_marker_red_f);
             } else {
@@ -1041,12 +1006,6 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             marker.setScaleY((float) 0.5);
             marker.setScaleX((float) 0.5);
             marker.setScrollY(-100);
-
-//            Drawable d = getResources().getDrawable(R.drawable.map_marker_green_f);
-//            int h = d.getIntrinsicHeight();
-//            int w = d.getIntrinsicWidth();
-            // marker.getHeight();
-            // Toast.makeText(this,  " 高 " + String.valueOf(h) , Toast.LENGTH_SHORT).show(); // 距離
             
             // on tap show further information about the area indicated
             // this could be done using a OnClickListener, which is a little more "snappy", since
@@ -1055,24 +1014,19 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             // interrupt dragging
             tileView.getMarkerLayout().setMarkerTapListener(markerTapListener);
             // add it to the view tree
-
             tileView.addMarker(marker, point[0], point[1], null, null);
 
-            if(pointnum==0){
+            if(PointNo==0){
                 tileView.moveToMarker(marker,false);
             }
 
-            pointnum++;
+            PointNo++;
         }
 
-        if (ListStFlag != 0) {
-            tileView.drawPath(DrawPointsList.subList(0, pointnum), null);//  點數  畫線
-        } else {
-            tileView.drawPath(DrawPointsList.subList(0, pointnum), null);//  點數  畫線
-        }
-
-        mMatrix = new int[0][0];
+        // drawPath
+        tileView.drawPath(DrawPointsList.subList(0, PointNo), null);//  點數  畫線
         tileView.defineBounds(Constants.NORTH_WEST_LONGITUDE, Constants.NORTH_WEST_LATITUDE, Constants.SOUTH_EAST_LONGITUDE, Constants.SOUTH_EAST_LATITUDE);
+        mMatrix = new int[0][0];
     }
 
     private void PrintPath(int parent[], int j) {
