@@ -638,10 +638,18 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
             mICON.setImageResource(R.drawable.map_min);
             NowMarker.addView(mICON,mLayoutParams);
             mICON.setY(22);
-            // add it to the view tree
-            tileView.addMarker(NowMarker, NowMarker_Point[0], NowMarker_Point[1], null, null);
-            // moveToMarker
-            getTileView().moveToMarker( NowMarker,false);
+
+            // if in National United University
+            if(NowMarker_Point[0] > Constants.NORTH_WEST_LONGITUDE
+                    && NowMarker_Point[0] < Constants.SOUTH_EAST_LONGITUDE
+                    && NowMarker_Point[1] > Constants.SOUTH_EAST_LATITUDE
+                    && NowMarker_Point[1] < Constants.NORTH_WEST_LATITUDE){
+                // add it to the view tree
+                tileView.addMarker(NowMarker, NowMarker_Point[0], NowMarker_Point[1], null, null);
+                // moveToMarker
+                getTileView().moveToMarker( NowMarker,false);
+            }
+
             // rotation
             if(lasttLatitude != 0){
                 float RotateValue = (float)GetAngle(lasttLatitude,lastLongitude,location.getLatitude(),location.getLongitude());
