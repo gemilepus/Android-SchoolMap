@@ -1,5 +1,7 @@
 package com.vine.projectdemo.AccountView;
 
+import static com.vine.projectdemo.Constants.BASE_URL;
+
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -32,6 +34,7 @@ import android.widget.TextView;
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
 import com.vine.projectdemo.API.RequestInterface;
+import com.vine.projectdemo.API.RequestInterfaceAll;
 import com.vine.projectdemo.API.RequestInterfaceByID;
 import com.vine.projectdemo.Adapter.PHPDataAdapter;
 import com.vine.projectdemo.Constants;
@@ -377,7 +380,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RequestInterfaceByID request = retrofit.create(RequestInterfaceByID.class);
-        Call<JSONResponse> call = request.getJSON(pref.getString(Constants.UNIQUE_ID,""));
+
+        ServerRequest mServerRequest = new ServerRequest();
+        mServerRequest.setOperation("getdatabyid");
+
+        Call<JSONResponse> call = request.operation(pref.getString(Constants.UNIQUE_ID,""),mServerRequest);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {

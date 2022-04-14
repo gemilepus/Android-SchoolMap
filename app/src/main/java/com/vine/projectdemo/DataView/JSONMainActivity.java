@@ -11,8 +11,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vine.projectdemo.API.RequestInterface;
 import com.vine.projectdemo.API.RequestInterfaceAll;
+import com.vine.projectdemo.AccountView.models.ServerRequest;
+import com.vine.projectdemo.AccountView.models.ServerResponse;
+import com.vine.projectdemo.AccountView.models.User;
 import com.vine.projectdemo.Adapter.DataAdapter;
+import com.vine.projectdemo.Constants;
 import com.vine.projectdemo.Model.JSONResponse;
 import com.vine.projectdemo.Model.JSONStructure;
 import com.vine.projectdemo.R;
@@ -116,8 +121,12 @@ public class JSONMainActivity extends AppCompatActivity {
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        RequestInterfaceAll request = retrofit.create(RequestInterfaceAll.class);
-        Call<JSONResponse> call = request.getJSON();
+        RequestInterfaceAll requestInterface = retrofit.create(RequestInterfaceAll.class);
+
+        ServerRequest request = new ServerRequest();
+        request.setOperation("getdata");
+
+        Call<JSONResponse> call = requestInterface.operation(request);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -133,7 +142,7 @@ public class JSONMainActivity extends AppCompatActivity {
             }
         });
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();
