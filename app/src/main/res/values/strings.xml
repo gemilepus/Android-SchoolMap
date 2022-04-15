@@ -64,4 +64,11 @@
     <string name="Login">登入</string>
     <string name="Create_an_account">建立帳號</string>
     <string name="Sign_up">註冊</string>
+    <string name="User">使用著</string>
+    <string name="Change_Password">更改密碼</string>
+    <string name="New">新增訊息</string>
+    <string name="Log_Out">登出</string>
+    <string name="Title">標題</string>
+    <string name="Type">類型</string>
+    <string name="Content">內容</string>
 </resources>

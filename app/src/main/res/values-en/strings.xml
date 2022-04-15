@@ -64,4 +64,11 @@
     <string name="Login">Login</string>
     <string name="Create_an_account">Create an account</string>
     <string name="Sign_up">Sign up</string>
+    <string name="User">User</string>
+    <string name="Change_Password">Change Password</string>
+    <string name="New">New</string>
+    <string name="Log_Out">Log Out</string>
+    <string name="Title">Title</string>
+    <string name="Type">Type</string>
+    <string name="Content">Content</string>
 </resources>

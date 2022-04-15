@@ -1,7 +1,5 @@
 package com.vine.projectdemo.AccountView;
 
-import static com.vine.projectdemo.Constants.BASE_URL;
-
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -34,7 +32,6 @@ import android.widget.TextView;
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
 import com.vine.projectdemo.API.RequestInterface;
-import com.vine.projectdemo.API.RequestInterfaceAll;
 import com.vine.projectdemo.API.RequestInterfaceByID;
 import com.vine.projectdemo.Adapter.PHPDataAdapter;
 import com.vine.projectdemo.Constants;
@@ -50,6 +47,8 @@ import com.vine.projectdemo.Values.GPS_Point;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -101,7 +100,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         pref = getActivity().getPreferences(0);
-        tv_name.setText("使用者 : "+pref.getString(Constants.NAME,""));
+        tv_name.setText(getResources().getString(R.string.User) + " : "+pref.getString(Constants.NAME,""));
         tv_email.setText(pref.getString(Constants.EMAIL,""));
 
         loadJSON();
@@ -270,7 +269,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 // tv_email.setText(pref.getString(Constants.EMAIL,""));
                 if(!new_head.isEmpty() && !new_type.isEmpty()){
                     progress_info.setVisibility(View.VISIBLE);
-                    NewInfoProcess( pref.getString(Constants.EMAIL,"") ,ck_pass,new_head,new_type,new_text,pref.getString(Constants.UNIQUE_ID,"") ,longitude,latitude );
+                    NewInfoProcess( pref.getString(Constants.EMAIL,"") ,ck_pass,new_head,new_type,new_text,pref.getString(Constants.UNIQUE_ID,"") ,longitude,latitude ,pref.getString(Constants.TOKEN,""));
                     //NewInfoProcess(pref.getString(Constants.EMAIL,""),pref.getString(Constants.EMAIL,""),new_head,new_type);
 
                 }else {
@@ -323,10 +322,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         });
     }
 
-    private void NewInfoProcess(String email, String old_password, String head, String type, String texts , String unique ,String longitude , String latitude ){
+    private void NewInfoProcess(String email, String old_password, String head, String type, String texts , String unique ,String longitude , String latitude , String token){
+        // Log
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY); // set log level
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build();
         RequestInterface requestInterface = retrofit.create(RequestInterface.class);
         User user = new User();
@@ -342,6 +349,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         ServerRequest request = new ServerRequest();
         request.setOperation(Constants.NEW_INFO_OPERATION);
         request.setUser(user);
+        request.setToken(token);
         Call<ServerResponse> response = requestInterface.operation(request);
         response.enqueue(new Callback<ServerResponse>() {
             @Override
@@ -449,7 +457,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
                 Log.d(Constants.TAG,"failed");
-                Snackbar.make(getView(), "BOOM !!!!!!", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(getView(), "failed", Snackbar.LENGTH_LONG).show();
             }
         });
     }

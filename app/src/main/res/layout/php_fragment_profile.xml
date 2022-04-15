@@ -68,7 +68,7 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:background="@color/colorPrimary"
-                        android:text="登出"
+                        android:text="@string/Log_Out"
                         android:textColor="@android:color/white" />
 
                     <androidx.appcompat.widget.AppCompatButton
@@ -79,7 +79,7 @@
                         android:layout_marginRight="5dp"
                         android:layout_weight="1"
                         android:background="@color/colorPrimary"
-                        android:text="更改密碼"
+                        android:text="@string/Change_Password"
                         android:textColor="@android:color/white" />
                 </LinearLayout>
 
@@ -91,7 +91,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
                     android:background="@color/colorPrimary"
-                    android:text="新增訊息"
+                    android:text="@string/New"
                     android:textColor="@android:color/white" />
 
                 <androidx.recyclerview.widget.RecyclerView

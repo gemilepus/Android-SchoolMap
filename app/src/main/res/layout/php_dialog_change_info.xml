@@ -22,7 +22,7 @@
                 android:id="@+id/et_head"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="標題"/>
+                android:hint="@string/Title"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,7 +34,7 @@
                     android:layout_width="140dp"
                     android:layout_height="38dp"
                     android:layout_marginTop="10dp"
-                    android:text="類型"
+                    android:text="@string/Type"
                     android:textSize="18sp" />
 
                 <Spinner
@@ -54,20 +54,20 @@
                 android:inputType="textMultiLine"
                 android:gravity="left|top"
                 android:minLines="6"
-                android:hint="內容" />
+                android:hint="@string/Content" />
 
             <Button
                 android:id="@+id/btnLocal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="設定地點" />
+                android:text="設定地點(not used)" />
 
             <EditText
                 android:id="@+id/ck_pass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:hint="輸入密碼認證"
+                android:hint="Password"
                 android:inputType="textPassword" />
 
             <ProgressBar
