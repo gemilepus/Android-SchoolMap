@@ -293,6 +293,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         user.setNew_password(new_password);
         ServerRequest request = new ServerRequest();
         request.setOperation(Constants. CHANGE_PASSWORD_OPERATION);
+        request.setToken(pref.getString(Constants.TOKEN,""));
 
         request.setUser(user);
         Call<ServerResponse> response = requestInterface.operation(request);
@@ -444,6 +445,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         ServerRequest request = new ServerRequest();
         request.setOperation(Constants.REMOVE_INFO_OPERATION);
         request.setUser(user);
+        request.setToken(pref.getString(Constants.TOKEN,""));
+
         Call<ServerResponse> response = requestInterface.operation(request);
         response.enqueue(new Callback<ServerResponse>() {
             @Override
