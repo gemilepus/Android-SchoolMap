@@ -71,4 +71,6 @@
     <string name="Title">Title</string>
     <string name="Type">Type</string>
     <string name="Content">Content</string>
+    <string name="Old_Password">Old Password</string>
+    <string name="New_Password">New Password</string>
 </resources>

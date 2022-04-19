@@ -165,15 +165,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         progress = (ProgressBar)view.findViewById(R.id.progress);
 
         builder.setView(view);
-        builder.setTitle("修改密碼");
-        builder.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+        builder.setTitle(getResources().getString(R.string.Change_Password));
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -237,14 +237,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         progress_info = (ProgressBar)view.findViewById(R.id.progres_in);
 
         builderin.setView(view);
-        builderin.setTitle("新增訊息");
-        builderin.setPositiveButton("確定", new DialogInterface.OnClickListener() {
+        builderin.setTitle(getResources().getString(R.string.New));
+        builderin.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which){
 
             }
         });
-        builderin.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builderin.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -454,8 +454,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 ServerResponse resp = response.body();
                 if(resp.getResult().equals(Constants.SUCCESS)){
                     loadJSON();
-                    Snackbar.make(getView(), resp.getMessage(), Snackbar.LENGTH_LONG).show();
                 }
+                Snackbar.make(getView(), resp.getMessage(), Snackbar.LENGTH_LONG).show();
             }
             @Override
             public void onFailure(Call<ServerResponse> call, Throwable t) {
