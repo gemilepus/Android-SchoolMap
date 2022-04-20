@@ -39,9 +39,9 @@ import com.vine.projectdemo.HomeFragment;
 import com.vine.projectdemo.Model.JSONResponse;
 import com.vine.projectdemo.Model.JSONStructure;
 import com.vine.projectdemo.R;
-import com.vine.projectdemo.AccountView.models.ServerRequest;
-import com.vine.projectdemo.AccountView.models.ServerResponse;
-import com.vine.projectdemo.AccountView.models.User;
+import com.vine.projectdemo.Model.ServerRequest;
+import com.vine.projectdemo.Model.ServerResponse;
+import com.vine.projectdemo.Model.User;
 import com.vine.projectdemo.Values.GPS_Point;
 
 import java.util.ArrayList;
@@ -144,6 +144,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         editor.putString(Constants.EMAIL,"");
         editor.putString(Constants.NAME,"");
         editor.putString(Constants.UNIQUE_ID,"");
+        editor.putString(Constants.TOKEN,"");
         editor.apply();
         goToLogin();
     }
@@ -486,8 +487,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private void deleteCheck() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this.getActivity());
-        alertDialogBuilder.setTitle("刪除");
-        alertDialogBuilder.setMessage("確定刪除這筆？");
+        alertDialogBuilder.setTitle("");
+        alertDialogBuilder.setMessage(getResources().getString(R.string.Delete) + " ？");
         alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                     @Override

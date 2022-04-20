@@ -73,4 +73,5 @@
     <string name="Content">內容</string>
     <string name="Old_Password">舊密碼</string>
     <string name="New_Password">新密碼</string>
+    <string name="Delete">刪除</string>
 </resources>

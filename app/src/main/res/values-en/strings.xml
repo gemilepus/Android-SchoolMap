@@ -73,4 +73,5 @@
     <string name="Content">Content</string>
     <string name="Old_Password">Old Password</string>
     <string name="New_Password">New Password</string>
+    <string name="Delete">Delete</string>
 </resources>

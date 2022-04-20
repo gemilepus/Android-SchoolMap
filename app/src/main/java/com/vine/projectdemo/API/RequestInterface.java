@@ -1,7 +1,7 @@
 package com.vine.projectdemo.API;
 
-import com.vine.projectdemo.AccountView.models.ServerRequest;
-import com.vine.projectdemo.AccountView.models.ServerResponse;
+import com.vine.projectdemo.Model.ServerRequest;
+import com.vine.projectdemo.Model.ServerResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

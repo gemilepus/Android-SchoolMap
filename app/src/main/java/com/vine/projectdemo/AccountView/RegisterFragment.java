@@ -16,9 +16,9 @@ import android.widget.TextView;
 import com.vine.projectdemo.API.RequestInterface;
 import com.vine.projectdemo.Constants;
 import com.vine.projectdemo.R;
-import com.vine.projectdemo.AccountView.models.ServerRequest;
-import com.vine.projectdemo.AccountView.models.ServerResponse;
-import com.vine.projectdemo.AccountView.models.User;
+import com.vine.projectdemo.Model.ServerRequest;
+import com.vine.projectdemo.Model.ServerResponse;
+import com.vine.projectdemo.Model.User;
 
 import retrofit2.Call;
 import retrofit2.Callback;

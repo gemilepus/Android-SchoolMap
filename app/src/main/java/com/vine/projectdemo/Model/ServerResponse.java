@@ -1,4 +1,4 @@
-package com.vine.projectdemo.AccountView.models;
+package com.vine.projectdemo.Model;
 
 public class ServerResponse {
 

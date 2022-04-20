@@ -11,13 +11,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.vine.projectdemo.API.RequestInterface;
 import com.vine.projectdemo.API.RequestInterfaceAll;
-import com.vine.projectdemo.AccountView.models.ServerRequest;
-import com.vine.projectdemo.AccountView.models.ServerResponse;
-import com.vine.projectdemo.AccountView.models.User;
+import com.vine.projectdemo.Model.ServerRequest;
 import com.vine.projectdemo.Adapter.DataAdapter;
-import com.vine.projectdemo.Constants;
 import com.vine.projectdemo.Model.JSONResponse;
 import com.vine.projectdemo.Model.JSONStructure;
 import com.vine.projectdemo.R;
@@ -69,11 +65,11 @@ public class JSONMainActivity extends AppCompatActivity {
     private void initViews(){
         ImageView mImageView = (ImageView)findViewById(R.id.imageViewBar);
         mImageView.setImageResource(R.drawable.bar);
-        mImageView.setAlpha(100); // 透明度
+        mImageView.setAlpha(100);
 
         textViewJSON = (TextView) this.findViewById(R.id.textViewJSON);
         textViewJSON.setBackgroundColor(0xFFffa830);
-        textViewJSON.setText("連線中 ...");
+        textViewJSON.setText("Connecting ...");
 
         recyclerView = (RecyclerView)findViewById(R.id.card_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -88,14 +84,13 @@ public class JSONMainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     if(dataSize > 0){
-                        //   已連線 BAR
                         textViewJSON.setBackgroundColor(0xFF79ff05);  // 綠色
-                        textViewJSON.setText("已連線");
-                        //  timer 停止
+                        textViewJSON.setText("Connected");
+
                         timer.cancel();
                     }else{
                         textViewJSON.setBackgroundColor(0xFFff2323);  // 紅色
-                        textViewJSON.setText("未連線");
+                        textViewJSON.setText("Not connected");
                     }
                 }
             });
