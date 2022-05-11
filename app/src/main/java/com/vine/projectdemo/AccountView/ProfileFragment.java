@@ -64,31 +64,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private PHPDataAdapter adapter;
 
     private TextView tv_name,tv_email,tv_message;
-    private AppCompatButton btn_change_password,btn_logout,btn_chg_info;
-    private EditText et_old_password,et_new_password;
-    private EditText et_head,et_type,et_text,ckpass;
-    private Button BtnLocal;
+    private EditText et_old_password,et_new_password,et_head,et_type,et_text,et_check_pass;
+    private AlertDialog dialog,dialog_info,MapDialog;
+    private ProgressBar progress,progress_info;
 
-    private AlertDialog dialog;
-    private AlertDialog dialog_info;
-    private AlertDialog MapDialog;
-
-    private ProgressBar progress;
-    private ProgressBar progress_info;
-    // spinner
-    final String[] SpinnerItem = {"重要", "國際交流","活動", "演講", "公告" ,"社團活動"};
-
-    // 存取中的清單編號紀錄
-    private int data_position;
+    private final String[] SpinnerItem = {"重要", "國際交流","活動", "演講", "公告" ,"社團活動"};
+    private int select_position;
 
     private TileView tileView;
     TextView[] marker_Text_array = new TextView[60];
-
     String ValueString , TextString;
     String[] ValueStringArray;
-
     private double[] Select_Point =  new double[2];
-    int List_MAX;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,9 +101,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         tv_name = (TextView)view.findViewById(R.id.txt_head);
         tv_email = (TextView)view.findViewById(R.id.tv_email);
-        btn_change_password = (AppCompatButton)view.findViewById(R.id.btn_chg_password);
-        btn_logout = (AppCompatButton)view.findViewById(R.id.btn_logout);
-        btn_chg_info =  (AppCompatButton)view.findViewById(R.id.btn_chg_info);
+        AppCompatButton btn_change_password = (AppCompatButton) view.findViewById(R.id.btn_chg_password);
+        AppCompatButton btn_logout = (AppCompatButton) view.findViewById(R.id.btn_logout);
+        AppCompatButton btn_chg_info = (AppCompatButton) view.findViewById(R.id.btn_chg_info);
 
         btn_change_password.setOnClickListener(this);
         btn_logout.setOnClickListener(this);
@@ -211,9 +198,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         et_head = (EditText)view.findViewById(R.id.et_head);
         //et_type = (EditText)view.findViewById(R.id.et_type);
         et_text = (EditText)view.findViewById(R.id.et_text);
-        ckpass  = (EditText)view.findViewById(R.id.ck_pass);
-        BtnLocal  = (Button)view.findViewById(R.id.btnLocal);
-        BtnLocal.setOnClickListener(new View.OnClickListener() {
+        et_check_pass  = (EditText)view.findViewById(R.id.ck_pass);
+        Button btnLocal = (Button) view.findViewById(R.id.btnLocal);
+        btnLocal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MapDialog();
@@ -261,7 +248,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 String new_head = et_head.getText().toString();
                 String new_type = spinner.getSelectedItem().toString();
                 String new_text = et_text.getText().toString();
-                String ck_pass = ckpass.getText().toString();
+                String ck_pass = et_check_pass.getText().toString();
 
                 String longitude = String.valueOf(Select_Point[0]);
                 String latitude  = String.valueOf(Select_Point[1]);
@@ -404,7 +391,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 adapter.setOnImgClickListener(new  PHPDataAdapter.OnImgClickListener() {
                     @Override
                     public void onImgClick(View view, int position) {
-                        data_position = position;
+                        select_position = position;
                         deleteCheck();
                         // data.get((int)view.getTag()).getHead()
                     }
@@ -418,7 +405,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 adapter.setOnItemLongClickListener(new  PHPDataAdapter.OnItemLongClickListener() {
                     @Override
                     public void onItemLongClick(View view, int position) {
-                        data_position = position;
+                        select_position = position;
                         alertCheck();
                     }
                 });
@@ -467,10 +454,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void alertCheck() {
-        //String[] alert_menu = {"修改", "刪除", "取消"};
-        String[] alert_menu = {"刪除", "取消"};
+        String[] alert_menu = {"Delete", "Close"};
         AlertDialog.Builder alert = new AlertDialog.Builder(this.getActivity());
-        alert.setTitle( "訊息 : " + data.get(data_position).getHead() );
+        alert.setTitle( "Title " + data.get(select_position).getHead() );
         alert.setItems(alert_menu, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int idx) {
@@ -493,7 +479,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        RemoveInfoProcess( data.get( data_position).getHead() , data.get( data_position ).getSno() , pref.getString(Constants.UNIQUE_ID,"") );
+                        RemoveInfoProcess( data.get( select_position).getHead() , data.get( select_position ).getSno() , pref.getString(Constants.UNIQUE_ID,"") );
                     }
                 });
         alertDialogBuilder.setNeutralButton("No", new DialogInterface.OnClickListener() {
@@ -569,7 +555,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             tileView.addMarker(marker, point[0], point[1], null, null);
         }
         
-        List_MAX = (int)HomeFragment.list.size();
+        int List_MAX = (int)HomeFragment.list.size();
         double x , y;
         for (int Nend = 0; Nend <  List_MAX ; Nend++) {
             x = 0;
