@@ -1,49 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.vine.projectdemo">
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+
     <application
+        android:name=".Values.GlobalVariable"
         android:allowBackup="true"
-        android:name="com.vine.projectdemo.Values.GlobalVariable"
         android:icon="@drawable/baseline_my_location"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/baseline_my_location"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".Util.AppService"
+            android:enabled="true"
+            android:exported="true"></service>
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
-            android:name="com.vine.projectdemo.AccountView.PHPMainActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:name=".AccountView.PHPMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
-            android:name="com.vine.projectdemo.DataView.JSONMainActivity"
-            android:screenOrientation="portrait">
-        </activity>
-
+            android:name=".DataView.JSONMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
-            android:name="com.vine.projectdemo.View.MapCallMainActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:name=".View.MapCallMainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
     </application>
+
 </manifest>

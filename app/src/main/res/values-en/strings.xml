@@ -74,4 +74,5 @@
     <string name="Old_Password">Old Password</string>
     <string name="New_Password">New Password</string>
     <string name="Delete">Delete</string>
+    <string name="To_Hide_Me">To hide me, click and uncheck \"Show Notification\"</string>
 </resources>

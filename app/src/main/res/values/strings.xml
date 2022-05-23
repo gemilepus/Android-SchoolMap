@@ -74,4 +74,5 @@
     <string name="Old_Password">舊密碼</string>
     <string name="New_Password">新密碼</string>
     <string name="Delete">刪除</string>
+    <string name="To_Hide_Me">如要隱藏此通知，請點此，然後將顯示通知取消</string>
 </resources>

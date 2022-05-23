@@ -44,7 +44,7 @@ import android.widget.Toast;
 import com.qozix.tileview.TileView;
 import com.qozix.tileview.markers.MarkerLayout;
 import com.vine.projectdemo.View.MainLinearLayout;
-import com.vine.projectdemo.View.RotationGestureDetector;
+import com.vine.projectdemo.Util.RotationGestureDetector;
 import com.vine.projectdemo.View.SampleCallout;
 
 import com.vine.projectdemo.Values.GPS_Point;

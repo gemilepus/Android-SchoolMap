@@ -30,6 +30,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.vine.projectdemo.Adapter.ViewPagerAdapter;
 import com.vine.projectdemo.DataView.JSONMainActivity;
 import com.vine.projectdemo.AccountView.PHPMainActivity;
+import com.vine.projectdemo.Util.AppService;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , HomeFragment.SendMessage{
 
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setupBottomNavigation();
         setViewPager(); // add Tab
         setupFab();
+
+        Intent intent = new Intent(this, AppService.class);
+        startService(intent);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);

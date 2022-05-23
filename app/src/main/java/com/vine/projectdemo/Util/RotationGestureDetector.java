@@ -1,6 +1,5 @@
-package com.vine.projectdemo.View;
+package com.vine.projectdemo.Util;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
