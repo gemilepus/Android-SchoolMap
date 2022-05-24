@@ -2,13 +2,16 @@ package com.vine.projectdemo.Util;
 
 import static com.vine.projectdemo.Constants.BASE_URL;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
@@ -76,6 +79,19 @@ public class AppService extends Service {
                 .setSmallIcon(R.drawable.baseline_my_location)
                 .getNotification();
         startForeground(1, notification);
+
+        registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
+        registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+
+        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + (1000*10),"alarm",
+                new AlarmManager.OnAlarmListener()
+                {
+                    @Override
+                    public void onAlarm() {
+                        Log.d("AlarmManager", "OnAlarm");
+                    }
+                },null);
     }
 
     @Override
@@ -85,21 +101,39 @@ public class AppService extends Service {
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
 
-        timer.scheduleAtFixedRate(new mainTask(), 0, 20000);
+        timer.schedule(new mainTask(), 0, TimerPeriod);
 
         // If we get killed, after returning from here, restart
         return START_STICKY;
     }
 
+
+    // Create broadcast object
+    BroadcastReceiver mBroadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.i("BroadcastReceiver", "Receiver");
+
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                Log.d("BroadcastReceiver", "Screen ON");
+                TimerPeriod = 20*1000;
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                Log.d("BroadcastReceiver", "Screen OFF");
+                TimerPeriod = 10*60*1000;
+            }
+
+        }
+    };
+
     private static Timer timer = new Timer();
+    private long TimerPeriod = 20000;
     private class mainTask extends TimerTask
     {
         public void run()
         {
-            if(call!=null){
-                if(call.isExecuted()){
-                    //load();
-                }
+            if(!IsCall){
+                load();
+                Log.d("","load");
             }
         }
     }
@@ -135,8 +169,10 @@ public class AppService extends Service {
                 .build();
     }
 
-    private Call<JSONResponse> call;
+
+    private boolean IsCall = false;
     private void load(){
+        IsCall = true;
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -146,7 +182,7 @@ public class AppService extends Service {
         ServerRequest request = new ServerRequest();
         request.setOperation("getdata");
 
-        call = requestInterface.operation(request);
+        Call<JSONResponse> call = requestInterface.operation(request);
         call.enqueue(new Callback<JSONResponse>() {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
@@ -160,10 +196,14 @@ public class AppService extends Service {
                     editor.apply();
                     nm.notify(1, getNotification(data.get(data.size()-1).getHead(),data.get(data.size()-1).getText()));
                 }
+
+                IsCall = false;
             }
             @Override
             public void onFailure(Call<JSONResponse> call, Throwable t) {
                 Log.d("Error",t.getMessage());
+
+                IsCall = false;
             }
         });
     }
