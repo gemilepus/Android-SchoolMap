@@ -22,8 +22,10 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.TaskStackBuilder;
 
 import com.vine.projectdemo.API.RequestInterfaceAll;
+import com.vine.projectdemo.DataView.JSONMainActivity;
 import com.vine.projectdemo.Model.JSONResponse;
 import com.vine.projectdemo.Model.JSONStructure;
 import com.vine.projectdemo.Model.ServerRequest;
@@ -41,6 +43,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AppService extends Service {
+
+    private AlarmManager alarmManager;
 
     public AppService() { }
 
@@ -83,13 +87,18 @@ public class AppService extends Service {
         registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
         registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 
-        AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis() + (1000*10),"alarm",
+         alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        SetAlarm();
+    }
+
+    private void SetAlarm() {
+        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+1000*60*60,"alarm",
                 new AlarmManager.OnAlarmListener()
                 {
                     @Override
                     public void onAlarm() {
                         Log.d("AlarmManager", "OnAlarm");
+                        SetAlarm();
                     }
                 },null);
     }
@@ -162,9 +171,15 @@ public class AppService extends Service {
     }
 
     Notification getNotification(String Title,String Content) {
+        Intent resultIntent = new Intent(this, JSONMainActivity.class);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_IMMUTABLE);
+
         return new NotificationCompat.Builder(ctx, channelId)
                 .setContentTitle(Title)
                 .setContentText(Content)
+                .setContentIntent(resultPendingIntent)
                 .setSmallIcon(R.drawable.baseline_my_location)
                 .build();
     }

@@ -41,7 +41,8 @@
         <activity
             android:name=".DataView.JSONMainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".View.MapCallMainActivity"
             android:screenOrientation="portrait"
