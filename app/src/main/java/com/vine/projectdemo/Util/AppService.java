@@ -208,10 +208,12 @@ public class AppService extends Service {
 
                 SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 if( !pref.getString("No","").equals(data.get(data.size()-1).getSno())){
-                    for(int i= 0;i < data.size();i++){
-                        if(Integer.parseInt(data.get(i).getSno()) > Integer.parseInt(pref.getString("No",""))){
-                            int id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)+i;
-                            nm.notify(id, getNotification(data.get(i).getHead(),data.get(i).getText()));
+                    if(pref.getString("No","").length() > 1){
+                        for(int i= 0;i < data.size();i++){
+                            if(Integer.parseInt(data.get(i).getSno()) > Integer.parseInt(pref.getString("No",""))){
+                                int id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)+i;
+                                nm.notify(id, getNotification(data.get(i).getHead(),data.get(i).getText()));
+                            }
                         }
                     }
                     SharedPreferences.Editor editor = pref.edit();
