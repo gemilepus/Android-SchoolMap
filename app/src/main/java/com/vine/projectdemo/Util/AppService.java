@@ -209,7 +209,7 @@ public class AppService extends Service {
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putString("No",data.get(data.size()-1).getSno());
                     editor.apply();
-                    nm.notify(1, getNotification(data.get(data.size()-1).getHead(),data.get(data.size()-1).getText()));
+                    nm.notify(2, getNotification(data.get(data.size()-1).getHead(),data.get(data.size()-1).getText()));
                 }
 
                 IsCall = false;
