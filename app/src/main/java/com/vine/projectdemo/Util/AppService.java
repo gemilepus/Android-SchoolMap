@@ -84,7 +84,6 @@ public class AppService extends Service {
                 .setSmallIcon(R.drawable.baseline_my_location)
                 .getNotification();
         startForeground(1, notification);
-
         registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
         registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 
@@ -236,4 +235,5 @@ public class AppService extends Service {
     public void onDestroy() {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
+
 }
