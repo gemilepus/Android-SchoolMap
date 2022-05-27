@@ -87,24 +87,26 @@ public class AppService extends Service {
         registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
         registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 
+        mOnAlarmListener = new AlarmManager.OnAlarmListener()
+        {
+            @Override
+            public void onAlarm() {
+                Log.d("AlarmManager", "OnAlarm");
+                if(!IsCall){
+                    load();
+                    Log.d("","load");
+                }
+
+                SetAlarm();
+            }
+        };
     }
 
     private long TimerPeriod = 20000;
+    AlarmManager.OnAlarmListener mOnAlarmListener;
     private void SetAlarm() {
-        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+TimerPeriod,"alarm",
-                new AlarmManager.OnAlarmListener()
-                {
-                    @Override
-                    public void onAlarm() {
-                        Log.d("AlarmManager", "OnAlarm");
-                        if(!IsCall){
-                            load();
-                            Log.d("","load");
-                        }
-
-                        SetAlarm();
-                    }
-                },null);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+TimerPeriod,
+                "alarm", mOnAlarmListener,null);
     }
 
     @Override
@@ -129,13 +131,15 @@ public class AppService extends Service {
             Log.i("BroadcastReceiver", "Receiver");
 
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                Toast.makeText(context, "Screen ON", Toast.LENGTH_LONG).show();
                 Log.d("BroadcastReceiver", "Screen ON");
                 TimerPeriod = 20*1000;
+                alarmManager.cancel(mOnAlarmListener);
+                SetAlarm();
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-                Toast.makeText(context, "Screen OFF", Toast.LENGTH_LONG).show();
                 Log.d("BroadcastReceiver", "Screen OFF");
                 TimerPeriod = 10*60*1000;
+                alarmManager.cancel(mOnAlarmListener);
+                SetAlarm();
             }
         }
     };
