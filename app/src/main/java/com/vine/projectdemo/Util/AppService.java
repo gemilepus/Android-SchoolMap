@@ -87,17 +87,21 @@ public class AppService extends Service {
         registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_ON));
         registerReceiver(mBroadcast, new IntentFilter(Intent.ACTION_SCREEN_OFF));
 
-         alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        SetAlarm();
     }
 
+    private long TimerPeriod = 20000;
     private void SetAlarm() {
-        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+1000*60*60,"alarm",
+        alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+TimerPeriod,"alarm",
                 new AlarmManager.OnAlarmListener()
                 {
                     @Override
                     public void onAlarm() {
                         Log.d("AlarmManager", "OnAlarm");
+                        if(!IsCall){
+                            load();
+                            Log.d("","load");
+                        }
+
                         SetAlarm();
                     }
                 },null);
@@ -110,12 +114,13 @@ public class AppService extends Service {
         // For each start request, send a message to start a job and deliver the
         // start ID so we know which request we're stopping when we finish the job
 
-        timer.schedule(new mainTask(), 0, TimerPeriod);
+        //timer.schedule(new mainTask(), 0, TimerPeriod);
+        alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+        SetAlarm();
 
         // If we get killed, after returning from here, restart
         return START_STICKY;
     }
-
 
     // Create broadcast object
     BroadcastReceiver mBroadcast = new BroadcastReceiver() {
@@ -124,28 +129,16 @@ public class AppService extends Service {
             Log.i("BroadcastReceiver", "Receiver");
 
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                Toast.makeText(context, "Screen ON", Toast.LENGTH_LONG).show();
                 Log.d("BroadcastReceiver", "Screen ON");
                 TimerPeriod = 20*1000;
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                Toast.makeText(context, "Screen OFF", Toast.LENGTH_LONG).show();
                 Log.d("BroadcastReceiver", "Screen OFF");
                 TimerPeriod = 10*60*1000;
             }
-
         }
     };
-
-    private static Timer timer = new Timer();
-    private long TimerPeriod = 20000;
-    private class mainTask extends TimerTask
-    {
-        public void run()
-        {
-            if(!IsCall){
-                load();
-                Log.d("","load");
-            }
-        }
-    }
 
     Context ctx;
     String channelId;

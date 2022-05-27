@@ -34,8 +34,7 @@
         <service
             android:name=".Util.AppService"
             android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
+            android:exported="true">
         </service>
 
         <activity
