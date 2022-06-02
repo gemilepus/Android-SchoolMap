@@ -1,5 +1,7 @@
 package com.vine.projectdemo;
 
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -30,6 +32,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.vine.projectdemo.Adapter.ViewPagerAdapter;
 import com.vine.projectdemo.DataView.JSONMainActivity;
 import com.vine.projectdemo.AccountView.PHPMainActivity;
+import com.vine.projectdemo.Util.AlarmReceiver;
 import com.vine.projectdemo.Util.AppService;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , HomeFragment.SendMessage{
@@ -56,8 +59,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent intent = new Intent(this, AppService.class);
         startService(intent);
 
+        SetAlarm(this);
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+
+    public static void SetAlarm(Context context) {
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra("title", "SchoolMap");
+        PendingIntent pi = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_IMMUTABLE);
+        try {
+            pi.send();
+        } catch (PendingIntent.CanceledException e) {
+            e.printStackTrace();
+        }
     }
 
     //  Fragment Communicating........................

@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,7 +37,9 @@ public class AppReceiver extends BroadcastReceiver {
                 Log.d(TAG_BOOT_BROADCAST_RECEIVER, message);
                 // This intent is used to start background service. The same service will be invoked for each invoke in the loop.
                 Intent startServiceIntent = new Intent(context, AppService.class);
-                context.startForegroundService(startServiceIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    context.startForegroundService(startServiceIntent);
+                }
 
                 //context.startService(startServiceIntent);
                 // Current thread will sleep one second.

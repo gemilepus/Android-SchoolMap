@@ -34,8 +34,6 @@ import com.vine.projectdemo.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import retrofit2.Call;
 import retrofit2.Callback;

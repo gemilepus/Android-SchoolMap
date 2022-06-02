@@ -31,6 +31,15 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name=".Util.AlarmReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="SchoolMap" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".Util.AppService"
             android:enabled="true"
