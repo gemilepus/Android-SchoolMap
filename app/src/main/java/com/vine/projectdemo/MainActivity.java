@@ -18,6 +18,9 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager2.widget.ViewPager2;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.util.Log;
 import android.view.Menu;
@@ -29,11 +32,15 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 
 import com.google.android.material.tabs.TabLayoutMediator;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.vine.projectdemo.Adapter.ViewPagerAdapter;
 import com.vine.projectdemo.DataView.JSONMainActivity;
 import com.vine.projectdemo.AccountView.PHPMainActivity;
 import com.vine.projectdemo.Util.AlarmReceiver;
 import com.vine.projectdemo.Util.AppService;
+
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener , HomeFragment.SendMessage{
 
@@ -56,11 +63,59 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setViewPager(); // add Tab
         setupFab();
 
+        // Service
         Intent intent = new Intent(this, AppService.class);
         startService(intent);
 
+        /*
+        // WorkManager
+        Configuration myConfig = new Configuration.Builder()
+                // Set the log level
+                //.setMinimumLoggingLevel(android.util.Log.INFO)
+                // Set the background task thread pool
+                //.setExecutor(Executors.newFixedThreadPool(8))
+                .build();
+        // Initialize WorkManager
+        WorkManager.initialize(this, myConfig);
+        // get the instance
+        WorkManager workManager = WorkManager.getInstance();
+
+        //WorkRequest request = new OneTimeWorkRequest.Builder(AppWorker.class).addTag("AppWorker").build();
+        PeriodicWorkRequest request = new PeriodicWorkRequest
+                .Builder(AppWorker.class, 15, TimeUnit.MINUTES)
+                .addTag("AppWorker")
+                .build();
+
+
+        Log.d("AppWorker", "getInstance");
+        WorkManager.getInstance(this).enqueue(request);
+
+         */
+
+        //SetAlarm(this);
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+    }
+
+    private boolean isWorkScheduled(String tag) {
+        WorkManager instance = WorkManager.getInstance(this);
+        ListenableFuture<List<WorkInfo>> statuses = instance.getWorkInfosByTag(tag);
+        try {
+            boolean running = false;
+            List<WorkInfo> workInfoList = statuses.get();
+            for (WorkInfo workInfo : workInfoList) {
+                WorkInfo.State state = workInfo.getState();
+                running = state == WorkInfo.State.RUNNING | state == WorkInfo.State.ENQUEUED;
+            }
+            return running;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static void SetAlarm(Context context) {

@@ -18,12 +18,15 @@ public class AppReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         String message = "BootDeviceReceiver onReceive, action is " + action;
         Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-        Log.d(TAG_BOOT_BROADCAST_RECEIVER, action);
 
         if(Intent.ACTION_BOOT_COMPLETED.equals(action))
         {
-            startServiceDirectly(context);
-            //startServiceByAlarm(context);
+            Log.d(TAG_BOOT_BROADCAST_RECEIVER, action);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                startServiceByAlarm(context);
+            }else{
+                startServiceDirectly(context);
+            }
         }
     }
 
@@ -32,6 +35,9 @@ public class AppReceiver extends BroadcastReceiver {
     {
         try {
             while (true) {
+                // Current thread will sleep one second.
+                Thread.sleep(10000);
+
                 String message = "BootDeviceReceiver onReceive start service directly.";
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 Log.d(TAG_BOOT_BROADCAST_RECEIVER, message);
@@ -39,11 +45,8 @@ public class AppReceiver extends BroadcastReceiver {
                 Intent startServiceIntent = new Intent(context, AppService.class);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     context.startForegroundService(startServiceIntent);
+                    //context.startService(startServiceIntent);
                 }
-
-                //context.startService(startServiceIntent);
-                // Current thread will sleep one second.
-                Thread.sleep(10000);
             }
         }catch(InterruptedException ex)
         {
@@ -59,6 +62,7 @@ public class AppReceiver extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         // Create intent to invoke the background service.
         Intent intent = new Intent(context, AppService.class);
+
         PendingIntent pendingIntent = PendingIntent.getService(context.getApplicationContext(), 0, intent, PendingIntent.FLAG_IMMUTABLE);
         long startTime = System.currentTimeMillis();
         long intervalTime = 60*1000;
