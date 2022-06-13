@@ -2,7 +2,10 @@ package com.vine.projectdemo.Util;
 
 import static com.vine.projectdemo.Constants.BASE_URL;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
+import android.app.Application;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -15,6 +18,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.Log;
@@ -105,6 +109,7 @@ public class AppService extends Service {
     private void SetAlarm() {
         alarmManager.set(AlarmManager.RTC_WAKEUP,System.currentTimeMillis()+TimerPeriod,
                 "alarm", mOnAlarmListener,null);
+        //alarmManager.cancel(mOnAlarmListener);
     }
 
     @Override
@@ -131,13 +136,9 @@ public class AppService extends Service {
             if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 Log.d("BroadcastReceiver", "Screen ON");
                 TimerPeriod = 20*1000;
-                alarmManager.cancel(mOnAlarmListener);
-                SetAlarm();
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 Log.d("BroadcastReceiver", "Screen OFF");
-                TimerPeriod = 10*60*1000;
-                alarmManager.cancel(mOnAlarmListener);
-                SetAlarm();
+                TimerPeriod = 60*1000;
             }
         }
     };
@@ -207,6 +208,7 @@ public class AppService extends Service {
                             if(Integer.parseInt(data.get(i).getSno()) > Integer.parseInt(pref.getString("No",""))){
                                 int id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)+i;
                                 nm.notify(id, getNotification(data.get(i).getHead(),data.get(i).getText()));
+                                wakeupScreen();
                             }
                         }
                     }
@@ -224,6 +226,32 @@ public class AppService extends Service {
                 IsCall = false;
             }
         });
+    }
+
+    private void wakeupScreen() {
+        try {
+            Application application = (Application) getApplicationContext();
+            // Unlock the device so that the tests can input keystrokes.
+            ((KeyguardManager) application.getSystemService(KEYGUARD_SERVICE))
+                    .newKeyguardLock("SchoolMap KeyguardLock")
+                    .disableKeyguard();
+            // Wake up the screen.
+            PowerManager powerManager = ((PowerManager) application.getSystemService(POWER_SERVICE));
+            @SuppressLint("InvalidWakeLockTag")
+            PowerManager.WakeLock mWakeLock = powerManager.newWakeLock(
+                    PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP
+                            | PowerManager.ON_AFTER_RELEASE, "SchoolMap WAKE_LOCK");
+            mWakeLock.acquire();
+
+            try {
+                Thread.sleep(10000); // turn on duration
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mWakeLock.release();
+        } catch (Exception e) {
+
+        }
     }
 
     @Override

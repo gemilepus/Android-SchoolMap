@@ -10,6 +10,10 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+
     <application
         android:name=".Values.GlobalVariable"
         android:allowBackup="true"
@@ -49,7 +53,10 @@
         <service
             android:name=".Util.AppService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            tools:targetApi="o_mr1">
         </service>
 
         <activity
