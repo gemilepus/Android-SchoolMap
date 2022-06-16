@@ -177,10 +177,10 @@ public class AppService extends Service {
                 .setContentText(Content)
                 .setContentIntent(resultPendingIntent)
                 .setSmallIcon(R.drawable.baseline_my_location)
+                .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
                 .build();
     }
-
 
     private boolean IsCall = false;
     private void load(){
@@ -208,10 +208,11 @@ public class AppService extends Service {
                             if(Integer.parseInt(data.get(i).getSno()) > Integer.parseInt(pref.getString("No",""))){
                                 int id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)+i;
                                 nm.notify(id, getNotification(data.get(i).getHead(),data.get(i).getText()));
-                                wakeupScreen();
                             }
                         }
                     }
+
+                    wakeupScreen();
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putString("No",data.get(data.size()-1).getSno());
                     editor.apply();
