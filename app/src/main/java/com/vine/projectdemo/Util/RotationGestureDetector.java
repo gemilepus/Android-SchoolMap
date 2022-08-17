@@ -66,9 +66,8 @@ public class RotationGestureDetector {
     {
         float angle1 = (float) Math.atan2( (fY - sY), (fX - sX) );
         float angle2 = (float) Math.atan2( (nfY - nsY), (nfX - nsX) );
-        float angle = ((float)Math.toDegrees(angle1 - angle2)) % 360;
 
-        return angle;
+        return ((float)Math.toDegrees(angle1 - angle2)) % 360;
     }
 
     public interface OnRotationGestureListener {

@@ -1134,7 +1134,7 @@ public class MapFragment extends Fragment implements SensorEventListener, Locati
         tileView_Run = false;
         tileView.pause();
 
-        // 停止GPS更新
+        // Stop GPS
         if (locationManager != null) {
             Log.d("LocationActivity", "locationManager.removeUpdates");
             if (ActivityCompat.checkSelfPermission(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
