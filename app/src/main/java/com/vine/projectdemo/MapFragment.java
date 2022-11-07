@@ -64,7 +64,7 @@ import static android.content.Context.SENSOR_SERVICE;
 public class MapFragment extends Fragment implements SensorEventListener, LocationListener ,
         RotationGestureDetector.OnRotationGestureListener {
 
-    public static final String TITLE = "校園地圖";
+    public static final String TITLE = "Map";
     public static MapFragment newInstance() {
         return new MapFragment();
     }

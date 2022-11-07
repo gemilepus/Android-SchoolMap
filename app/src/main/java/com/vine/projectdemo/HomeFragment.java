@@ -34,7 +34,7 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 public class HomeFragment extends Fragment {
 
-    public static final String TITLE = "查詢路線";
+    public static final String TITLE = "Home";
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }

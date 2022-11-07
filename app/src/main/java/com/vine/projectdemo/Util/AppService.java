@@ -199,23 +199,25 @@ public class AppService extends Service {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
                 JSONResponse jsonResponse = response.body();
-                ArrayList<JSONStructure> data = new ArrayList<>(Arrays.asList(jsonResponse.getData()));;
 
-                SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                if( !pref.getString("No","").equals(data.get(data.size()-1).getSno())){
-                    if(pref.getString("No","").length() > 1){
-                        for(int i= 0;i < data.size();i++){
-                            if(Integer.parseInt(data.get(i).getSno()) > Integer.parseInt(pref.getString("No",""))){
-                                int id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)+i;
-                                nm.notify(id, getNotification(data.get(i).getHead(),data.get(i).getText()));
+                if(response.body()!=null){
+                    ArrayList<JSONStructure> data = new ArrayList<>(Arrays.asList(jsonResponse.getData()));;
+                    SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                    if( !pref.getString("No","").equals(data.get(data.size()-1).getSno())){
+                        if(pref.getString("No","").length() > 1){
+                            for(int i= 0;i < data.size();i++){
+                                if(Integer.parseInt(data.get(i).getSno()) > Integer.parseInt(pref.getString("No",""))){
+                                    int id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE)+i;
+                                    nm.notify(id, getNotification(data.get(i).getHead(),data.get(i).getText()));
+                                }
                             }
                         }
-                    }
 
-                    wakeupScreen();
-                    SharedPreferences.Editor editor = pref.edit();
-                    editor.putString("No",data.get(data.size()-1).getSno());
-                    editor.apply();
+                        wakeupScreen();
+                        SharedPreferences.Editor editor = pref.edit();
+                        editor.putString("No",data.get(data.size()-1).getSno());
+                        editor.apply();
+                    }
                 }
 
                 IsCall = false;
