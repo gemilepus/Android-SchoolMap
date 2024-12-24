@@ -17,6 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.vine.projectdemo'
 }
 
 dependencies {
@@ -30,8 +31,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.10.0'
 
     implementation 'androidx.work:work-runtime:2.8.1'
-    
-    implementation 'com.qozix:tileview:2.2.7'
+
+    implementation 'com.github.moagrius:TileView:2.2.7'
     implementation 'net.objecthunter:exp4j:0.4.8'
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
@@ -39,4 +40,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
 
     testImplementation 'junit:junit:4.13.2'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
